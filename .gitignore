@@ -1,0 +1,54 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+Debug/
+Release/
+
+# NuGet / packages
+packages/
+*.nupkg
+*.snupkg
+
+# ReSharper / Rider
+.idea/
+_ReSharper*/
+*.DotSettings.user
+
+# Generated/runtime files
+*.pdb
+*.cache
+*.db
+*.vsidx
+*.log
+TestResults/
+
+# BepInEx local deployment/runtime output
+BepInEx/config/
+BepInEx/LogOutput.log
+BepInEx/plugins/
+BepInEx/patchers/
+BepInEx/monomod/
+BepInEx/core/
+
+# Local deployment/build artifacts
+plugins/
+deploy/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Archives
+*.zip
+*.7z
+*.rar
