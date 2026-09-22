@@ -18,37 +18,47 @@ namespace FateOfTheFallen
 
 
         // ============================================================
-        // UPDATE
+        // UPDATE ALL ACTIVE DOTS
+        // ============================================================
+        //
+        // This method is called once per Unity frame by the player
+        // Stats.Update Harmony hook.
+        //
+        // We no longer traverse scheduler state once for every NPC,
+        // pet, player, etc. Only entries actually present in ActiveDots
+        // are processed here.
         // ============================================================
 
-        internal static void Update(Stats stats)
+        internal static void UpdateAll()
         {
-            if (stats == null || stats.StatusEffects == null)
+            if (ActiveDots.Count == 0)
             {
                 return;
             }
 
-            float deltaTime = Time.deltaTime;
+            float deltaTime =
+                Time.deltaTime;
 
             if (deltaTime <= 0f)
             {
                 return;
             }
 
-            for (int i = ActiveDots.Count - 1; i >= 0; i--)
+            for (int i = ActiveDots.Count - 1;
+                     i >= 0;
+                     i--)
             {
-                DotState state = ActiveDots[i];
-
-                if (state == null || state.Stats != stats)
-                {
-                    continue;
-                }
+                DotState state =
+                    ActiveDots[i];
 
                 if (!IsValid(state))
                 {
                     ActiveDots.RemoveAt(i);
                     continue;
                 }
+
+                Stats stats =
+                    state.Stats;
 
                 StatusEffect statusEffect =
                     stats.StatusEffects[state.Slot];
@@ -60,23 +70,44 @@ namespace FateOfTheFallen
 
                 float multiplier =
                     BlightcallerAscensions
-                        .GetAcceleratedDecayMultiplier(ownerSkills);
+                        .GetAcceleratedDecayMultiplier(
+                            ownerSkills);
 
+                /*
+                 * Rank 0 means native timing only.
+                 *
+                 * Keep the state tracked so that gaining Accelerated
+                 * Decay while a DoT is active remains safe.
+                 */
                 if (multiplier <= 1f)
                 {
                     continue;
                 }
 
-                float interval = 3f / multiplier;
+                /*
+                 * Preserve the existing Accelerated Decay timing logic.
+                 */
+                float interval =
+                    3f / multiplier;
 
-                state.NextTickTime -= deltaTime;
+                state.NextTickTime -=
+                    deltaTime;
 
+                /*
+                 * Normally this executes at most once.
+                 *
+                 * The while loop safely catches up after a long frame
+                 * or brief pause.
+                 */
                 while (state.NextTickTime <= 0f)
                 {
                     if (!IsValid(state))
                     {
                         break;
                     }
+
+                    stats =
+                        state.Stats;
 
                     statusEffect =
                         stats.StatusEffects[state.Slot];
@@ -85,12 +116,23 @@ namespace FateOfTheFallen
                         stats,
                         statusEffect);
 
-                    state.NextTickTime += interval;
+                    state.NextTickTime +=
+                        interval;
 
                     if (!IsValid(state))
                     {
                         break;
                     }
+                }
+
+                /*
+                 * Remove effects invalidated by the extra tick
+                 * immediately rather than carrying them into the next
+                 * frame.
+                 */
+                if (!IsValid(state))
+                {
+                    ActiveDots.RemoveAt(i);
                 }
             }
         }
@@ -100,14 +142,18 @@ namespace FateOfTheFallen
         // TRACK ACTIVE DOTS
         // ============================================================
 
-        internal static void TrackStatusEffects(Stats stats)
+        internal static void TrackStatusEffects(
+            Stats stats)
         {
-            if (stats == null || stats.StatusEffects == null)
+            if (stats == null ||
+                stats.StatusEffects == null)
             {
                 return;
             }
 
-            for (int i = 0; i < stats.StatusEffects.Length; i++)
+            for (int i = 0;
+                     i < stats.StatusEffects.Length;
+                     i++)
             {
                 StatusEffect statusEffect =
                     stats.StatusEffects[i];
@@ -119,7 +165,7 @@ namespace FateOfTheFallen
                 }
 
                 if (!BlightcallerAscensions.IsBlightcallerDoT(
-                    statusEffect.Effect))
+                        statusEffect.Effect))
                 {
                     continue;
                 }
@@ -140,7 +186,7 @@ namespace FateOfTheFallen
 
 
         // ============================================================
-        // ADD / UPDATE TRACKED DOT
+        // ADD / REFRESH
         // ============================================================
 
         private static void Upsert(
@@ -148,9 +194,12 @@ namespace FateOfTheFallen
             int slot,
             StatusEffect statusEffect)
         {
-            for (int i = 0; i < ActiveDots.Count; i++)
+            for (int i = 0;
+                     i < ActiveDots.Count;
+                     i++)
             {
-                DotState existing = ActiveDots[i];
+                DotState existing =
+                    ActiveDots[i];
 
                 if (existing.Stats != stats ||
                     existing.Slot != slot)
@@ -158,13 +207,18 @@ namespace FateOfTheFallen
                     continue;
                 }
 
+                /*
+                 * The same status slot is now occupied by a
+                 * different spell.
+                 */
                 if (existing.Effect != statusEffect.Effect)
                 {
                     existing.Effect =
                         statusEffect.Effect;
 
                     existing.NextTickTime =
-                        GetInitialInterval(statusEffect);
+                        GetInitialInterval(
+                            statusEffect);
                 }
 
                 return;
@@ -176,28 +230,56 @@ namespace FateOfTheFallen
                     Stats = stats,
                     Slot = slot,
                     Effect = statusEffect.Effect,
+
+                    /*
+                     * Start the accelerated timer from zero.
+                     *
+                     * Native TickEffects() remains responsible for
+                     * the normal first tick.
+                     */
                     NextTickTime =
-                        GetInitialInterval(statusEffect)
+                        GetInitialInterval(
+                            statusEffect)
                 });
         }
 
 
         // ============================================================
-        // NATIVE TICK NOTIFICATION
+        // NATIVE TICK RESET
         // ============================================================
 
-        internal static void OnNativeTick(Stats stats)
+        internal static void OnNativeTick(
+            Stats stats)
         {
             if (stats == null)
             {
                 return;
             }
 
-            for (int i = ActiveDots.Count - 1; i >= 0; i--)
-            {
-                DotState state = ActiveDots[i];
+            /*
+             * Native TickEffects() has just processed its normal
+             * status-effect tick.
+             *
+             * Accelerated Decay runs on its own completely independent
+             * timer and must NOT be reset by native DoT ticks.
+             *
+             * This method therefore performs cleanup only.
+             */
 
-                if (state == null || state.Stats != stats)
+            for (int i = ActiveDots.Count - 1;
+                     i >= 0;
+                     i--)
+            {
+                DotState state =
+                    ActiveDots[i];
+
+                if (state == null)
+                {
+                    ActiveDots.RemoveAt(i);
+                    continue;
+                }
+
+                if (state.Stats != stats)
                 {
                     continue;
                 }
@@ -205,14 +287,7 @@ namespace FateOfTheFallen
                 if (!IsValid(state))
                 {
                     ActiveDots.RemoveAt(i);
-                    continue;
                 }
-
-                StatusEffect statusEffect =
-                    stats.StatusEffects[state.Slot];
-
-                state.NextTickTime =
-                    GetInitialInterval(statusEffect);
             }
         }
 
@@ -236,14 +311,16 @@ namespace FateOfTheFallen
 
             float multiplier =
                 BlightcallerAscensions
-                    .GetAcceleratedDecayMultiplier(ownerSkills);
+                    .GetAcceleratedDecayMultiplier(
+                        ownerSkills);
 
             if (multiplier <= 1f)
             {
                 return 3f;
             }
 
-            return 3f / multiplier;
+            return
+                3f / multiplier;
         }
 
 
@@ -265,7 +342,8 @@ namespace FateOfTheFallen
             Spell effect =
                 statusEffect.Effect;
 
-            if (!BlightcallerAscensions.IsBlightcallerDoT(effect))
+            if (!BlightcallerAscensions.IsBlightcallerDoT(
+                    effect))
             {
                 return;
             }
@@ -311,10 +389,12 @@ namespace FateOfTheFallen
 
 
             // --------------------------------------------------------
-            // NPC DAMAGE OVERRIDE
+            // NATIVE NPC RESIST OVERRIDE
             // --------------------------------------------------------
 
-            if (UnityEngine.Random.Range(0f, 10f) > 6.5f &&
+            if (UnityEngine.Random.Range(
+                    0f,
+                    10f) > 6.5f &&
                 stats.Myself.isNPC &&
                 stats.Myself.MyNPC != null &&
                 !stats.Myself.MyNPC.SimPlayer)
@@ -324,7 +404,7 @@ namespace FateOfTheFallen
 
 
             // --------------------------------------------------------
-            // DAMAGE
+            // BASE DOT DAMAGE
             // --------------------------------------------------------
 
             int damage =
@@ -347,7 +427,8 @@ namespace FateOfTheFallen
 
             float potentMultiplier =
                 BlightcallerAscensions
-                    .GetPotentAfflictionMultiplier(ownerSkills);
+                    .GetPotentAfflictionMultiplier(
+                        ownerSkills);
 
             if (potentMultiplier > 1f)
             {
@@ -359,7 +440,7 @@ namespace FateOfTheFallen
 
 
             // --------------------------------------------------------
-            // APPLY DAMAGE
+            // DAMAGE APPLICATION
             // --------------------------------------------------------
 
             if (damage > 0)
@@ -412,7 +493,7 @@ namespace FateOfTheFallen
             }
 
             if (!BlightcallerAscensions.IsBlightcallerDoT(
-                statusEffect.Effect))
+                    statusEffect.Effect))
             {
                 return false;
             }
@@ -432,13 +513,15 @@ namespace FateOfTheFallen
 
 
         // ============================================================
-        // CLEANUP
+        // CLEANUP FOR ONE STATS INSTANCE
         // ============================================================
 
         private static void RemoveInvalidEntries(
             Stats stats)
         {
-            for (int i = ActiveDots.Count - 1; i >= 0; i--)
+            for (int i = ActiveDots.Count - 1;
+                     i >= 0;
+                     i--)
             {
                 DotState state =
                     ActiveDots[i];

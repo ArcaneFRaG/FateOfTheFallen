@@ -1,26 +1,145 @@
 ﻿using HarmonyLib;
+using System;
 using UnityEngine;
+using static GameData;
 
 namespace FateOfTheFallen
 {
     // ================================================================
-    // POTENT AFFLICTION
+    // POTENT AFFLICTION DAMAGE HANDLER
     // ================================================================
     //
-    // Applies the Blightcaller Potent Affliction Ascension to all
-    // outgoing damage originating from a Blightcaller.
+    // Potent Affliction is applied only to the transient damage
+    // argument entering Character damage methods.
     //
-    // Rank 0 = 100%
-    // Rank 1 = 110%
-    // Rank 2 = 120%
-    // Rank 3 = 130%
+    // It never modifies:
     //
-    // We patch the native damage receivers rather than individual
-    // spells. This means direct spells, DoTs, wand bolts, AoE damage,
-    // and other damage paths using these methods are covered.
+    //     Spell.TargetDamage
+    //     StatusEffect.bonusDmg
+    //     Stats.TickEffects locals
+    //     scheduler state
     //
-    // Accelerated Decay is intentionally NOT handled here.
+    // This prevents boosted damage from being fed back into later
+    // hits and causing the old escalating damage ramp.
+    //
+    // Some native damage methods may call other patched damage methods
+    // internally. The thread-local depth guard ensures the multiplier
+    // is applied at most once per nested damage chain.
     // ================================================================
+
+    internal static class BlightcallerPotentAfflictionDamage
+    {
+        [ThreadStatic]
+        private static int DamageDepth;
+
+
+        // ============================================================
+        // BEGIN DAMAGE EVENT
+        // ============================================================
+
+        internal static bool Begin(
+            Character attacker,
+            ref int damage)
+        {
+            if (attacker == null)
+            {
+                return false;
+            }
+
+            if (attacker.MySkills == null)
+            {
+                return false;
+            }
+
+            float multiplier =
+                BlightcallerAscensions
+                    .GetPotentAfflictionMultiplier(
+                        attacker.MySkills);
+
+            if (multiplier <= 1f)
+            {
+                return false;
+            }
+
+            bool shouldApply =
+                DamageDepth == 0;
+
+            DamageDepth++;
+
+            if (shouldApply &&
+                damage > 0)
+            {
+                damage =
+                    Mathf.RoundToInt(
+                        damage *
+                        multiplier);
+            }
+
+            return true;
+        }
+
+
+        // ============================================================
+        // END DAMAGE EVENT
+        // ============================================================
+
+        internal static void End(
+            bool entered)
+        {
+            if (!entered)
+            {
+                return;
+            }
+
+            if (DamageDepth > 0)
+            {
+                DamageDepth--;
+            }
+            else
+            {
+                DamageDepth = 0;
+            }
+        }
+    }
+
+
+    // ================================================================
+    // STANDARD DAMAGE
+    // ================================================================
+
+    [HarmonyPatch(
+        typeof(Character),
+        "DamageMe",
+        new Type[]
+        {
+            typeof(int),
+            typeof(bool),
+            typeof(DamageType),
+            typeof(Character),
+            typeof(bool),
+            typeof(bool),
+            typeof(int)
+        })]
+    internal static class Patch_BlightcallerPotentAfflictionDamage
+    {
+        private static void Prefix(
+            ref int _incdmg,
+            Character _attacker,
+            out bool __state)
+        {
+            __state =
+                BlightcallerPotentAfflictionDamage.Begin(
+                    _attacker,
+                    ref _incdmg);
+        }
+
+        private static void Postfix(
+            bool __state)
+        {
+            BlightcallerPotentAfflictionDamage.End(
+                __state);
+        }
+    }
 
 
     // ================================================================
@@ -29,94 +148,69 @@ namespace FateOfTheFallen
 
     [HarmonyPatch(
         typeof(Character),
-        "MagicDamageMe")]
-    internal static class Patch_PotentAfflictionMagicDamage
+        "MagicDamageMe",
+        new Type[]
+        {
+            typeof(int),
+            typeof(bool),
+            typeof(DamageType),
+            typeof(Character),
+            typeof(float),
+            typeof(int)
+        })]
+    internal static class Patch_BlightcallerPotentAfflictionMagicDamage
     {
         private static void Prefix(
             ref int _dmg,
-            Character _attacker)
+            Character _attacker,
+            out bool __state)
         {
-            // Nothing to modify.
-            if (_dmg <= 0)
-            {
-                return;
-            }
+            __state =
+                BlightcallerPotentAfflictionDamage.Begin(
+                    _attacker,
+                    ref _dmg);
+        }
 
-            // No attacker means there is no Blightcaller source
-            // that we can identify.
-            if (_attacker == null)
-            {
-                return;
-            }
-
-            // The attacker must have a UseSkill component.
-            if (_attacker.MySkills == null)
-            {
-                return;
-            }
-
-            float multiplier =
-                BlightcallerAscensions.GetPotentAfflictionMultiplier(
-                    _attacker.MySkills);
-
-            // Rank 0, non-Blightcaller, or otherwise inactive.
-            if (multiplier <= 1f)
-            {
-                return;
-            }
-
-            _dmg =
-                Mathf.RoundToInt(
-                    (float)_dmg * multiplier);
+        private static void Postfix(
+            bool __state)
+        {
+            BlightcallerPotentAfflictionDamage.End(
+                __state);
         }
     }
 
 
     // ================================================================
-    // GENERAL / PHYSICAL DAMAGE
+    // BLEED DAMAGE
     // ================================================================
 
     [HarmonyPatch(
         typeof(Character),
-        "DamageMe")]
-    internal static class Patch_PotentAfflictionDamage
+        "BleedDamageMe",
+        new Type[]
+        {
+            typeof(int),
+            typeof(bool),
+            typeof(Character)
+        })]
+    internal static class Patch_BlightcallerPotentAfflictionBleedDamage
     {
         private static void Prefix(
             ref int _incdmg,
-            Character _attacker)
+            Character _attacker,
+            out bool __state)
         {
-            // Nothing to modify.
-            if (_incdmg <= 0)
-            {
-                return;
-            }
+            __state =
+                BlightcallerPotentAfflictionDamage.Begin(
+                    _attacker,
+                    ref _incdmg);
+        }
 
-            // No attacker means there is no Blightcaller source
-            // that we can identify.
-            if (_attacker == null)
-            {
-                return;
-            }
-
-            // The attacker must have a UseSkill component.
-            if (_attacker.MySkills == null)
-            {
-                return;
-            }
-
-            float multiplier =
-                BlightcallerAscensions.GetPotentAfflictionMultiplier(
-                    _attacker.MySkills);
-
-            // Rank 0, non-Blightcaller, or otherwise inactive.
-            if (multiplier <= 1f)
-            {
-                return;
-            }
-
-            _incdmg =
-                Mathf.RoundToInt(
-                    (float)_incdmg * multiplier);
+        private static void Postfix(
+            bool __state)
+        {
+            BlightcallerPotentAfflictionDamage.End(
+                __state);
         }
     }
 }

@@ -20,8 +20,7 @@ namespace FateOfTheFallen
 
         internal static void Initialize()
         {
-            Plugin.NativeLog.LogWarning(
-                "BlightcallerClassIcon: Initialize() CALLED.");
+            
 
             try
             {
@@ -37,11 +36,10 @@ namespace FateOfTheFallen
                             "BlightcallerClassIcon: embedded resource not found: " +
                             IconResourceName);
 
-                        Plugin.NativeLog.LogDebug(
-                            "BlightcallerClassIcon: available embedded resources: " +
+                        
                             string.Join(
                                 ", ",
-                                assembly.GetManifestResourceNames()));
+                                assembly.GetManifestResourceNames());
 
                         Sprite = null;
                         return;
@@ -110,11 +108,7 @@ namespace FateOfTheFallen
                     Sprite.name =
                         "BlightcallerClassIcon";
 
-                    Plugin.NativeLog.LogWarning(
-                        "BlightcallerClassIcon: loaded embedded icon " +
-                        texture.width +
-                        "x" +
-                        texture.height);
+                    
                 }
             }
             catch (Exception exception)

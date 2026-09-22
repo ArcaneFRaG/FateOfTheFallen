@@ -6,6 +6,18 @@ using HarmonyLib;
 
 namespace FateOfTheFallen
 {
+    // ================================================================
+    // PESTILENT REJUVENATION
+    // ================================================================
+    //
+    // Native DoT ticks are detected from Stats.TickEffects().
+    //
+    // Accelerated Decay ticks call TryPestilentRejuvenation()
+    // directly from the custom scheduler.
+    //
+    // This ensures ALL Blightcaller DoT ticks can proc the Ascension.
+    // ================================================================
+
     [HarmonyPatch(typeof(Stats), "TickEffects")]
     internal static class Patch_BlightcallerPestilentRejuvenation
     {
@@ -24,20 +36,29 @@ namespace FateOfTheFallen
                     typeof(int)
                 });
 
-        private static readonly MethodInfo TryPestilentRejuvenationMethod =
+        private static readonly MethodInfo NativeTickProcMethod =
             AccessTools.Method(
                 typeof(Patch_BlightcallerPestilentRejuvenation),
-                nameof(TryPestilentRejuvenation));
+                nameof(TryNativeTickProc));
+
+
+        // ============================================================
+        // NATIVE DOT TICK TRANSPILER
+        // ============================================================
 
         private static IEnumerable<CodeInstruction> Transpiler(
             IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> codes =
-                new List<CodeInstruction>(instructions);
+                new List<CodeInstruction>(
+                    instructions);
 
-            bool injected = false;
+            bool injected =
+                false;
 
-            for (int i = 0; i < codes.Count; i++)
+            for (int i = 0;
+                     i < codes.Count;
+                     i++)
             {
                 CodeInstruction instruction =
                     codes[i];
@@ -48,23 +69,14 @@ namespace FateOfTheFallen
                     method == DamageMeMethod)
                 {
                     /*
-                     * The native code has just executed:
+                     * Native TickEffects has just called:
                      *
-                     * this.Myself.DamageMe(
-                     *     num3,
-                     *     ...);
+                     * this.Myself.DamageMe(...)
                      *
-                     * At this point:
+                     * Existing native locals:
                      *
-                     * V_1 = StatusEffect index
-                     * V_6 = num3
-                     *
-                     * Inject:
-                     *
-                     * TryPestilentRejuvenation(
-                     *     this,
-                     *     V_1,
-                     *     V_6);
+                     * V_1 = StatusEffect slot
+                     * V_6 = calculated DoT damage
                      */
 
                     codes.InsertRange(
@@ -83,10 +95,12 @@ namespace FateOfTheFallen
 
                             new CodeInstruction(
                                 OpCodes.Call,
-                                TryPestilentRejuvenationMethod)
+                                NativeTickProcMethod)
                         });
 
-                    injected = true;
+                    injected =
+                        true;
+
                     break;
                 }
             }
@@ -96,49 +110,52 @@ namespace FateOfTheFallen
 
 
         // ============================================================
-        // PESTILENT REJUVENATION
+        // NATIVE TICK ADAPTER
         // ============================================================
 
-        private static void TryPestilentRejuvenation(
+        private static void TryNativeTickProc(
             Stats targetStats,
             int statusEffectIndex,
             int damage)
         {
-            /*
-             * The native TickEffects() already guarantees that
-             * this code is reached after a positive DoT damage
-             * amount has been calculated and DamageMe() has been
-             * called.
-             *
-             * Still validate everything here so this helper is
-             * completely self-contained.
-             */
-
-            if (targetStats == null)
-            {
-                return;
-            }
-
-            if (damage <= 0)
-            {
-                return;
-            }
-
-            if (targetStats.StatusEffects == null)
+            if (targetStats == null ||
+                targetStats.StatusEffects == null)
             {
                 return;
             }
 
             if (statusEffectIndex < 0 ||
-                statusEffectIndex >= targetStats.StatusEffects.Length)
+                statusEffectIndex >=
+                    targetStats.StatusEffects.Length)
             {
                 return;
             }
 
             StatusEffect statusEffect =
-                targetStats.StatusEffects[statusEffectIndex];
+                targetStats.StatusEffects[
+                    statusEffectIndex];
 
-            if (statusEffect == null)
+            TryPestilentRejuvenation(
+                statusEffect,
+                damage);
+        }
+
+
+        // ============================================================
+        // SHARED PROC HANDLER
+        // ============================================================
+
+        internal static void TryPestilentRejuvenation(
+            StatusEffect statusEffect,
+            int damage)
+        {
+            if (damage <= 0)
+            {
+                return;
+            }
+
+            if (statusEffect == null ||
+                statusEffect.Effect == null)
             {
                 return;
             }
@@ -146,68 +163,75 @@ namespace FateOfTheFallen
             Spell effect =
                 statusEffect.Effect;
 
-            if (effect == null)
-            {
-                return;
-            }
-
 
             // --------------------------------------------------------
             // BLIGHTCALLER DOT ONLY
             // --------------------------------------------------------
 
-            if (!BlightcallerAscensions.IsBlightcallerDoT(effect))
+            if (!BlightcallerAscensions.IsBlightcallerDoT(
+                    effect))
             {
                 return;
             }
 
 
             // --------------------------------------------------------
-            // GET BLIGHTCALLER OWNER
+            // OWNER
             // --------------------------------------------------------
 
             Character owner =
                 statusEffect.Owner;
 
-            if (owner == null)
-            {
-                return;
-            }
-
-            if (owner.MyStats == null)
-            {
-                return;
-            }
-
-            if (owner.MySkills == null)
+            if (owner == null ||
+                owner.MyStats == null ||
+                owner.MySkills == null)
             {
                 return;
             }
 
 
             // --------------------------------------------------------
-            // CHECK ASCENSION
+            // ASCENSION CHECK
             // --------------------------------------------------------
 
-            if (!BlightcallerAscensions.HasPestilentRejuvenation(
-                owner.MySkills))
+            if (!BlightcallerAscensions
+                    .HasPestilentRejuvenation(
+                        owner.MySkills))
             {
                 return;
             }
 
 
             // --------------------------------------------------------
-            // 2% PROC CHANCE
+            // GET ASCENSION RANK
             // --------------------------------------------------------
 
-            if (UnityEngine.Random.value > 0.02f)
+            int rank =
+                BlightcallerAscensions
+                    .GetPestilentRejuvenationRank(
+                        owner.MySkills);
+
+            if (rank <= 0)
             {
                 return;
             }
 
 
             // --------------------------------------------------------
-            // RESTORE 5% MAX MANA
+            // 2% PROC CHANCE PER RANK
+            // --------------------------------------------------------
+
+            float procChance =
+                rank * 0.02f;
+
+            if (UnityEngine.Random.value >=
+                procChance)
+            {
+                return;
+            }
+
+            // --------------------------------------------------------
+            // MANA VALUES
             // --------------------------------------------------------
 
             Stats ownerStats =
@@ -221,20 +245,6 @@ namespace FateOfTheFallen
                 return;
             }
 
-            int restoration =
-                UnityEngine.Mathf.RoundToInt(
-                    maxMana * 0.05f);
-
-            if (restoration <= 0)
-            {
-                return;
-            }
-
-
-            // --------------------------------------------------------
-            // DO NOT RESTORE IF ALREADY FULL
-            // --------------------------------------------------------
-
             int currentMana =
                 ownerStats.GetCurrentMana();
 
@@ -245,12 +255,23 @@ namespace FateOfTheFallen
 
 
             // --------------------------------------------------------
-            // APPLY RESTORATION
+            // RESTORE 10% MAX MANA
             // --------------------------------------------------------
+
+            int restoration =
+                UnityEngine.Mathf.RoundToInt(
+                    maxMana *
+                    0.10f);
+
+            if (restoration <= 0)
+            {
+                return;
+            }
 
             ownerStats.CurrentMana =
                 UnityEngine.Mathf.Min(
-                    currentMana + restoration,
+                    currentMana +
+                    restoration,
                     maxMana);
         }
     }

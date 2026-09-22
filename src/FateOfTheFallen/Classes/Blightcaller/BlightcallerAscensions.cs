@@ -31,7 +31,7 @@ namespace FateOfTheFallen
         private const int PotentAfflictionMaxRank = 3;
         private const int AcceleratedDecayMaxRank = 3;
         private const int ExtendedAfflictionMaxRank = 3;
-        private const int PestilentRejuvinationMaxRank = 3;
+        private const int PestilentRejuvenationMaxRank = 3;
 
         private const int ExpectedCount = 4;
 
@@ -139,9 +139,9 @@ namespace FateOfTheFallen
                 Create(
                     PestilentRejuvenationId,
                     "Pestilent Rejuvenation",
-                    "Your damage-over-time effects have a 2% chance to restore 5% of your maximum mana when they deal damage.",
+                    "Your damage-over-time effects have a 2% chance to restore 10% of your maximum mana when they deal damage.",
                     5,
-                    PestilentRejuvinationMaxRank));
+                    PestilentRejuvenationMaxRank));
 
             // ========================================================
             // ADD TO NATIVE DATABASE
@@ -156,10 +156,7 @@ namespace FateOfTheFallen
             _registeredDatabase =
                 database;
 
-            Plugin.ModLog.Loading(
-                "Blightcaller: registered " +
-                Registered.Count +
-                " Ascension perks.");
+            
 
             return true;
         }
@@ -486,26 +483,32 @@ namespace FateOfTheFallen
                 1f +
                 (rank * 0.15f);
         }
-    
+
 
         // ============================================================
         // PESTILENT REJUVENATION
         // ============================================================
 
-        internal static bool HasPestilentRejuvenation(
-           UseSkill skills)
+        internal static int GetPestilentRejuvenationRank(
+            UseSkill skills)
         {
             if (!IsBlightcallerSkills(skills))
             {
-                return false;
+                return 0;
             }
 
-            return
-                GetRank(
-                    skills,
-                    PestilentRejuvenationId) > 0;
+            return GetRank(
+                skills,
+                PestilentRejuvenationId);
         }
 
 
+        internal static bool HasPestilentRejuvenation(
+            UseSkill skills)
+        {
+            return
+                GetPestilentRejuvenationRank(
+                    skills) > 0;
+        }
     }
 }

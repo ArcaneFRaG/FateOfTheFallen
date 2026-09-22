@@ -15,98 +15,98 @@ namespace FateOfTheFallen
                 typeof(Stats)
             })]
     internal static class Patch_BlightcallerCast
+    {
+        private static bool Prefix(
+            CastSpell __instance,
+            Spell _spell,
+            ref Stats _target,
+            ref bool __result)
         {
-            private static bool Prefix(
-                CastSpell __instance,
-                Spell _spell,
-                ref Stats _target,
-                ref bool __result)
+            try
             {
-                try
-                {
-                    BlightcallerSpellDefinition definition;
-    
-                    if (!BlightcallerCatalog.TryGetDefinition(
-                            _spell,
-                            out definition))
-                    {
-                        return true;
-                    }
-    
-                    string denial;
-    
-                    if (BlightcallerRuntime.PrepareCast(
-                        __instance,
+                BlightcallerSpellDefinition definition;
+
+                if (!BlightcallerCatalog.TryGetDefinition(
                         _spell,
-                        ref _target,
-                        out denial))
-                    {
-                        return true;
-                    }
-    
-                    __result = false;
-    
-                    return false;
-                }
-                catch (Exception exception)
+                        out definition))
                 {
-                    Plugin.NativeLog.LogError(
-                        "Blightcaller: spell cast patch failed: " +
-                        exception);
-    
                     return true;
                 }
+
+                string denial;
+
+                if (BlightcallerRuntime.PrepareCast(
+                    __instance,
+                    _spell,
+                    ref _target,
+                    out denial))
+                {
+                    return true;
+                }
+
+                __result = false;
+
+                return false;
             }
-    
-            private static void Postfix(
-                Spell _spell,
-                bool __result)
+            catch (Exception exception)
             {
-                if (!__result)
+                Plugin.NativeLog.LogError(
+                    "Blightcaller: spell cast patch failed: " +
+                    exception);
+
+                return true;
+            }
+        }
+
+        private static void Postfix(
+            Spell _spell,
+            bool __result)
+        {
+            if (!__result)
+            {
+                return;
+            }
+
+            try
+            {
+                BlightcallerSpellDefinition definition;
+
+                if (!BlightcallerCatalog.TryGetDefinition(
+                        _spell,
+                        out definition))
                 {
                     return;
                 }
-    
-                try
+
+                if (definition.HiddenEffect)
                 {
-                    BlightcallerSpellDefinition definition;
-    
-                    if (!BlightcallerCatalog.TryGetDefinition(
-                            _spell,
-                            out definition))
-                    {
-                        return;
-                    }
-    
-                    if (definition.HiddenEffect)
-                    {
-                        return;
-                    }
-    
-                    if (GameData.PlayerCombat == null)
-                    {
-                        return;
-                    }
-    
-                    if (GameData.PlayerStats == null)
-                    {
-                        return;
-                    }
-    
-                    if (!BlightcallerCatalog.IsBlightcallerClass(
-                            GameData.PlayerStats.CharacterClass))
-                    {
-                        return;
-                    }
-    
-                    GameData.PlayerCombat.ForceAttackOn();
+                    return;
                 }
-                catch (Exception exception)
+
+                if (GameData.PlayerCombat == null)
                 {
-                    Plugin.NativeLog.LogError(
-                        "Blightcaller: post-cast handling failed: " +
-                        exception);
+                    return;
                 }
+
+                if (GameData.PlayerStats == null)
+                {
+                    return;
+                }
+
+                if (!BlightcallerCatalog.IsBlightcallerClass(
+                        GameData.PlayerStats.CharacterClass))
+                {
+                    return;
+                }
+
+                GameData.PlayerCombat.ForceAttackOn();
+            }
+            catch (Exception exception)
+            {
+                Plugin.NativeLog.LogError(
+                    "Blightcaller: post-cast handling failed: " +
+                    exception);
             }
         }
+    }
 }

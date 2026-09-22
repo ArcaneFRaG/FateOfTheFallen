@@ -112,7 +112,7 @@ namespace FateOfTheFallen
                     new Harmony(
                         PluginGuid);
 
-                //_harmony.PatchAll();
+                _harmony.PatchAll();
 
                 BlightcallerClassIcon.Initialize();
 
