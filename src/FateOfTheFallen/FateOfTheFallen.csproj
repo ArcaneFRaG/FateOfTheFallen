@@ -25,6 +25,10 @@
     <Reference Include="UnityEngine.AudioModule"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.AudioModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.ImageConversionModule"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>D:\SteamLibrary\steamapps\common\Erenshor\Erenshor_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.UI"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="System" />

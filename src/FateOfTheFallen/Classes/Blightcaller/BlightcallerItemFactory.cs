@@ -8,11 +8,20 @@ namespace FateOfTheFallen
 {
     internal static class BlightcallerItemFactory
     {
+        // ============================================================
+        // EMBEDDED RESOURCES
+        // ============================================================
+
         private const string CustomScrollIconResource =
             "FateOfTheFallen.Assets.Blightcaller_Scroll.png";
 
         private const string CustomAuraIconResource =
             "FateOfTheFallen.Assets.Blightcaller_Aura.png";
+
+
+        // ============================================================
+        // ITEM REGISTRY
+        // ============================================================
 
         private static readonly Dictionary<string, Item> ItemsById =
             new Dictionary<string, Item>(
@@ -22,9 +31,227 @@ namespace FateOfTheFallen
             new Dictionary<string, Item>(
                 StringComparer.OrdinalIgnoreCase);
 
+
+        // ============================================================
+        // ICON CACHE
+        // ============================================================
+
         private static readonly Dictionary<string, Sprite> IconsByResource =
             new Dictionary<string, Sprite>(
                 StringComparer.OrdinalIgnoreCase);
+
+
+        // ============================================================
+        // GENERIC ITEM CREATION
+        // ============================================================
+        //
+        // This is the common creation path for custom Fate of the
+        // Fallen items.
+        //
+        // Individual systems should use this rather than directly
+        // calling ScriptableObject.CreateInstance<Item>().
+        //
+        // The specialised system can then configure additional fields
+        // after creation, for example:
+        //
+        //     BookTitle
+        //     AssignQuestOnRead
+        //     CompleteOnRead
+        //     TeachSpell
+        //     TeachSkill
+        //     Aura
+        //     WornEffect
+        //
+        // CreateItem also automatically registers the resulting item
+        // with the custom item registry.
+        // ============================================================
+
+        internal static Item CreateItem(
+            string id,
+            string itemName,
+            string lore,
+            Item.SlotType slot,
+            Sprite icon,
+            int itemLevel = 1,
+            int itemValue = 0,
+            bool stackable = false,
+            bool disposable = false,
+            bool unique = false,
+            bool playerCannotSell = false,
+            bool noTradeNoDestroy = false,
+            bool simPlayersCantGet = false)
+        {
+            // ========================================================
+            // VALIDATION
+            // ========================================================
+
+            if (string.IsNullOrEmpty(id))
+            {
+                Plugin.NativeLog.LogError(
+                    "BlightcallerItemFactory: cannot create an item without an ID.");
+
+                return null;
+            }
+
+            if (string.IsNullOrEmpty(itemName))
+            {
+                Plugin.NativeLog.LogError(
+                    "BlightcallerItemFactory: cannot create item " +
+                    id +
+                    " without an ItemName.");
+
+                return null;
+            }
+
+
+            // ========================================================
+            // EXISTING ITEM
+            // ========================================================
+            //
+            // Registration methods can be called more than once as
+            // Erenshor databases initialise/reinitialise.
+            //
+            // Never create a second ScriptableObject for the same ID.
+            // ========================================================
+
+            Item existing =
+                GetItemById(
+                    id);
+
+            if (existing != null)
+            {
+                return existing;
+            }
+
+
+            // ========================================================
+            // CREATE ITEM
+            // ========================================================
+
+            Item item =
+                ScriptableObject.CreateInstance<Item>();
+
+            if (item == null)
+            {
+                Plugin.NativeLog.LogError(
+                    "BlightcallerItemFactory: ScriptableObject.CreateInstance<Item>() " +
+                    "returned null for " +
+                    id +
+                    ".");
+
+                return null;
+            }
+
+
+            // ========================================================
+            // IDENTITY
+            // ========================================================
+
+            item.name =
+                itemName;
+
+            item.Id =
+                id;
+
+            item.ItemName =
+                itemName;
+
+
+            // ========================================================
+            // BASIC DATA
+            // ========================================================
+
+            item.ItemLevel =
+                itemLevel;
+
+            item.ItemValue =
+                itemValue;
+
+            item.RequiredSlot =
+                slot;
+
+            item.Lore =
+                lore ?? string.Empty;
+
+
+            // ========================================================
+            // ICON
+            // ========================================================
+
+            item.ItemIcon =
+                icon;
+
+
+            // ========================================================
+            // CLASS ACCESS
+            // ========================================================
+            //
+            // Start with an empty list.
+            //
+            // The specialised item creator can add class restrictions
+            // afterwards if required.
+            //
+            // Quest items, notes, general world objects, etc. normally
+            // remain unrestricted.
+            // ========================================================
+
+            item.Classes =
+                new List<Class>();
+
+
+            // ========================================================
+            // INVENTORY BEHAVIOUR
+            // ========================================================
+
+            item.Stackable =
+                stackable;
+
+            item.Disposable =
+                disposable;
+
+            item.Unique =
+                unique;
+
+            item.PlayerCannotSell =
+                playerCannotSell;
+
+            item.NoTradeNoDestroy =
+                noTradeNoDestroy;
+
+            item.SimPlayersCantGet =
+                simPlayersCantGet;
+
+
+            // ========================================================
+            // UNITY LIFETIME
+            // ========================================================
+
+            item.hideFlags =
+                HideFlags.HideAndDontSave;
+
+
+            // ========================================================
+            // REGISTER
+            // ========================================================
+
+            RegisterItem(
+                item);
+
+
+            Plugin.NativeLog.LogDebug(
+                "BlightcallerItemFactory: created custom item " +
+                item.Id +
+                ": " +
+                item.ItemName +
+                ".");
+
+            return item;
+        }
+
+
+        // ============================================================
+        // REGISTER ITEM
+        // ============================================================
 
         internal static void RegisterItem(
             Item item)
@@ -53,6 +280,11 @@ namespace FateOfTheFallen
             }
         }
 
+
+        // ============================================================
+        // LOOKUP BY ID
+        // ============================================================
+
         internal static Item GetItemById(
             string id)
         {
@@ -72,6 +304,11 @@ namespace FateOfTheFallen
 
             return null;
         }
+
+
+        // ============================================================
+        // LOOKUP BY NAME
+        // ============================================================
 
         internal static Item GetItem(
             string itemName)
@@ -93,6 +330,11 @@ namespace FateOfTheFallen
             return null;
         }
 
+
+        // ============================================================
+        // REGISTERED CHECK
+        // ============================================================
+
         internal static bool IsRegistered(
             string id)
         {
@@ -101,8 +343,14 @@ namespace FateOfTheFallen
                 return false;
             }
 
-            return ItemsById.ContainsKey(id);
+            return ItemsById.ContainsKey(
+                id);
         }
+
+
+        // ============================================================
+        // BLIGHTCALLER SCROLL ICON
+        // ============================================================
 
         internal static Sprite GetCustomScrollIcon()
         {
@@ -111,12 +359,22 @@ namespace FateOfTheFallen
                 "Blightcaller Scroll Icon");
         }
 
+
+        // ============================================================
+        // BLIGHTCALLER AURA ICON
+        // ============================================================
+
         internal static Sprite GetCustomAuraIcon()
         {
             return LoadEmbeddedIcon(
                 CustomAuraIconResource,
                 "Blightcaller Aura Icon");
         }
+
+
+        // ============================================================
+        // GENERIC EMBEDDED SPRITE LOAD
+        // ============================================================
 
         internal static Sprite Load(
             string resourceName)
@@ -131,6 +389,11 @@ namespace FateOfTheFallen
                 "Blightcaller Spell Icon");
         }
 
+
+        // ============================================================
+        // LOAD EMBEDDED ICON
+        // ============================================================
+
         internal static Sprite LoadEmbeddedIcon(
             string resourceName,
             string iconName)
@@ -140,6 +403,11 @@ namespace FateOfTheFallen
                 return null;
             }
 
+
+            // ========================================================
+            // CACHE
+            // ========================================================
+
             Sprite cached;
 
             if (IconsByResource.TryGetValue(
@@ -148,6 +416,11 @@ namespace FateOfTheFallen
             {
                 return cached;
             }
+
+
+            // ========================================================
+            // RESOURCE LOOKUP
+            // ========================================================
 
             Assembly assembly =
                 typeof(BlightcallerItemFactory).Assembly;
@@ -176,7 +449,9 @@ namespace FateOfTheFallen
                         Plugin.NativeLog.LogWarning(
                             "Blightcaller: available embedded resources:");
 
-                        foreach (string resource in resources)
+                        foreach (
+                            string resource
+                            in resources)
                         {
                             Plugin.NativeLog.LogWarning(
                                 "  " +
@@ -186,6 +461,11 @@ namespace FateOfTheFallen
 
                     return null;
                 }
+
+
+                // ====================================================
+                // READ IMAGE
+                // ====================================================
 
                 byte[] imageData =
                     new byte[stream.Length];
@@ -219,6 +499,11 @@ namespace FateOfTheFallen
                     return null;
                 }
 
+
+                // ====================================================
+                // CREATE TEXTURE
+                // ====================================================
+
                 Texture2D texture =
                     new Texture2D(
                         2,
@@ -227,8 +512,8 @@ namespace FateOfTheFallen
                         false);
 
                 if (!texture.LoadImage(
-                    imageData,
-                    false))
+                        imageData,
+                        false))
                 {
                     Plugin.NativeLog.LogWarning(
                         "Blightcaller: failed to decode embedded icon: " +
@@ -249,6 +534,11 @@ namespace FateOfTheFallen
                 texture.filterMode =
                     FilterMode.Bilinear;
 
+
+                // ====================================================
+                // CREATE SPRITE
+                // ====================================================
+
                 Sprite sprite =
                     Sprite.Create(
                         texture,
@@ -265,6 +555,11 @@ namespace FateOfTheFallen
                 sprite.name =
                     iconName;
 
+
+                // ====================================================
+                // CACHE
+                // ====================================================
+
                 IconsByResource[
                     resourceName] =
                     sprite;
@@ -273,10 +568,21 @@ namespace FateOfTheFallen
             }
         }
 
+
+        // ============================================================
+        // CLEAR
+        // ============================================================
+
         internal static void Clear()
         {
             ItemsById.Clear();
+
             ItemsByName.Clear();
+
+
+            // ========================================================
+            // DESTROY CACHED SPRITES / TEXTURES
+            // ========================================================
 
             foreach (
                 Sprite sprite

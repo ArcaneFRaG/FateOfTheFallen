@@ -1,21 +1,22 @@
 ﻿using HarmonyLib;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using UnityEngine;
 
 namespace FateOfTheFallen
 {
     [HarmonyPatch(
-            typeof(CastSpell),
-            "StartSpell",
-            new Type[]
-            {
-                typeof(Spell),
-                typeof(Stats)
-            })]
+        typeof(CastSpell),
+        "StartSpell",
+        new Type[]
+        {
+            typeof(Spell),
+            typeof(Stats)
+        })]
     internal static class Patch_BlightcallerCast
     {
+        // ============================================================
+        // CAST VALIDATION
+        // ============================================================
+
         private static bool Prefix(
             CastSpell __instance,
             Spell _spell,
@@ -26,6 +27,7 @@ namespace FateOfTheFallen
             {
                 BlightcallerSpellDefinition definition;
 
+
                 if (!BlightcallerCatalog.TryGetDefinition(
                         _spell,
                         out definition))
@@ -33,18 +35,31 @@ namespace FateOfTheFallen
                     return true;
                 }
 
+
                 string denial;
 
+
+                /*
+                 * BlightcallerRuntime.PrepareCast() is already correctly
+                 * caster-aware. It checks:
+                 *
+                 * __instance.MyChar.MyStats.CharacterClass
+                 *
+                 * rather than GameData.PlayerStats.
+                 */
                 if (BlightcallerRuntime.PrepareCast(
-                    __instance,
-                    _spell,
-                    ref _target,
-                    out denial))
+                        __instance,
+                        _spell,
+                        ref _target,
+                        out denial))
                 {
                     return true;
                 }
 
-                __result = false;
+
+                __result =
+                    false;
+
 
                 return false;
             }
@@ -54,12 +69,20 @@ namespace FateOfTheFallen
                     "Blightcaller: spell cast patch failed: " +
                     exception);
 
+
                 return true;
             }
         }
 
+
+        // ============================================================
+        // POST CAST
+        // ============================================================
+
         private static void Postfix(
+            CastSpell __instance,
             Spell _spell,
+            Stats _target,
             bool __result)
         {
             if (!__result)
@@ -67,9 +90,11 @@ namespace FateOfTheFallen
                 return;
             }
 
+
             try
             {
                 BlightcallerSpellDefinition definition;
+
 
                 if (!BlightcallerCatalog.TryGetDefinition(
                         _spell,
@@ -78,28 +103,76 @@ namespace FateOfTheFallen
                     return;
                 }
 
+
+                // ====================================================
+                // DOT SCHEDULER FAST-PATH
+                // ====================================================
+                //
+                // Projectile spells may not have resolved yet, so this
+                // does not replace the normal Stats.Update tracking.
+                //
+                // It simply catches any Blightcaller effect already on
+                // the target immediately.
+                // ====================================================
+
+                if (_target != null &&
+                    _target.StatusEffects != null)
+                {
+                    BlightcallerDotScheduler
+                        .TrackStatusEffects(
+                            _target);
+                }
+
+
                 if (definition.HiddenEffect)
                 {
                     return;
                 }
 
-                if (GameData.PlayerCombat == null)
+
+                // ====================================================
+                // ACTUAL CASTER
+                // ====================================================
+
+                Character caster =
+                    __instance != null
+                        ? __instance.MyChar
+                        : null;
+
+
+                if (caster == null ||
+                    caster.MyStats == null)
                 {
                     return;
                 }
 
-                if (GameData.PlayerStats == null)
+
+                if (!BlightcallerCatalog
+                        .IsBlightcallerClass(
+                            caster.MyStats.CharacterClass))
                 {
                     return;
                 }
 
-                if (!BlightcallerCatalog.IsBlightcallerClass(
-                        GameData.PlayerStats.CharacterClass))
-                {
-                    return;
-                }
 
-                GameData.PlayerCombat.ForceAttackOn();
+                // ====================================================
+                // PLAYER-ONLY COMBAT HANDLING
+                // ====================================================
+                //
+                // SimPlayer Blightcallers must remain entirely within
+                // native NPC combat handling.
+                //
+                // Never call the local PlayerCombat controller because
+                // a SimPlayer successfully cast a Blightcaller spell.
+                // ====================================================
+
+                if (caster.MyStats ==
+                        GameData.PlayerStats &&
+                    GameData.PlayerCombat != null)
+                {
+                    GameData.PlayerCombat
+                        .ForceAttackOn();
+                }
             }
             catch (Exception exception)
             {

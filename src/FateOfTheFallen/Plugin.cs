@@ -18,7 +18,7 @@ namespace FateOfTheFallen
             "Fate of the Fallen";
 
         public const string PluginVersion =
-            "0.1.2";
+            "0.1.25";
 
         private Harmony _harmony;
 

@@ -473,6 +473,8 @@ namespace FateOfTheFallen
                 );
 
                 ConfigureKaelithInventory(inventory);
+                ConfigureKaelithQuests(
+                    vendor);
             }
             catch (Exception ex)
             {
@@ -484,6 +486,94 @@ namespace FateOfTheFallen
                 DestroyVendor(ref _advancedVendor);
             }
         }
+
+        // ------------------------------------------------------------
+        // KAELITH QUESTS
+        // ------------------------------------------------------------
+
+        private static void ConfigureKaelithQuests(
+            GameObject vendor)
+        {
+            if (vendor == null)
+            {
+                return;
+            }
+
+            Quest quest =
+                FateOfTheFallenQuests.WeatheredNoteQuest;
+
+            if (quest == null)
+            {
+                Plugin.NativeLog.LogError(
+                    "Kaelith: Weathered Note quest was unavailable.");
+
+                return;
+            }
+
+            QuestManager questManager =
+                vendor.GetComponent<QuestManager>();
+
+            if (questManager == null)
+            {
+                questManager =
+                    vendor.AddComponent<QuestManager>();
+
+                Plugin.NativeLog.LogInfo(
+                    "Kaelith: added QuestManager component.");
+            }
+
+            if (questManager.NPCQuests == null)
+            {
+                questManager.NPCQuests =
+                    new List<Quest>();
+            }
+
+
+            // Remove stale/duplicate versions of our quest.
+
+            for (int i =
+                     questManager.NPCQuests.Count - 1;
+                 i >= 0;
+                 i--)
+            {
+                Quest existing =
+                    questManager.NPCQuests[i];
+
+                if (existing == null)
+                {
+                    continue;
+                }
+
+                if (string.Equals(
+                        existing.DBName,
+                        FateOfTheFallenQuests
+                            .WeatheredNoteQuestId,
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    questManager.NPCQuests.RemoveAt(
+                        i);
+                }
+            }
+
+
+            // Add the exact Quest object used by the custom quest system.
+
+            questManager.NPCQuests.Add(
+                quest);
+
+            Plugin.NativeLog.LogInfo(
+                "Kaelith: attached quest [" +
+                quest.DBName +
+                "] to QuestManager. Required item count: " +
+                (
+                    quest.RequiredItems != null
+                        ? quest.RequiredItems.Count
+                        : 0
+                ) +
+                ".");
+        }
+
+
 
         // ------------------------------------------------------------
         // SPAWN VORREN
@@ -1058,8 +1148,26 @@ namespace FateOfTheFallen
 
                 string dialogue;
 
+                // ----------------------------------------------------
+                // KAELITH QUEST TURN-IN
+                // ----------------------------------------------------
+
                 if (isKaelith)
                 {
+                    string questDialogue;
+
+                    if (FateOfTheFallenQuests
+                        .TryHandleKaelithTurnIn(
+                            out questDialogue))
+                    {
+                        SetDialogReturnString(
+                            __instance,
+                            questDialogue
+                        );
+
+                        return;
+                    }
+
                     dialogue =
                         GetKaelithDialogue();
                 }
