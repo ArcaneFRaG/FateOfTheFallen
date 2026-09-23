@@ -13,7 +13,7 @@ namespace FateOfTheFallen
             new Color(0.55f, 0.20f, 0.75f, 1f);
 
         internal static readonly Color NameplateColor =
-            new Color(0.70f, 0.35f, 0.85f, 1f);
+            new Color(0.22f, 0.30f, 0.24f, 1f);
 
         private const string IconResourceName =
             "FateOfTheFallen.Assets.BlightcallerClassIcon.png";

@@ -198,6 +198,7 @@ namespace FateOfTheFallen
                     }
                 }
 
+
                 // ============================================================
                 // REPAIR THE SAVE-SLOT ASCENSION LIST
                 // ============================================================
@@ -281,6 +282,32 @@ namespace FateOfTheFallen
 
                 GameData.GM.PlayerSkills.AscensionPoints =
                     GameData.CurrentCharacterSlot.AscensionPointsUnspent;
+
+
+                // ============================================================
+                // RESTORE EQUIPPED BLIGHTCALLER AURA
+                // ============================================================
+                //
+                // Native equipment loading can occur before the custom
+                // Blightcaller Aura items have been registered.
+                //
+                // By the time LoadSpellsAndSkills runs, the active character,
+                // inventory and custom databases should normally be available,
+                // making this a useful final retry point.
+                //
+                // TryRestoreFromSave() is intentionally safe to call more than
+                // once. If the Aura was already restored during Inventory.Start
+                // or SpellDB.Start, this simply confirms the current state.
+                // ============================================================
+
+                BlightcallerAuraPersistence
+                    .TryRestoreFromSave(
+                        "LoadSpellsAndSkills");
+
+
+                // ============================================================
+                // SKIP NATIVE LOAD
+                // ============================================================
 
                 return false;
             }

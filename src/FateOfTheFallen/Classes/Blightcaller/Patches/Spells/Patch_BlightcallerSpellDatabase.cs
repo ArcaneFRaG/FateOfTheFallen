@@ -36,12 +36,22 @@ namespace FateOfTheFallen
     
                     BlightcallerCatalog.RegisterSpells(
                         __instance);
-    
-                    BlightcallerScrolls.Register();
-    
-                    BlightcallerAuras.Register(
-                        __instance);
-                }
+
+                BlightcallerScrolls.Register();
+
+                BlightcallerAuras.Register(
+                    __instance);
+
+                /*
+                 * Aura items now definitely exist in the custom item registry,
+                 * so retry restoration after registration.
+                 */
+                BlightcallerAuraPersistence
+                    .TryRestoreFromSave(
+                        "SpellDB.Start");
+            }
+
+
                 catch (Exception exception)
                 {
                     Plugin.NativeLog.LogError(
