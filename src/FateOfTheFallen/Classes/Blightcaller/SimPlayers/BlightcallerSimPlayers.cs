@@ -198,10 +198,6 @@ namespace FateOfTheFallen
                     assignedCount++;
                     changed = true;
 
-                    Plugin.NativeLog.LogDebug(
-                        "Blightcaller SimPlayers: assigned [" +
-                        sim.SimName +
-                        "] as Blightcaller.");
                 }
             }
 
@@ -234,12 +230,7 @@ namespace FateOfTheFallen
                 _loggedPopulation =
                     true;
 
-                Plugin.NativeLog.LogInfo(
-                    "Blightcaller SimPlayers: assigned " +
-                    assignedCount +
-                    " of " +
-                    eligible.Count +
-                    " eligible SimPlayers.");
+                
             }
         }
 
@@ -261,20 +252,12 @@ namespace FateOfTheFallen
                 return false;
             }
 
-            /*
-             * Preserve an existing Blightcaller assignment even after
-             * ClassName has already been changed away from a native class.
-             */
             if (AssignedSimNames.Contains(
                     sim.SimName))
             {
                 return true;
             }
 
-            /*
-             * Do not steal a Sim that another custom-class mod has already
-             * changed to a non-native class.
-             */
             return IsNativeClassName(
                 sim.ClassName);
         }
@@ -475,10 +458,6 @@ namespace FateOfTheFallen
                 sim.LoadSimSkills();
                 sim.LoadSimSpells();
 
-                Plugin.NativeLog.LogDebug(
-                    "Blightcaller SimPlayers: rebuilt runtime kit for active Sim [" +
-                    npc.NPCName +
-                    "].");
             }
         }
 
@@ -555,12 +534,7 @@ namespace FateOfTheFallen
                 }
             }
 
-            Plugin.NativeLog.LogInfo(
-                "Blightcaller SimPlayers: configured " +
-                visibleCount +
-                " visible spells for Sim use; " +
-                hiddenCount +
-                " hidden carrier effects remain non-castable.");
+            
         }
 
 
@@ -726,7 +700,7 @@ namespace FateOfTheFallen
 
 
         // ============================================================
-        // BLIGHTCALLER SIMPLAYER ASCENSIONS
+        // BLIGHTCALLER SIMPLAYER ASCENSION SELECTION
         // ============================================================
 
         internal static bool ChooseBlightcallerAscension(
@@ -774,9 +748,8 @@ namespace FateOfTheFallen
                 new List<Ascension>();
 
             /*
-             * Preserve the native SimPlayer progression rule:
-             * class-specific Ascensions do not become available until
-             * eight Ascension points have already been spent.
+             * Native SimPlayers do not begin receiving class-specific
+             * Ascensions until eight total points have already been spent.
              */
             bool classAscensionsUnlocked =
                 skills.GetPointsSpent() >= 8;
@@ -811,9 +784,8 @@ namespace FateOfTheFallen
             }
 
             /*
-             * Native fallback behavior:
-             * - before class Ascensions unlock, choose General
-             * - after all class Ascensions are capped, choose General
+             * Before the class-specific pool unlocks, or once every
+             * Blightcaller Ascension is capped, fall back to General.
              */
             if (candidates.Count == 0 &&
                 GameData.SkillDatabase != null &&
@@ -848,18 +820,16 @@ namespace FateOfTheFallen
 
             if (candidates.Count == 0)
             {
-                Plugin.NativeLog.LogDebug(
-                    "Blightcaller SimPlayers: no available Ascensions for [" +
-                    npc.NPCName +
-                    "].");
 
                 return true;
             }
 
             /*
-             * Match native SimPlayerChooseAscension selection:
-             * pick the candidate with the highest
-             * SimPlayerWeight - current rank.
+             * Match the native SimPlayer selection method:
+             *
+             *     SimPlayerWeight - current rank
+             *
+             * Highest value wins.
              */
             int bestWeight =
                 -99;
@@ -920,18 +890,107 @@ namespace FateOfTheFallen
                 skills.GetAscensionRank(
                     selected.Id);
 
-            Plugin.NativeLog.LogInfo(
-                "Blightcaller SimPlayers: [" +
-                npc.NPCName +
-                "] selected Ascension [" +
-                selected.SkillName +
-                "] rank " +
-                newRank +
-                "/" +
-                selected.MaxRank +
-                ".");
+            
 
             return true;
+        }
+
+
+        // ============================================================
+        // SIMPLAYER ASCENSION INSPECTION UI
+        // ============================================================
+        //
+        // Native SimInspect.DoAscensionsView() displays:
+        //
+        // - General Ascensions for everyone
+        // - native class-specific Ascensions for the six native classes
+        //
+        // It has no "Blightcaller" branch, so our custom Ascensions are
+        // omitted from the inspection window despite existing correctly
+        // in the SimPlayer's UseSkill.MyAscensions list.
+        //
+        // This method is called from the SimInspect Harmony postfix.
+        // ============================================================
+
+        internal static void PopulateAscensionInspection(
+            SimInspect inspect)
+        {
+            if (inspect == null ||
+                inspect.Who == null ||
+                inspect.Who.MyStats == null ||
+                inspect.AscList == null)
+            {
+                return;
+            }
+
+            SimPlayer sim =
+                inspect.Who;
+
+            if (!BlightcallerCatalog
+                    .IsBlightcallerClass(
+                        sim.MyStats.CharacterClass))
+            {
+                return;
+            }
+
+            if (!BlightcallerAscensions.Register())
+            {
+                Plugin.NativeLog.LogWarning(
+                    "Blightcaller SimPlayers: could not register Ascensions while populating inspection UI.");
+
+                return;
+            }
+
+            UseSkill skills =
+                sim.GetComponent<UseSkill>();
+
+            if (skills == null &&
+                sim.MyStats.Myself != null)
+            {
+                skills =
+                    sim.MyStats.Myself.MySkills;
+            }
+
+            if (skills == null)
+            {
+                Plugin.NativeLog.LogWarning(
+                    "Blightcaller SimPlayers: inspected Blightcaller [" +
+                    sim.transform.name +
+                    "] has no UseSkill component.");
+
+                return;
+            }
+
+            /*
+             * Native DoAscensionsView() has already cleared the text and
+             * populated all General Ascensions.
+             *
+             * We append only the four Blightcaller-specific Ascensions.
+             */
+            foreach (
+                Ascension ascension
+                in BlightcallerAscensions.All)
+            {
+                if (ascension == null ||
+                    string.IsNullOrEmpty(
+                        ascension.Id))
+                {
+                    continue;
+                }
+
+                int rank =
+                    BlightcallerAscensions.GetRank(
+                        skills,
+                        ascension.Id);
+
+                inspect.AscList.text +=
+                    ascension.SkillName +
+                    " - Rank: " +
+                    rank +
+                    " / " +
+                    ascension.MaxRank +
+                    "\n";
+            }
         }
 
 
@@ -957,9 +1016,10 @@ namespace FateOfTheFallen
             data.Reav = false;
 
             /*
-             * Blightcaller uses Arcanist as its native persistence fallback.
-             * The real Blightcaller class is restored by the LoadSimData
-             * postfix before native skills/spells are rebuilt.
+             * Native SimPlayer save data cannot store a custom class.
+             *
+             * Save Blightcaller Sims as Arcanists and restore the actual
+             * runtime class through LoadSimData.
              */
             data.Arc = true;
         }
@@ -1099,10 +1159,6 @@ namespace FateOfTheFallen
 
             Save();
 
-            Plugin.NativeLog.LogDebug(
-                "Blightcaller SimPlayers: removed assignment for [" +
-                simName +
-                "].");
         }
 
 
@@ -1118,6 +1174,7 @@ namespace FateOfTheFallen
             }
 
             _loaded = true;
+
             AssignedSimNames.Clear();
 
             if (TryLoadFile(
@@ -1207,10 +1264,7 @@ namespace FateOfTheFallen
                         simName);
                 }
 
-                Plugin.NativeLog.LogInfo(
-                    "Blightcaller SimPlayers: loaded " +
-                    AssignedSimNames.Count +
-                    " persistent assignments.");
+                
 
                 return true;
             }

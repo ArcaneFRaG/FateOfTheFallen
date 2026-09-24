@@ -91,14 +91,7 @@ namespace FateOfTheFallen
                 // DIAGNOSTICS
                 // ====================================================
 
-                Plugin.NativeLog.LogInfo(
-                    "Fate of the Fallen: ItemDatabase initialization complete. Weathered Note=" +
-                    (
-                        weatheredNote != null
-                            ? weatheredNote.Id
-                            : "<null>"
-                    ) +
-                    ".");
+            
             }
             catch (Exception exception)
             {
@@ -145,10 +138,7 @@ namespace FateOfTheFallen
                         item
                     };
 
-                Plugin.NativeLog.LogInfo(
-                    "Fate of the Fallen: native ItemDB was null; created database containing [" +
-                    item.ItemName +
-                    "].");
+                
             }
             else
             {
@@ -189,10 +179,6 @@ namespace FateOfTheFallen
                     found =
                         true;
 
-                    Plugin.NativeLog.LogInfo(
-                        "Fate of the Fallen: replaced native ItemDB entry for ID [" +
-                        item.Id +
-                        "] with canonical custom item.");
 
                     break;
                 }
@@ -218,14 +204,7 @@ namespace FateOfTheFallen
                     database.ItemDB =
                         expanded;
 
-                    Plugin.NativeLog.LogInfo(
-                        "Fate of the Fallen: added [" +
-                        item.ItemName +
-                        "] ID [" +
-                        item.Id +
-                        "] to native ItemDB at index [" +
-                        oldLength +
-                        "].");
+                    
                 }
             }
 
@@ -311,8 +290,7 @@ namespace FateOfTheFallen
 
             if (itemDict == null)
             {
-                Plugin.NativeLog.LogWarning(
-                    "Fate of the Fallen: ItemDatabase.itemDict was null during custom item registration.");
+                
 
                 return;
             }
@@ -320,12 +298,7 @@ namespace FateOfTheFallen
             itemDict[item.Id] =
                 item;
 
-            Plugin.NativeLog.LogInfo(
-                "Fate of the Fallen: registered [" +
-                item.ItemName +
-                "] ID [" +
-                item.Id +
-                "] with native ItemDatabase.");
+            
         }
     }
 
@@ -399,8 +372,7 @@ namespace FateOfTheFallen
                             .ToString(),
                         StringComparison.OrdinalIgnoreCase))
                 {
-                    Plugin.NativeLog.LogInfo(
-                        "Fate of the Fallen: native inventory loader requested Weathered Note [1700].");
+                    
 
                     FateOfTheFallenNotes.Register(
                         __instance);
@@ -420,8 +392,7 @@ namespace FateOfTheFallen
                     __result =
                         item;
 
-                    Plugin.NativeLog.LogInfo(
-                        "Fate of the Fallen: resolved saved Weathered Note [1700] during native inventory load.");
+                    
 
                     return false;
                 }

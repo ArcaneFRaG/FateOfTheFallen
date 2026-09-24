@@ -68,10 +68,7 @@ namespace FateOfTheFallen
                     return;
                 }
 
-                Plugin.NativeLog.LogInfo(
-                    "Fate of the Fallen: registered Weathered Note [" +
-                    _weatheredNote.Id +
-                    "].");
+                
             }
 
 
@@ -192,23 +189,6 @@ namespace FateOfTheFallen
                 null;
 
 
-            // ========================================================
-            // CREATION DIAGNOSTICS
-            // ========================================================
-
-            if (note.ItemIcon != null)
-            {
-                Plugin.NativeLog.LogInfo(
-                    "Fate of the Fallen: Weathered Note created with native icon [" +
-                    note.ItemIcon.name +
-                    "].");
-            }
-            else
-            {
-                Plugin.NativeLog.LogInfo(
-                    "Fate of the Fallen: Weathered Note created before native icon data was available.");
-            }
-
             return note;
         }
 
@@ -315,10 +295,7 @@ namespace FateOfTheFallen
             _weatheredNote.ItemIcon =
                 nativeIcon;
 
-            Plugin.NativeLog.LogInfo(
-                "Fate of the Fallen: refreshed Weathered Note icon from native Torn Note [" +
-                nativeIcon.name +
-                "].");
+            
         }
 
 
@@ -351,12 +328,7 @@ namespace FateOfTheFallen
             _weatheredNote.AssignQuestOnRead =
                 quest;
 
-            Plugin.NativeLog.LogInfo(
-                "Fate of the Fallen: Weathered Note [" +
-                WeatheredNoteId +
-                "] linked to quest [" +
-                quest.DBName +
-                "].");
+            
         }
 
 

@@ -281,14 +281,7 @@ namespace FateOfTheFallen
                 skills.AscensionPoints +=
                     refund;
 
-                Plugin.ModLog.Info(
-                    "Blightcaller: capped " +
-                    customId +
-                    " at rank " +
-                    maxRank +
-                    " and refunded " +
-                    refund +
-                    " Ascension point(s).");
+                
 
                 rank =
                     maxRank;

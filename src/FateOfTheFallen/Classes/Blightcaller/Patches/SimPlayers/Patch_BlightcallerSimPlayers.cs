@@ -23,20 +23,10 @@ namespace FateOfTheFallen
                     return;
                 }
 
-
-                // ====================================================
-                // ASSIGN BLIGHTCALLER SIMPLAYERS
-                // ====================================================
-                //
-                // This executes before native role categorization.
-                //
-                // BlightcallerSimPlayers.EnsurePopulation() handles:
-                //
-                // - deterministic SimPlayer assignment
-                // - persistent sidecar assignments
-                // - restoring ClassName = "Blightcaller"
-                // ====================================================
-
+                /*
+                 * Assign persistent Blightcaller SimPlayers before
+                 * native role categorization occurs.
+                 */
                 BlightcallerSimPlayers
                     .EnsurePopulation(
                         __instance.Sims);
@@ -60,34 +50,24 @@ namespace FateOfTheFallen
                     return;
                 }
 
-
-                // ====================================================
-                // DPS ROLE
-                // ====================================================
-                //
-                // Native CategorizeAll() only knows the six native
-                // class-name strings.
-                //
-                // Add Blightcaller Sims to the global DPS pool after
-                // native processing has completed.
-                // ====================================================
-
+                /*
+                 * Native CategorizeAll() only knows the six native
+                 * class-name strings.
+                 *
+                 * Append Blightcaller Sims to the manager DPS pool.
+                 */
                 BlightcallerSimPlayers
                     .AddManagerDpsRoles(
                         __instance);
 
 
-                // ====================================================
-                // ACTIVE SIM RECONCILIATION
-                // ====================================================
-                //
-                // A newly assigned Sim may already have been spawned
-                // and loaded using its previous native class.
-                //
-                // Restore the runtime Blightcaller class and rebuild
-                // its skills/spells if required.
-                // ====================================================
-
+                /*
+                 * A Sim may already exist in the world when its
+                 * persistent Blightcaller assignment is restored.
+                 *
+                 * Reapply the actual runtime class and rebuild its
+                 * skills/spells where necessary.
+                 */
                 BlightcallerSimPlayers
                     .ReapplyActiveSimPlayers(
                         __instance);
@@ -121,22 +101,14 @@ namespace FateOfTheFallen
                     return;
                 }
 
-
-                // ====================================================
-                // RESTORE REAL CUSTOM CLASS
-                // ====================================================
-                //
-                // Native SimPlayerSaveData contains only the six
-                // original class Boolean flags.
-                //
-                // Blightcaller Sims therefore load natively as the
-                // Arcanist fallback.
-                //
-                // This postfix replaces that fallback with the actual
-                // Blightcaller Class ScriptableObject before native
-                // LoadSimSkills() and LoadSimSpells() execute.
-                // ====================================================
-
+                /*
+                 * Native SimPlayerSaveData contains only the native
+                 * class Boolean flags.
+                 *
+                 * Blightcaller therefore loads through the Arcanist
+                 * fallback and is restored here to the real custom
+                 * Class ScriptableObject.
+                 */
                 BlightcallerSimPlayers
                     .ApplyRuntimeClass(
                         __instance);
@@ -170,24 +142,11 @@ namespace FateOfTheFallen
                     return;
                 }
 
-
-                // ====================================================
-                // CUSTOM-CLASS SKILLS
-                // ====================================================
-                //
-                // Native LoadSimSkills() hardcodes:
-                //
-                // Paladin
-                // Arcanist
-                // Duelist
-                // Druid
-                // Stormcaller
-                // Reaver
-                //
-                // Blightcaller therefore needs its shared skills
-                // appended after native processing.
-                // ====================================================
-
+                /*
+                 * Native LoadSimSkills() hardcodes the six native
+                 * classes, so append Blightcaller's shared skills
+                 * after native processing.
+                 */
                 BlightcallerSimPlayers
                     .AddBlightcallerSkills(
                         __instance);
@@ -206,22 +165,11 @@ namespace FateOfTheFallen
     // BLIGHTCALLER SIMPLAYER ASCENSION SELECTION
     // ============================================================
     //
-    // Native Stats.FindNextAscensions() hardcodes only:
+    // Native Stats.FindNextAscensions() knows only the six native
+    // classes.
     //
-    // - Duelist
-    // - Paladin
-    // - Arcanist
-    // - Druid
-    // - Stormcaller
-    // - Reaver
-    //
-    // A runtime class named "Blightcaller" therefore cannot receive
-    // its class-specific Ascensions through native selection.
-    //
-    // Intercept SimPlayerChooseAscension only for actual
-    // Blightcaller SimPlayers.
-    //
-    // Every native class continues using completely native behaviour.
+    // Blightcaller therefore requires its own class-specific
+    // Ascension-selection path.
     // ============================================================
 
     [HarmonyPatch(
@@ -249,7 +197,6 @@ namespace FateOfTheFallen
                 NPC npc =
                     __instance.Myself.MyNPC;
 
-
                 if (npc == null ||
                     !npc.SimPlayer)
                 {
@@ -273,19 +220,16 @@ namespace FateOfTheFallen
                 // CUSTOM ASCENSION SELECTION
                 // ====================================================
                 //
-                // ChooseBlightcallerAscension() mirrors native
-                // SimPlayer Ascension behaviour but substitutes the
-                // Blightcaller class-specific Ascension pool.
+                // Handle Blightcaller Ascension selection ourselves.
                 //
-                // Returning false prevents native FindNextAscensions()
-                // from seeing the unknown "Blightcaller" class name and
-                // incorrectly falling back to General Ascensions.
+                // Returning false prevents native Erenshor from
+                // falling through to General-only Ascensions because
+                // "Blightcaller" is not one of its hardcoded classes.
                 // ====================================================
 
                 BlightcallerSimPlayers
                     .ChooseBlightcallerAscension(
                         __instance);
-
 
                 return false;
             }
@@ -295,15 +239,65 @@ namespace FateOfTheFallen
                     "Blightcaller SimPlayers: Ascension selection patch failed: " +
                     exception);
 
-
                 /*
                  * Fail open.
                  *
-                 * If our custom implementation unexpectedly fails,
-                 * allow native Erenshor processing instead of preventing
-                 * the SimPlayer from spending its Ascension point.
+                 * Native behaviour is preferable to blocking the
+                 * SimPlayer from spending an Ascension point entirely.
                  */
                 return true;
+            }
+        }
+    }
+
+
+    // ============================================================
+    // BLIGHTCALLER SIMPLAYER ASCENSION INSPECTION UI
+    // ============================================================
+    //
+    // Native SimInspect.DoAscensionsView() displays:
+    //
+    // - General Ascensions
+    // - Duelist Ascensions
+    // - Paladin Ascensions
+    // - Arcanist Ascensions
+    // - Druid Ascensions
+    // - Stormcaller Ascensions
+    // - Reaver Ascensions
+    //
+    // There is no Blightcaller class branch.
+    //
+    // Native processing is allowed to populate the General
+    // Ascensions first.
+    //
+    // The postfix then appends the Blightcaller-specific Ascensions
+    // using the inspected SimPlayer's real UseSkill ranks.
+    // ============================================================
+
+    [HarmonyPatch(
+        typeof(SimInspect),
+        "DoAscensionsView")]
+    internal static class Patch_BlightcallerSimPlayerAscensionInspection
+    {
+        private static void Postfix(
+            SimInspect __instance)
+        {
+            try
+            {
+                if (__instance == null)
+                {
+                    return;
+                }
+
+                BlightcallerSimPlayers
+                    .PopulateAscensionInspection(
+                        __instance);
+            }
+            catch (Exception exception)
+            {
+                Plugin.NativeLog.LogError(
+                    "Blightcaller SimPlayers: Ascension inspection UI patch failed: " +
+                    exception);
             }
         }
     }
@@ -328,22 +322,15 @@ namespace FateOfTheFallen
                     return;
                 }
 
-
-                // ====================================================
-                // SAVE BLIGHTCALLER AS NATIVE ARCANIST
-                // ====================================================
-                //
-                // Native SimPlayerSaveData has no extensible custom
-                // Class field.
-                //
-                // The persistent sidecar remembers that this Sim is
-                // actually a Blightcaller.
-                //
-                // Native Erenshor receives a completely valid Arcanist
-                // save and our LoadSimData postfix restores the custom
-                // runtime class afterwards.
-                // ====================================================
-
+                /*
+                 * Native SimPlayerSaveData has no custom-class field.
+                 *
+                 * Save Blightcaller Sims as Arcanists so Erenshor
+                 * receives a completely valid native save.
+                 *
+                 * The sidecar stores the actual Blightcaller
+                 * assignment and LoadSimData restores it.
+                 */
                 BlightcallerSimPlayers
                     .ApplyNativeFallback(
                         _data);
@@ -378,15 +365,10 @@ namespace FateOfTheFallen
                     return;
                 }
 
-
-                // ====================================================
-                // REMOVE PERSISTENT CUSTOM-CLASS ASSIGNMENT
-                // ====================================================
-                //
-                // If Erenshor deletes the SimPlayer save entirely,
-                // remove our sidecar assignment too.
-                // ====================================================
-
+                /*
+                 * If Erenshor deletes the SimPlayer entirely,
+                 * remove its custom-class sidecar assignment too.
+                 */
                 BlightcallerSimPlayers
                     .RemoveAssignment(
                         npcName);
@@ -420,19 +402,14 @@ namespace FateOfTheFallen
                     return;
                 }
 
-
-                // ====================================================
-                // ACTIVE PARTY ROLE
-                // ====================================================
-                //
-                // SimPlayerGrouping maintains a separate runtime role
-                // list from SimPlayerMngr.CategorizeAll().
-                //
-                // Native SetRoles() only recognizes native Class
-                // ScriptableObjects, so append Blightcaller members
-                // to the active DPS list.
-                // ====================================================
-
+                /*
+                 * SimPlayerGrouping maintains a second role system
+                 * separate from SimPlayerMngr.CategorizeAll().
+                 *
+                 * Native SetRoles() recognizes only native Class
+                 * ScriptableObjects, so append Blightcaller members
+                 * to the active DPS list.
+                 */
                 BlightcallerSimPlayers
                     .AddGroupingDpsRoles(
                         __instance);

@@ -238,12 +238,6 @@ namespace FateOfTheFallen
                 item);
 
 
-            Plugin.NativeLog.LogDebug(
-                "BlightcallerItemFactory: created custom item " +
-                item.Id +
-                ": " +
-                item.ItemName +
-                ".");
 
             return item;
         }

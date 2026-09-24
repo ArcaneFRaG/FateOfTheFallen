@@ -66,12 +66,6 @@ namespace FateOfTheFallen
 
             RegisterWithNativeQuestDatabase();
 
-            Plugin.NativeLog.LogInfo(
-                "Fate of the Fallen: registered quest [" +
-                _weatheredNoteQuest.DBName +
-                "] " +
-                _weatheredNoteQuest.QuestName +
-                ".");
         }
 
 
@@ -329,21 +323,12 @@ namespace FateOfTheFallen
                                 _weatheredNoteQuest;
                         }
 
-                        Plugin.NativeLog.LogInfo(
-                            "Fate of the Fallen: custom quest already present in native QuestDB [" +
-                            WeatheredNoteQuestId +
-                            "].");
 
                         return;
                     }
 
                     questList.Add(
                         _weatheredNoteQuest);
-
-                    Plugin.NativeLog.LogInfo(
-                        "Fate of the Fallen: added custom quest to native QuestDB List<Quest> [" +
-                        WeatheredNoteQuestId +
-                        "].");
 
                     return;
                 }
@@ -389,10 +374,6 @@ namespace FateOfTheFallen
                                 questArray);
                         }
 
-                        Plugin.NativeLog.LogInfo(
-                            "Fate of the Fallen: custom quest already present in native QuestDB Quest[] [" +
-                            WeatheredNoteQuestId +
-                            "].");
 
                         return;
                     }
@@ -415,14 +396,6 @@ namespace FateOfTheFallen
                         GameData.QuestDB,
                         expandedArray);
 
-                    Plugin.NativeLog.LogInfo(
-                        "Fate of the Fallen: added custom quest to native QuestDB Quest[] [" +
-                        WeatheredNoteQuestId +
-                        "]. Native count: " +
-                        questArray.Length +
-                        " -> " +
-                        expandedArray.Length +
-                        ".");
 
                     return;
                 }
@@ -487,10 +460,6 @@ namespace FateOfTheFallen
                         weatheredNote);
                 }
 
-                Plugin.NativeLog.LogInfo(
-                    "Fate of the Fallen: Weathered Note [1700] linked as required item for quest [" +
-                    _weatheredNoteQuest.DBName +
-                    "].");
             }
 
 
@@ -513,12 +482,6 @@ namespace FateOfTheFallen
                 _weatheredNoteQuest.ItemOnComplete =
                     planarStone;
 
-                Plugin.NativeLog.LogInfo(
-                    "Fate of the Fallen: quest reward linked: [" +
-                    planarStone.ItemName +
-                    "] ID [" +
-                    planarStone.Id +
-                    "].");
             }
         }
 
@@ -774,12 +737,6 @@ namespace FateOfTheFallen
                     reward);
             }
 
-            Plugin.NativeLog.LogInfo(
-                "Fate of the Fallen: completed quest [" +
-                quest.DBName +
-                "] and awarded [" +
-                reward.ItemName +
-                "].");
 
 
             // ========================================================
@@ -903,14 +860,7 @@ namespace FateOfTheFallen
                     continue;
                 }
 
-                Plugin.NativeLog.LogInfo(
-                    "Fate of the Fallen: resolved native item [" +
-                    itemName +
-                    "] at ItemDB index [" +
-                    i +
-                    "], ID [" +
-                    item.Id +
-                    "].");
+                
 
                 return item;
             }

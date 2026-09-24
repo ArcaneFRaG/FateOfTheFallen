@@ -518,8 +518,7 @@ namespace FateOfTheFallen
                 questManager =
                     vendor.AddComponent<QuestManager>();
 
-                Plugin.NativeLog.LogInfo(
-                    "Kaelith: added QuestManager component.");
+                
             }
 
             if (questManager.NPCQuests == null)
