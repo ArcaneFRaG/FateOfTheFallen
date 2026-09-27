@@ -108,17 +108,15 @@ namespace FateOfTheFallen
 
             try
             {
+                FateContentModule.Initialize();
+
                 _harmony =
                     new Harmony(
                         PluginGuid);
 
                 _harmony.PatchAll();
 
-                BlightcallerClassIcon.Initialize();
-
-                BlightcallerVendor.Install();
-
-                BlightcallerSceneLoad.Install();
+                BlightcallerModule.Initialize();
 
                 ModLog.Loading(
                     "Load complete.");
@@ -143,25 +141,18 @@ namespace FateOfTheFallen
              *
              * This is important for Lunaris hot unload/reload.
              */
-            try
-            {
-                BlightcallerSceneLoad.Uninstall();
-            }
-            catch (Exception exception)
-            {
-                ModLog.Error(
-                    "Failed to uninstall BlightcallerSceneLoad",
-                    exception);
-            }
+            BlightcallerModule.Shutdown();
 
             try
             {
-                BlightcallerVendor.Uninstall();
+                CoroutineHost.Shutdown();
+                EmbeddedAssetLoader.Clear();
+                CustomItemRegistry.Clear();
             }
             catch (Exception exception)
             {
                 ModLog.Error(
-                    "Failed to uninstall BlightcallerVendor",
+                    "Failed to release shared Fate of the Fallen runtime resources",
                     exception);
             }
 

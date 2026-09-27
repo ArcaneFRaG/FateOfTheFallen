@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using System;
 
 namespace FateOfTheFallen
@@ -162,7 +162,7 @@ namespace FateOfTheFallen
              */
 
             Item savedAura =
-                BlightcallerItemFactory.GetItemById(
+                CustomItemRegistry.GetItemById(
                     savedAuraId);
 
             /*
