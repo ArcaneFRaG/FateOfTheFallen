@@ -85,10 +85,14 @@ namespace FateOfTheFallen
                 }
 
                 /*
-                 * Preserve the existing Accelerated Decay timing logic.
+                 * Native TickEffects already applies one tick every three
+                 * seconds. Accelerated Decay is an EXTRA tick stream, so it
+                 * must represent only (multiplier - 1) native tick rates.
+                 * Using 3 / multiplier here doubled the base stream at rank 1
+                 * and made max rank deal roughly 3x rather than 2x damage.
                  */
                 float interval =
-                    3f / multiplier;
+                    GetExtraTickInterval(multiplier);
 
                 state.NextTickTime -=
                     deltaTime;
@@ -319,8 +323,18 @@ namespace FateOfTheFallen
                 return 3f;
             }
 
-            return
-                3f / multiplier;
+            return GetExtraTickInterval(multiplier);
+        }
+
+
+        // Native 3-second ticks are NOT replaced. Only schedule the
+        // additional tick rate promised by Accelerated Decay's ranks.
+        private static float GetExtraTickInterval(float totalMultiplier)
+        {
+            float extraRate = Mathf.Max(0f, totalMultiplier - 1f);
+            return extraRate > 0.0001f
+                ? 3f / extraRate
+                : float.PositiveInfinity;
         }
 
 

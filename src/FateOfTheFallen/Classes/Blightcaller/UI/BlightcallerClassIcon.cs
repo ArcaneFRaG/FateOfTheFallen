@@ -12,6 +12,11 @@ namespace FateOfTheFallen
         internal static readonly Color NameplateColor =
             new Color(0.22f, 0.30f, 0.24f, 1f);
 
+        // Class colour originally used by standalone Arcane's Group Frames.
+        // Deliberately not the darker native nameplate or icon tint.
+        internal static readonly Color GroupFrameColor =
+            new Color(0.55f, 0.22f, 0.72f, 1f);
+
         internal static void Initialize()
         {
             Sprite =

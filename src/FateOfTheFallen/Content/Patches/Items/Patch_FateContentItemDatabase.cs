@@ -3,10 +3,6 @@ using System;
 
 namespace FateOfTheFallen
 {
-    /// <summary>
-    /// Registers non-class Fate of the Fallen content when the native
-    /// item database is ready.
-    /// </summary>
     [HarmonyPatch(
         typeof(ItemDatabase),
         "Start")]
@@ -17,33 +13,20 @@ namespace FateOfTheFallen
         {
             try
             {
-                if (__instance == null)
+                if (__instance == null ||
+                    !FOTFExpansionGate.IsUnlocked)
                 {
                     return;
                 }
 
-                FateOfTheFallenQuests.Register();
-
-                FateOfTheFallenNotes.Register(
-                    __instance);
-
-                Item weatheredNote =
-                    FateOfTheFallenNotes.GetWeatheredNote();
-
-                if (weatheredNote != null)
-                {
-                    CustomItemRegistry.RegisterWithNativeDatabase(
-                        __instance,
-                        weatheredNote);
-                }
-
-                FateOfTheFallenNotes.LinkQuest();
-                FateOfTheFallenQuests.LinkItems();
+                FateContentModule
+                    .RegisterItemDatabaseContent(
+                        __instance);
             }
             catch (Exception exception)
             {
                 Plugin.NativeLog.LogError(
-                    "Fate of the Fallen: failed during content ItemDatabase initialization: " +
+                    "Fate of the Fallen: failed during gated ItemDatabase initialization: " +
                     exception);
             }
         }

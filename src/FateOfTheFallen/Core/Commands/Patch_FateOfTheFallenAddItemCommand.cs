@@ -13,7 +13,7 @@ namespace FateOfTheFallen
             1600;
 
         private const int FateOfTheFallenItemMax =
-            1800;
+            1999;
 
         private static readonly Dictionary<int, string>
             LastHandledAddItemCommands =

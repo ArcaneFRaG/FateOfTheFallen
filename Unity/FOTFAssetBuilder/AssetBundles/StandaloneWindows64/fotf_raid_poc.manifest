@@ -1,0 +1,48 @@
+ManifestFileVersion: 0
+CRC: 2807269507
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b8ded5e376cf28a2cc26e69d9a84c37a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: d895f943a7c5523ca349ea7a80637b41
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: b8ded5e376cf28a2cc26e69d9a84c37a
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 89
+  Script: {instanceID: 0}
+- Class: 104
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 157
+  Script: {instanceID: 0}
+- Class: 196
+  Script: {instanceID: 0}
+- Class: 238
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/FateOfTheFallen/Raids/Raid/FOTF_Raid_PoC.unity
+Dependencies: []

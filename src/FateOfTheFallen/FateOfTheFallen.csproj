@@ -22,11 +22,34 @@
     <Reference Include="Lunaris"><HintPath>$(ErenshorDir)\Lunaris.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Unity.TextMeshPro"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\Unity.TextMeshPro.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.AIModule">
+      <HintPath>D:\SteamLibrary\steamapps\common\Erenshor\Erenshor_Data\Managed\UnityEngine.AIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>D:\SteamLibrary\steamapps\common\Erenshor\Erenshor_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.AudioModule"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.AudioModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.AssetBundleModule"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.ImageConversionModule"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.IMGUIModule"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>D:\SteamLibrary\steamapps\common\Erenshor\Erenshor_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.JSONSerializeModule"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.ParticleSystemModule"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.TerrainModule">
+      <HintPath>D:\SteamLibrary\steamapps\common\Erenshor\Erenshor_Data\Managed\UnityEngine.TerrainModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>D:\SteamLibrary\steamapps\common\Erenshor\Erenshor_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.UI"><HintPath>$(ErenshorDir)\Erenshor_Data\Managed\UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -36,12 +59,89 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>D:\SteamLibrary\steamapps\common\Erenshor\Erenshor_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\Assets\**\*">
+      <Link>Assets\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Blightcaller\*.png">
       <LogicalName>FateOfTheFallen.Assets.%(Filename)%(Extension)</LogicalName>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Emberweaver\*.png">
+      <LogicalName>FateOfTheFallen.Assets.Emberweaver.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Lightbringer\*.png">
+      <LogicalName>FateOfTheFallen.Assets.Lightbringer.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="..\..\Assets\Blender Scripts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="..\..\Assets\Bundles\Bundles" />
+    <None Remove="..\..\Assets\Bundles\Bundles.manifest" />
+    <None Remove="..\..\Assets\Bundles\fotf_equipment.manifest" />
+    <None Remove="..\..\Assets\Bundles\fotf_npcs.manifest" />
+    <None Remove="..\..\Assets\Bundles\fotf_questprops.manifest" />
+    <None Remove="..\..\Assets\Bundles\fotf_raid_poc.manifest" />
+    <None Remove="..\..\Assets\Bundles\fotf_worldbosses.manifest" />
+    <None Remove="..\..\Assets\Bundles\fotf_zones.manifest" />
+    <None Remove="..\..\Assets\Bundles\README.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\Bundles\fotf_equipment">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Bundles\fotf_raid_poc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Bundles\fotf_zones">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Bundles\fotf_npcs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Bundles\fotf_questprops">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Bundles\fotf_worldbosses">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Items\*.png">
+      <LogicalName>FateOfTheFallen.Resources.Items.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\BossAbilityIcons\BlightboundColossus\FOTF_Withering_Affliction.png" />
+    <EmbeddedResource Include="Resources\BossAbilityIcons\BlightboundColossus\FOTF_Withering_Affliction.png">
+      <LogicalName>FateOfTheFallen.Resources.BossAbilityIcons.BlightboundColossus.FOTF_Withering_Affliction.png</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Content\Quests\Items\" />
   </ItemGroup>
 
 </Project>

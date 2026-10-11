@@ -82,10 +82,16 @@ namespace FateOfTheFallen
 
         internal static void Register()
         {
-            if (_registered)
-            {
-                return;
-            }
+            /*
+             * Do not early-return just because this class registered once.
+             *
+             * Plugin.OnDestroy() clears CustomItemRegistry during Lunaris hot
+             * unload/reload. Depending on the loader/runtime, these static
+             * scroll objects can survive while the shared registry does not.
+             * Re-running this method must therefore rebind every surviving
+             * scroll into CustomItemRegistry instead of assuming the first
+             * registration is still valid.
+             */
 
             if (BlightcallerCatalog.BlightcallerClass == null)
             {
@@ -97,6 +103,9 @@ namespace FateOfTheFallen
                 Plugin.NativeLog.LogWarning(
                     "Blightcaller scroll registration waiting for class.");
 
+                _registered =
+                    false;
+
                 return;
             }
 
@@ -104,6 +113,9 @@ namespace FateOfTheFallen
             {
                 Plugin.NativeLog.LogWarning(
                     "Blightcaller scroll registration waiting for ItemDB.");
+
+                _registered =
+                    false;
 
                 return;
             }
@@ -113,8 +125,17 @@ namespace FateOfTheFallen
                 Plugin.NativeLog.LogWarning(
                     "Blightcaller scroll registration waiting for ItemDB contents.");
 
+                _registered =
+                    false;
+
                 return;
             }
+
+            int expectedScrolls =
+                0;
+
+            int registeredScrolls =
+                0;
 
             foreach (
                 BlightcallerSpellDefinition definition
@@ -124,6 +145,8 @@ namespace FateOfTheFallen
                 {
                     continue;
                 }
+
+                expectedScrolls++;
 
                 string scrollId =
                     BuildScrollId(
@@ -153,28 +176,81 @@ namespace FateOfTheFallen
                     continue;
                 }
 
-                Item scroll =
-                    CreateScroll(
-                        definition,
-                        spell,
-                        scrollId);
+                Item scroll;
 
-                if (scroll == null)
+                if (!ScrollsByKey.TryGetValue(
+                        definition.Key,
+                        out scroll) ||
+                    scroll == null)
                 {
-                    continue;
+                    /*
+                     * If the shared registry already has the stable ID, adopt
+                     * that object first. This avoids creating a second object
+                     * when registration is retried during normal database
+                     * lifecycle events.
+                     */
+                    scroll =
+                        CustomItemRegistry.GetItemById(
+                            scrollId);
+
+                    if (scroll == null)
+                    {
+                        scroll =
+                            CreateScroll(
+                                definition,
+                                spell,
+                                scrollId);
+                    }
+
+                    if (scroll == null)
+                    {
+                        continue;
+                    }
+
+                    ScrollsByKey[
+                        definition.Key] =
+                        scroll;
                 }
 
+                /*
+                 * Refresh the two reference-sensitive fields. A hot reload may
+                 * create a new canonical Blightcaller Class / Spell object
+                 * even when a scroll object itself survives.
+                 */
+                scroll.TeachSpell =
+                    spell;
+
+                scroll.Classes =
+                    new List<Class>
+                    {
+                        BlightcallerCatalog.BlightcallerClass
+                    };
+
+                /*
+                 * Critical hot-reload step: CustomItemRegistry is cleared on
+                 * plugin unload, so always re-register the canonical scroll.
+                 */
                 CustomItemRegistry.RegisterItem(
                     scroll);
 
-                ScrollsByKey[
-                    definition.Key] =
-                    scroll;
+                registeredScrolls++;
             }
 
             _registered =
-                ScrollsByKey.Count > 0;
+                expectedScrolls > 0 &&
+                registeredScrolls == expectedScrolls;
+
+            if (!_registered)
+            {
+                Plugin.NativeLog.LogWarning(
+                    "Blightcaller scroll registration incomplete. Registered=[" +
+                    registeredScrolls +
+                    "] Expected=[" +
+                    expectedScrolls +
+                    "].");
+            }
         }
+
 
         private static Item CreateScroll(
             BlightcallerSpellDefinition definition,

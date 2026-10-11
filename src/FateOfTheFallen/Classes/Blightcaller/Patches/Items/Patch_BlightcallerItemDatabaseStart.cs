@@ -11,6 +11,7 @@ namespace FateOfTheFallen
     [HarmonyPatch(
         typeof(ItemDatabase),
         "Start")]
+    [HarmonyPriority(Priority.Last)]
     internal static class Patch_BlightcallerItemDatabaseStart
     {
         private static void Postfix()

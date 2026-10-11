@@ -1,0 +1,34 @@
+ManifestFileVersion: 0
+CRC: 2926126545
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: fde469f6b6e5fd698d7f92732d71b353
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: fad51e2251343679c52e0fd935508550
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: fde469f6b6e5fd698d7f92732d71b353
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/FateOfTheFallen/NPCs/Archivist Sereth/Prefabs/Archivist_Sereth.prefab
+Dependencies: []

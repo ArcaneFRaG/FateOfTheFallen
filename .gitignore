@@ -1,37 +1,106 @@
+# ============================================================
+# Fate of the Fallen
+# Root .gitignore
+#
+# Repository structure:
+#
+# FateOfTheFallen/
+# ├── src/                         Runtime mod source
+# ├── Assets/Bundles/              Shipped AssetBundles
+# └── Unity/
+#     └── FateOfTheFallen.Unity/    Unity 2021.3.45f1 authoring project
+#
+# IMPORTANT:
+# - Assets/Bundles is intentionally tracked.
+# - Unity .meta files are intentionally tracked.
+# - The main FateOfTheFallen .sln/.csproj files are tracked.
+# ============================================================
+
+
+# ============================================================
 # Visual Studio
+# ============================================================
+
 .vs/
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
+*.csproj.user
 
-# Build output
-bin/
-obj/
+
+# ============================================================
+# .NET / MSBuild output
+# ============================================================
+
 [Bb]in/
 [Oo]bj/
-Debug/
-Release/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
 
-# NuGet / packages
+TestResults/
+
+
+# ============================================================
+# NuGet
+# ============================================================
+
 packages/
 *.nupkg
 *.snupkg
 
-# ReSharper / Rider
+
+# ============================================================
+# JetBrains Rider / ReSharper
+# ============================================================
+
 .idea/
 _ReSharper*/
 *.DotSettings.user
 
-# Generated/runtime files
+
+# ============================================================
+# VS Code
+# ============================================================
+
+.vscode/
+
+
+# ============================================================
+# General generated files
+# ============================================================
+
 *.pdb
 *.cache
 *.db
+*.db-shm
+*.db-wal
+*.opendb
+*.VC.db
+*.VC.opendb
 *.vsidx
-*.log
-TestResults/
+*.tmp
+*.temp
+*.bak
 
-# BepInEx local deployment/runtime output
+
+# ============================================================
+# Logs
+# ============================================================
+
+*.log
+Logs/
+
+
+# ============================================================
+# Local BepInEx runtime / deployment
+#
+# These should not be committed if a local Erenshor/BepInEx
+# environment is placed inside the repository.
+# ============================================================
+
 BepInEx/config/
 BepInEx/LogOutput.log
 BepInEx/plugins/
@@ -39,16 +108,135 @@ BepInEx/patchers/
 BepInEx/monomod/
 BepInEx/core/
 
-# Local deployment/build artifacts
-plugins/
+
+# ============================================================
+# Local build / deployment folders
+# ============================================================
+
 deploy/
 dist/
+artifacts/
+publish/
 
-# OS
+
+# ============================================================
+# Temporary local plugin deployment
+# ============================================================
+
+plugins/
+
+
+# # ============================================================
+# UNITY AUTHORING PROJECT
+# ============================================================
+
+# Unity generated/cache directories anywhere under /Unity
+/Unity/**/[Ll]ibrary/
+/Unity/**/[Tt]emp/
+/Unity/**/[Oo]bj/
+/Unity/**/[Bb]uild/
+/Unity/**/[Bb]uilds/
+/Unity/**/[Ll]ogs/
+/Unity/**/[Uu]ser[Ss]ettings/
+/Unity/**/[Mm]emoryCaptures/
+/Unity/**/[Rr]ecordings/
+/Unity/**/ExportedObj/
+/Unity/**/.gradle/
+/Unity/**/.vs/
+/Unity/**/.idea/
+
+# Asset Store tooling
+/Unity/**/[Aa]ssets/AssetStoreTools*
+
+# Unity-generated IDE files
+/Unity/**/*.csproj
+/Unity/**/*.sln
+/Unity/**/*.suo
+/Unity/**/*.user
+/Unity/**/*.userprefs
+/Unity/**/*.unityproj
+/Unity/**/*.booproj
+/Unity/**/*.pidb
+/Unity/**/*.svd
+/Unity/**/*.pdb
+/Unity/**/*.mdb
+/Unity/**/*.opendb
+/Unity/**/*.VC.db
+
+# Unity-generated crash/debug files
+/Unity/**/sysinfo.txt
+/Unity/**/crashlytics-build.properties
+
+# Unity package exports
+/Unity/**/*.unitypackage
+
+# Platform build products
+/Unity/**/*.apk
+/Unity/**/*.aab
+/Unity/**/*.app============================================================
+
+/Assets/Bundles/*.manifest
+
+
+# ============================================================
+# OS generated files
+# ============================================================
+
 .DS_Store
-Thumbs.db
+.AppleDouble
+.LSOverride
+Icon?
 
-# Archives
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+Desktop.ini
+
+$RECYCLE.BIN/
+
+
+# ============================================================
+# Windows shortcuts / metadata
+# ============================================================
+
+*.lnk
+*.stackdump
+
+
+# ============================================================
+# Archives / temporary distribution files
+# ============================================================
+
 *.zip
 *.7z
 *.rar
+*.tar
+*.gz
+
+
+# ============================================================
+# Patch / merge leftovers
+# ============================================================
+
+*.orig
+*.rej
+*.patch~
+*~
+
+
+# ============================================================
+# DO NOT IGNORE
+#
+# These are intentionally kept under source control:
+#
+# !FateOfTheFallen.sln
+# !src/**/*.csproj
+# !Unity/FateOfTheFallen.Unity/Assets/**
+# !Unity/FateOfTheFallen.Unity/Packages/**
+# !Unity/FateOfTheFallen.Unity/ProjectSettings/**
+# !**/*.meta
+# !Assets/Bundles/fotf_equipment
+# !Assets/Bundles/fotf_zones
+# ============================================================

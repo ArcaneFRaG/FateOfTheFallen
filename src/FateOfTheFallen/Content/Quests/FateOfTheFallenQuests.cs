@@ -6,72 +6,305 @@ namespace FateOfTheFallen
 {
     internal static class FateOfTheFallenQuests
     {
-        // ============================================================
-        // QUEST IDS
-        // ============================================================
+        internal const string AfterLastWardenQuestId =
+            "FOTF_MAIN_01_AFTER_THE_LAST_WARDEN";
 
-        internal const string WeatheredNoteQuestId =
-            "FOTF_TEST_WEATHERED_NOTE";
+        internal const string SignsOfDecayQuestId =
+            "FOTF_MAIN_02_SIGNS_OF_DECAY";
 
+        internal const string WhereLightFailsQuestId =
+            "FOTF_MAIN_03_WHERE_LIGHT_FAILS";
 
-        // ============================================================
-        // NATIVE ITEM NAMES
-        // ============================================================
+        internal const string RestlessDeadQuestId =
+            "FOTF_MAIN_04_THE_RESTLESS_DEAD";
 
-        private const string PlanarStoneItemName =
-            "Planar Stone";
-
-
-        // ============================================================
-        // QUESTS
-        // ============================================================
-
-        private static Quest _weatheredNoteQuest;
+        internal const string AshBeneathEarthQuestId =
+            "FOTF_MAIN_05_ASH_BENEATH_THE_EARTH";
 
 
-        // ============================================================
-        // ACCESSORS
-        // ============================================================
-
-        internal static Quest WeatheredNoteQuest
-        {
-            get
-            {
-                return _weatheredNoteQuest;
-            }
-        }
+        private static Quest _afterLastWardenQuest;
+        private static Quest _signsOfDecayQuest;
+        private static Quest _whereLightFailsQuest;
+        private static Quest _restlessDeadQuest;
+        private static Quest _ashBeneathEarthQuest;
 
 
-        // ============================================================
-        // REGISTER
-        // ============================================================
+        internal static Quest AfterLastWardenQuest =>
+            _afterLastWardenQuest;
+
+        internal static Quest SignsOfDecayQuest =>
+            _signsOfDecayQuest;
+
+        internal static Quest WhereLightFailsQuest =>
+            _whereLightFailsQuest;
+
+        internal static Quest RestlessDeadQuest =>
+            _restlessDeadQuest;
+
+        internal static Quest AshBeneathEarthQuest =>
+            _ashBeneathEarthQuest;
+
 
         internal static void Register()
         {
-            if (_weatheredNoteQuest == null)
-            {
-                _weatheredNoteQuest =
-                    CreateWeatheredNoteQuest();
+            LegacyFOTFQuestCleanup
+                .RemoveObsoleteQuestState();
 
-                if (_weatheredNoteQuest == null)
+            if (_ashBeneathEarthQuest == null)
+            {
+                _ashBeneathEarthQuest =
+                    CreateAshBeneathEarthQuest();
+
+                if (_ashBeneathEarthQuest == null)
                 {
                     Plugin.NativeLog.LogError(
-                        "Fate of the Fallen: failed to create Weathered Note quest.");
+                        "Fate of the Fallen: failed to create Quest 5 [Ash Beneath the Earth].");
 
                     return;
                 }
             }
 
-            RegisterWithNativeQuestDatabase();
+            if (_restlessDeadQuest == null)
+            {
+                _restlessDeadQuest =
+                    CreateRestlessDeadQuest();
 
+                if (_restlessDeadQuest == null)
+                {
+                    Plugin.NativeLog.LogError(
+                        "Fate of the Fallen: failed to create Quest 4 [The Restless Dead].");
+
+                    return;
+                }
+            }
+
+            if (_whereLightFailsQuest == null)
+            {
+                _whereLightFailsQuest =
+                    CreateWhereLightFailsQuest();
+
+                if (_whereLightFailsQuest == null)
+                {
+                    Plugin.NativeLog.LogError(
+                        "Fate of the Fallen: failed to create Quest 3 [Where Light Fails].");
+
+                    return;
+                }
+            }
+
+            if (_signsOfDecayQuest == null)
+            {
+                _signsOfDecayQuest =
+                    CreateSignsOfDecayQuest();
+
+                if (_signsOfDecayQuest == null)
+                {
+                    Plugin.NativeLog.LogError(
+                        "Fate of the Fallen: failed to create Quest 2 [Signs of Decay].");
+
+                    return;
+                }
+            }
+
+            if (_afterLastWardenQuest == null)
+            {
+                _afterLastWardenQuest =
+                    CreateAfterLastWardenQuest();
+
+                if (_afterLastWardenQuest == null)
+                {
+                    Plugin.NativeLog.LogError(
+                        "Fate of the Fallen: failed to create Quest 1 [After the Last Warden].");
+
+                    return;
+                }
+            }
+
+            _afterLastWardenQuest
+                .AssignNewQuestOnComplete =
+                    _signsOfDecayQuest;
+
+            _signsOfDecayQuest
+                .AssignNewQuestOnComplete =
+                    _whereLightFailsQuest;
+
+            _whereLightFailsQuest
+                .AssignNewQuestOnComplete =
+                    _restlessDeadQuest;
+
+            _restlessDeadQuest
+                .AssignNewQuestOnComplete =
+                    _ashBeneathEarthQuest;
+
+            CustomQuestRegistry.Register(
+                _afterLastWardenQuest);
+
+            CustomQuestRegistry.Register(
+                _signsOfDecayQuest);
+
+            CustomQuestRegistry.Register(
+                _whereLightFailsQuest);
+
+            CustomQuestRegistry.Register(
+                _restlessDeadQuest);
+
+            CustomQuestRegistry.Register(
+                _ashBeneathEarthQuest);
+
+            SignsOfDecayContent
+                .LinkQuestRequirement();
+
+            WhereLightFailsContent
+                .LinkQuestRequirement();
+
+            RestlessDeadContent
+                .LinkQuestRequirement();
         }
 
 
-        // ============================================================
-        // CREATE WEATHERED NOTE QUEST
-        // ============================================================
+        private static Quest CreateAfterLastWardenQuest()
+        {
+            return
+                CreateBaseQuest(
+                    "FOTF Quest 01 - After the Last Warden",
+                    AfterLastWardenQuestId,
+                    "After the Last Warden",
+                    "Archivist Sereth has been comparing reports written in " +
+                    "the days following the fall of the last corrupted Warden. " +
+                    "Several apparently unrelated disturbances began at nearly " +
+                    "the same time.\n\n" +
+                    "Speak with Archivist Sereth in Port Azure and ask him " +
+                    "about the disturbances.\n\n" +
+                    "Say: disturbances");
+        }
 
-        private static Quest CreateWeatheredNoteQuest()
+
+        private static Quest CreateSignsOfDecayQuest()
+        {
+            Quest quest =
+                CreateBaseQuest(
+                    "FOTF Quest 02 - Signs of Decay",
+                    SignsOfDecayQuestId,
+                    "Signs of Decay",
+                    "Sereth believes the blight reports are the most consistent " +
+                    "of the disturbances recorded after the fall of the Wardens.\n\n" +
+                    "Travel to Loomingwood and investigate the patch of vegetation " +
+                    "that has rapidly collapsed into unnatural decay. Recover a " +
+                    "fresh sample of Blighted Spores, then return the sample to " +
+                    "Archivist Sereth in Port Azure.");
+
+            if (quest != null)
+            {
+                quest.DialogOnSuccess =
+                    "These spores are unfamiliar. There is blight in them, " +
+                    "certainly, but it is translated poorly into our world—as " +
+                    "though whatever produced them was never meant to take root " +
+                    "here. That matters. If the other disturbances carry " +
+                    "different signatures, then we are not looking at a single " +
+                    "spreading corruption.";
+
+                quest.DialogOnPartialSuccess =
+                    "The affected ground should be easy enough to recognise. " +
+                    "Find whatever continues to grow there and bring me a sample.";
+            }
+
+            return
+                quest;
+        }
+
+
+        private static Quest CreateWhereLightFailsQuest()
+        {
+            Quest quest =
+                CreateBaseQuest(
+                    "FOTF Quest 03 - Where Light Fails",
+                    WhereLightFailsQuestId,
+                    "Where Light Fails",
+                    "The spores from Loomingwood carry a distinct blight signature. " +
+                    "Sereth now wants evidence from a second disturbance: a place " +
+                    "where daylight itself seems diminished.\n\n" +
+                    "Investigate the dark disturbance in Soluna's Landing " +
+                    "and recover Veiled Residue for Archivist Sereth.");
+
+            if (quest != null)
+            {
+                quest.DialogOnSuccess =
+                    "This is not blight. There is no rot in it, no growth, no hunger. " +
+                    "Light around it simply disappears. Two disturbances, two different " +
+                    "signatures. Whatever has begun, we are not dealing with a single breach.";
+
+                quest.DialogOnPartialSuccess =
+                    "Bring me the residue from the heart of that dark disturbance. " +
+                    "I need something I can examine here, away from whatever is affecting the light.";
+            }
+
+            return
+                quest;
+        }
+
+
+        private static Quest CreateRestlessDeadQuest()
+        {
+            Quest quest =
+                CreateBaseQuest(
+                    "FOTF Quest 04 - The Restless Dead",
+                    RestlessDeadQuestId,
+                    "The Restless Dead",
+                    "Sereth's third report concerns graves disturbed from within. " +
+                    "Several bodies have risen without any visible ritual, binding, " +
+                    "or known necromancer nearby.\n\n" +
+                    "Investigate one of the disturbed graves within Fernalla's Revival Plains, destroy one of the risen dead, " +
+                    "recover the Lingering Soul-Essence that remains, and return it to " +
+                    "Archivist Sereth in Port Azure.");
+
+            if (quest != null)
+            {
+                quest.DialogOnSuccess =
+                    "No necromantic binding. No summoning mark. This soul appears to have " +
+                    "been prevented from leaving rather than called back. Three disturbances, " +
+                    "and three entirely different signatures. Unfortunately, there is a fourth.";
+
+                quest.DialogOnPartialSuccess =
+                    "The reports describe the dead rising without ritual. Destroy one of them " +
+                    "and bring me whatever remains when its body can no longer hold it.";
+            }
+
+            return
+                quest;
+        }
+
+
+        private static Quest CreateAshBeneathEarthQuest()
+        {
+            Quest quest =
+                CreateBaseQuest(
+                    "FOTF Quest 05 - Ash Beneath the Earth",
+                    AshBeneathEarthQuestId,
+                    "Ash Beneath the Earth",
+                    "A fourth disturbance remains. A section of stone has split open and begun " +
+                    "radiating heat without any natural source. Small embers have reportedly " +
+                    "formed around the fracture.\n\n" +
+                    "Recover an Infernal Ember from the scorched fracture and return it to " +
+                    "Archivist Sereth in Port Azure.");
+
+            if (quest != null)
+            {
+                quest.DialogOnSuccess =
+                    "Demonic. Quite unmistakably. Four incidents. Blight. Something resembling " +
+                    "the Void. Unbound soul-energy. Infernal corruption. None alike. All beginning " +
+                    "after the fall of the gods. There is an old inscription I need you to retrieve.";
+            }
+
+            return
+                quest;
+        }
+
+
+        private static Quest CreateBaseQuest(
+            string unityName,
+            string dbName,
+            string questName,
+            string description)
         {
             Quest quest =
                 ScriptableObject.CreateInstance<Quest>();
@@ -81,68 +314,29 @@ namespace FateOfTheFallen
                 return null;
             }
 
-
-            // ========================================================
-            // UNITY IDENTITY
-            // ========================================================
-
             quest.name =
-                "FOTF Quest - A Strange Discovery";
-
-
-            // ========================================================
-            // QUEST IDENTITY
-            // ========================================================
+                unityName;
 
             quest.DBName =
-                WeatheredNoteQuestId;
+                dbName;
 
             quest.QuestName =
-                "A Strange Discovery";
+                questName;
 
             quest.QuestDesc =
-                "A weathered note speaks of something stirring beneath " +
-                "the ruins.\n\n" +
-                "The warning may mean something to Kaelith the Blighted " +
-                "in Azure. Bring the Weathered Note to him.";
-
-
-            // ========================================================
-            // REQUIRED ITEMS
-            // ========================================================
-            //
-            // Weathered Note is linked later, after the item has been
-            // created.
-            // ========================================================
+                description;
 
             quest.RequiredItems =
                 new List<Item>();
 
-
-            // ========================================================
-            // KAELITH DIALOGUE
-            // ========================================================
-
             quest.DialogOnSuccess =
-                "Let me see that note...\n\n" +
-                "Hm. This is no idle warning. I've seen markings like " +
-                "these before, tied to things best left buried.\n\n" +
-                "You did well bringing this to me. Take this Planar Stone. " +
-                "If what is written here is true, you may have need of it.";
+                string.Empty;
 
             quest.DialogOnPartialSuccess =
-                "You mentioned a note. Bring it to me and I'll have a look.";
+                string.Empty;
 
             quest.AssignThisQuestOnPartialComplete =
                 false;
-
-
-            // ========================================================
-            // REWARDS
-            // ========================================================
-            //
-            // Planar Stone is linked later from the native ItemDB.
-            // ========================================================
 
             quest.XPonComplete =
                 0;
@@ -152,11 +346,6 @@ namespace FateOfTheFallen
 
             quest.ItemOnComplete =
                 null;
-
-
-            // ========================================================
-            // QUEST BEHAVIOUR
-            // ========================================================
 
             quest.repeatable =
                 false;
@@ -170,29 +359,14 @@ namespace FateOfTheFallen
             quest.AssignNewQuestOnComplete =
                 null;
 
-
-            // ========================================================
-            // FACTION EFFECTS
-            // ========================================================
-
             quest.AffectFactions =
                 new List<WorldFaction>();
 
             quest.AffectFactionAmts =
                 new List<float>();
 
-
-            // ========================================================
-            // OTHER QUEST EFFECTS
-            // ========================================================
-
             quest.CompleteOtherQuests =
                 new List<Quest>();
-
-
-            // ========================================================
-            // TURN-IN HOLDER BEHAVIOUR
-            // ========================================================
 
             quest.KillTurnInHolder =
                 false;
@@ -206,390 +380,741 @@ namespace FateOfTheFallen
             quest.OncePerSpawnInstance =
                 false;
 
-
-            // ========================================================
-            // ACHIEVEMENTS
-            // ========================================================
-
             quest.SetAchievementOnGet =
                 string.Empty;
 
             quest.SetAchievementOnFinish =
                 string.Empty;
 
-
-            // ========================================================
-            // VENDOR UNLOCK
-            // ========================================================
-
             quest.UnlockItemForVendor =
                 null;
-
-
-            // ========================================================
-            // UNITY LIFETIME
-            // ========================================================
 
             quest.hideFlags =
                 HideFlags.HideAndDontSave;
 
-
-            return quest;
+            return
+                quest;
         }
 
 
-        // ============================================================
-        // REGISTER WITH NATIVE QUEST DATABASE
-        // ============================================================
-
-        private static void RegisterWithNativeQuestDatabase()
+        internal static bool IsAfterLastWardenActive()
         {
-            if (_weatheredNoteQuest == null)
-            {
-                return;
-            }
-
-            CustomQuestRegistry.Register(
-                _weatheredNoteQuest);
-        }
-
-        // ============================================================
-        // LINK ITEMS AND REWARDS
-        // ============================================================
-
-        internal static void LinkItems()
-        {
-            if (_weatheredNoteQuest == null)
-            {
-                Plugin.NativeLog.LogWarning(
-                    "Fate of the Fallen: cannot link quest data because Weathered Note quest is null.");
-
-                return;
-            }
-
-
-            // ========================================================
-            // REQUIRED ITEM - WEATHERED NOTE
-            // ========================================================
-
-            Item weatheredNote =
-                FateOfTheFallenNotes.GetWeatheredNote();
-
-            if (weatheredNote == null)
-            {
-                Plugin.NativeLog.LogWarning(
-                    "Fate of the Fallen: Weathered Note [1700] was null while linking quest requirements.");
-            }
-            else
-            {
-                if (_weatheredNoteQuest.RequiredItems == null)
-                {
-                    _weatheredNoteQuest.RequiredItems =
-                        new List<Item>();
-                }
-
-                if (!_weatheredNoteQuest.RequiredItems.Contains(
-                        weatheredNote))
-                {
-                    _weatheredNoteQuest.RequiredItems.Add(
-                        weatheredNote);
-                }
-
-            }
-
-
-            // ========================================================
-            // REWARD - PLANAR STONE
-            // ========================================================
-
-            Item planarStone =
-                FindNativeItemByName(
-                    PlanarStoneItemName);
-
-            if (planarStone == null)
-            {
-                Plugin.NativeLog.LogWarning(
-                    "Fate of the Fallen: native Planar Stone could not be found. " +
-                    "Quest reward will remain empty.");
-            }
-            else
-            {
-                _weatheredNoteQuest.ItemOnComplete =
-                    planarStone;
-
-            }
+            return
+                ContainsQuestId(
+                    GameData.HasQuest,
+                    AfterLastWardenQuestId);
         }
 
 
-        // ============================================================
-        // KAELITH QUEST TURN-IN
-        // ============================================================
-
-        internal static bool TryHandleKaelithTurnIn(
-            out string dialogue)
+        internal static bool IsAfterLastWardenComplete()
         {
-            dialogue =
-                null;
+            return
+                ContainsQuestId(
+                    GameData.CompletedQuests,
+                    AfterLastWardenQuestId);
+        }
 
-            Quest quest =
-                _weatheredNoteQuest;
 
-            if (quest == null)
+        internal static bool IsSignsOfDecayActive()
+        {
+            return
+                ContainsQuestId(
+                    GameData.HasQuest,
+                    SignsOfDecayQuestId);
+        }
+
+
+        internal static bool IsSignsOfDecayComplete()
+        {
+            return
+                ContainsQuestId(
+                    GameData.CompletedQuests,
+                    SignsOfDecayQuestId);
+        }
+
+
+        internal static bool IsWhereLightFailsActive()
+        {
+            return
+                ContainsQuestId(
+                    GameData.HasQuest,
+                    WhereLightFailsQuestId);
+        }
+
+
+        internal static bool IsWhereLightFailsComplete()
+        {
+            return
+                ContainsQuestId(
+                    GameData.CompletedQuests,
+                    WhereLightFailsQuestId);
+        }
+
+
+        internal static bool IsRestlessDeadActive()
+        {
+            return
+                ContainsQuestId(
+                    GameData.HasQuest,
+                    RestlessDeadQuestId);
+        }
+
+
+        internal static bool IsRestlessDeadComplete()
+        {
+            return
+                ContainsQuestId(
+                    GameData.CompletedQuests,
+                    RestlessDeadQuestId);
+        }
+
+
+        internal static bool IsAshBeneathEarthActive()
+        {
+            return
+                ContainsQuestId(
+                    GameData.HasQuest,
+                    AshBeneathEarthQuestId);
+        }
+
+
+        internal static bool IsAshBeneathEarthComplete()
+        {
+            return
+                ContainsQuestId(
+                    GameData.CompletedQuests,
+                    AshBeneathEarthQuestId);
+        }
+
+
+        internal static bool TryAssignAfterLastWarden()
+        {
+            Register();
+
+            if (_afterLastWardenQuest == null)
             {
                 return false;
             }
 
-
-            // ========================================================
-            // ALREADY COMPLETE
-            // ========================================================
-
-            if (GameData.CompletedQuests != null &&
-                GameData.CompletedQuests.Contains(
-                    quest.DBName))
+            if (IsAfterLastWardenComplete() ||
+                IsAfterLastWardenActive())
             {
-                return false;
-            }
-
-
-            // ========================================================
-            // QUEST MUST BE ACTIVE
-            // ========================================================
-
-            if (GameData.HasQuest == null ||
-                !GameData.HasQuest.Contains(
-                    quest.DBName))
-            {
-                return false;
-            }
-
-
-            // ========================================================
-            // PLAYER INVENTORY
-            // ========================================================
-
-            if (GameData.PlayerInv == null)
-            {
-                Plugin.NativeLog.LogError(
-                    "Fate of the Fallen: PlayerInv was null while attempting Weathered Note quest turn-in.");
-
-                return false;
-            }
-
-
-            // ========================================================
-            // VERIFY QUEST EXISTS IN NATIVE DATABASE
-            // ========================================================
-
-            if (GameData.QuestDB == null)
-            {
-                Plugin.NativeLog.LogError(
-                    "Fate of the Fallen: QuestDB was null during Weathered Note quest turn-in.");
-
-                return false;
-            }
-
-            Quest nativeQuest =
-                GameData.QuestDB.GetQuestByName(
-                    quest.DBName);
-
-            if (nativeQuest == null)
-            {
-                RegisterWithNativeQuestDatabase();
-
-                nativeQuest =
-                    GameData.QuestDB.GetQuestByName(
-                        quest.DBName);
-            }
-
-            if (nativeQuest == null)
-            {
-                Plugin.NativeLog.LogError(
-                    "Fate of the Fallen: Weathered Note quest could not be resolved from native QuestDB.");
-
-                return false;
-            }
-
-
-            // ========================================================
-            // CHECK REQUIRED ITEMS
-            // ========================================================
-
-            if (quest.RequiredItems != null)
-            {
-                foreach (
-                    Item requiredItem
-                    in quest.RequiredItems)
-                {
-                    if (requiredItem == null)
-                    {
-                        continue;
-                    }
-
-                    bool playerHasItem =
-                        GameData.PlayerInv.HasItem(
-                            requiredItem,
-                            false);
-
-                    if (!playerHasItem)
-                    {
-                        dialogue =
-                            !string.IsNullOrEmpty(
-                                quest.DialogOnPartialSuccess)
-                                ? quest.DialogOnPartialSuccess
-                                : "You don't have what I need.";
-
-                        return true;
-                    }
-                }
-            }
-
-
-            // ========================================================
-            // VALIDATE REWARD BEFORE CONSUMING NOTE
-            // ========================================================
-
-            if (quest.ItemOnComplete == null)
-            {
-                Plugin.NativeLog.LogError(
-                    "Fate of the Fallen: Weathered Note quest reward was null. " +
-                    "Turn-in cancelled so the player does not lose the note.");
-
-                dialogue =
-                    "Something isn't right. Hold onto that note for now.";
-
                 return true;
             }
 
-
-            // ========================================================
-            // REMOVE REQUIRED ITEMS
-            // ========================================================
-
-            List<Item> removedItems =
-                new List<Item>();
-
-            if (quest.RequiredItems != null)
+            if (!CanNativeQuestDbResolve(
+                    AfterLastWardenQuestId))
             {
-                foreach (
-                    Item requiredItem
-                    in quest.RequiredItems)
-                {
-                    if (requiredItem == null)
-                    {
-                        continue;
-                    }
+                Plugin.NativeLog.LogError(
+                    "Fate of the Fallen: Quest 1 is registered locally but could not be resolved through QuestDB.");
 
-                    bool removed =
-                        GameData.PlayerInv.HasItem(
-                            requiredItem,
-                            true);
-
-                    if (!removed)
-                    {
-                        RestoreRemovedItems(
-                            removedItems);
-
-                        dialogue =
-                            !string.IsNullOrEmpty(
-                                quest.DialogOnPartialSuccess)
-                                ? quest.DialogOnPartialSuccess
-                                : "You don't have what I need.";
-
-                        return true;
-                    }
-
-                    removedItems.Add(
-                        requiredItem);
-                }
+                return false;
             }
 
+            try
+            {
+                GameData.AssignQuest(
+                    AfterLastWardenQuestId);
+            }
+            catch (Exception exception)
+            {
+                Plugin.NativeLog.LogWarning(
+                    "Fate of the Fallen: native AssignQuest threw for Quest 1; attempting direct quest-state fallback. " +
+                    exception.Message);
+            }
 
-            // ========================================================
-            // COMPLETE THROUGH NATIVE QUEST SYSTEM
-            // ========================================================
+            if (!IsAfterLastWardenActive() &&
+                !IsAfterLastWardenComplete())
+            {
+                AddQuestId(
+                    GameData.HasQuest,
+                    AfterLastWardenQuestId);
+            }
+
+            return
+                IsAfterLastWardenActive();
+        }
+
+
+        internal static bool TryCompleteAfterLastWarden()
+        {
+            Register();
+
+            if (IsAfterLastWardenComplete())
+            {
+                return true;
+            }
+
+            if (!IsAfterLastWardenActive())
+            {
+                return false;
+            }
+
+            if (!CanNativeQuestDbResolve(
+                    AfterLastWardenQuestId))
+            {
+                return false;
+            }
 
             try
             {
                 GameData.FinishQuest(
-                    quest.DBName);
+                    AfterLastWardenQuestId);
             }
             catch (Exception exception)
             {
-                RestoreRemovedItems(
-                    removedItems);
+                Plugin.NativeLog.LogWarning(
+                    "Fate of the Fallen: native FinishQuest threw for Quest 1; attempting direct quest-state fallback. " +
+                    exception.Message);
+            }
 
-                Plugin.NativeLog.LogError(
-                    "Fate of the Fallen: native FinishQuest failed for [" +
-                    quest.DBName +
-                    "]: " +
-                    exception);
+            if (!IsAfterLastWardenComplete())
+            {
+                RemoveQuestId(
+                    GameData.HasQuest,
+                    AfterLastWardenQuestId);
 
-                dialogue =
-                    "Something isn't right. Hold onto that note for now.";
+                AddQuestId(
+                    GameData.CompletedQuests,
+                    AfterLastWardenQuestId);
+            }
 
+            if (!IsAfterLastWardenComplete())
+            {
+                return false;
+            }
+
+            RemoveQuestId(
+                GameData.HasQuest,
+                AfterLastWardenQuestId);
+
+            PlayQuestCompleteSound();
+
+            return true;
+        }
+
+
+        internal static bool TryAssignSignsOfDecay()
+        {
+            Register();
+
+            if (_signsOfDecayQuest == null)
+            {
+                return false;
+            }
+
+            if (IsSignsOfDecayComplete() ||
+                IsSignsOfDecayActive())
+            {
                 return true;
             }
 
-
-            // ========================================================
-            // VERIFY COMPLETION
-            // ========================================================
-
-            if (GameData.CompletedQuests == null ||
-                !GameData.CompletedQuests.Contains(
-                    quest.DBName))
+            if (!CanNativeQuestDbResolve(
+                    SignsOfDecayQuestId))
             {
-                RestoreRemovedItems(
-                    removedItems);
-
-                Plugin.NativeLog.LogError(
-                    "Fate of the Fallen: FinishQuest returned without marking [" +
-                    quest.DBName +
-                    "] complete.");
-
-                dialogue =
-                    "Something isn't right. Hold onto that note for now.";
-
-                return true;
+                return false;
             }
-
-
-            // ========================================================
-            // AWARD PLANAR STONE
-            // ========================================================
-
-            Item reward =
-                quest.ItemOnComplete;
-
-            bool rewardAdded =
-                GameData.PlayerInv.AddItemToInv(
-                    reward);
-
-            if (!rewardAdded)
-            {
-                GameData.PlayerInv.ForceItemToInv(
-                    reward);
-            }
-
-
-
-            // ========================================================
-            // QUEST COMPLETE SOUND
-            // ========================================================
 
             try
             {
-                if (GameData.PlayerAud != null &&
-                    GameData.Misc != null &&
-                    GameData.Misc.QuestComplete != null)
+                GameData.AssignQuest(
+                    SignsOfDecayQuestId);
+            }
+            catch (Exception exception)
+            {
+                Plugin.NativeLog.LogWarning(
+                    "Fate of the Fallen: native AssignQuest threw for Quest 2; attempting direct quest-state fallback. " +
+                    exception.Message);
+            }
+
+            if (!IsSignsOfDecayActive() &&
+                !IsSignsOfDecayComplete())
+            {
+                AddQuestId(
+                    GameData.HasQuest,
+                    SignsOfDecayQuestId);
+            }
+
+            return
+                IsSignsOfDecayActive();
+        }
+
+
+        internal static bool TryCompleteSignsOfDecay()
+        {
+            Register();
+
+            if (IsSignsOfDecayComplete())
+            {
+                return true;
+            }
+
+            if (!IsSignsOfDecayActive())
+            {
+                return false;
+            }
+
+            if (!CanNativeQuestDbResolve(
+                    SignsOfDecayQuestId))
+            {
+                return false;
+            }
+
+            try
+            {
+                GameData.FinishQuest(
+                    SignsOfDecayQuestId);
+            }
+            catch (Exception exception)
+            {
+                Plugin.NativeLog.LogWarning(
+                    "Fate of the Fallen: native FinishQuest threw for Quest 2; attempting direct quest-state fallback. " +
+                    exception.Message);
+            }
+
+            if (!IsSignsOfDecayComplete())
+            {
+                RemoveQuestId(
+                    GameData.HasQuest,
+                    SignsOfDecayQuestId);
+
+                AddQuestId(
+                    GameData.CompletedQuests,
+                    SignsOfDecayQuestId);
+            }
+
+            if (!IsSignsOfDecayComplete())
+            {
+                return false;
+            }
+
+            RemoveQuestId(
+                GameData.HasQuest,
+                SignsOfDecayQuestId);
+
+            PlayQuestCompleteSound();
+
+            return true;
+        }
+
+
+        internal static bool TryAssignWhereLightFails()
+        {
+            Register();
+
+            if (_whereLightFailsQuest == null)
+            {
+                return false;
+            }
+
+            if (IsWhereLightFailsComplete() ||
+                IsWhereLightFailsActive())
+            {
+                return true;
+            }
+
+            if (!CanNativeQuestDbResolve(
+                    WhereLightFailsQuestId))
+            {
+                return false;
+            }
+
+            try
+            {
+                GameData.AssignQuest(
+                    WhereLightFailsQuestId);
+            }
+            catch (Exception exception)
+            {
+                Plugin.NativeLog.LogWarning(
+                    "Fate of the Fallen: native AssignQuest threw for Quest 3; attempting direct quest-state fallback. " +
+                    exception.Message);
+            }
+
+            if (!IsWhereLightFailsActive() &&
+                !IsWhereLightFailsComplete())
+            {
+                AddQuestId(
+                    GameData.HasQuest,
+                    WhereLightFailsQuestId);
+            }
+
+            return
+                IsWhereLightFailsActive();
+        }
+
+
+        internal static bool TryAssignRestlessDead()
+        {
+            Register();
+
+            if (_restlessDeadQuest == null)
+            {
+                return false;
+            }
+
+            if (IsRestlessDeadComplete() ||
+                IsRestlessDeadActive())
+            {
+                return true;
+            }
+
+            if (!CanNativeQuestDbResolve(
+                    RestlessDeadQuestId))
+            {
+                return false;
+            }
+
+            try
+            {
+                GameData.AssignQuest(
+                    RestlessDeadQuestId);
+            }
+            catch (Exception exception)
+            {
+                Plugin.NativeLog.LogWarning(
+                    "Fate of the Fallen: native AssignQuest threw for Quest 4; attempting direct quest-state fallback. " +
+                    exception.Message);
+            }
+
+            if (!IsRestlessDeadActive() &&
+                !IsRestlessDeadComplete())
+            {
+                AddQuestId(
+                    GameData.HasQuest,
+                    RestlessDeadQuestId);
+            }
+
+            return
+                IsRestlessDeadActive();
+        }
+
+
+        internal static bool TryAssignAshBeneathEarth()
+        {
+            Register();
+
+            if (_ashBeneathEarthQuest == null)
+            {
+                return false;
+            }
+
+            if (IsAshBeneathEarthComplete() ||
+                IsAshBeneathEarthActive())
+            {
+                return true;
+            }
+
+            if (!CanNativeQuestDbResolve(
+                    AshBeneathEarthQuestId))
+            {
+                return false;
+            }
+
+            try
+            {
+                GameData.AssignQuest(
+                    AshBeneathEarthQuestId);
+            }
+            catch (Exception exception)
+            {
+                Plugin.NativeLog.LogWarning(
+                    "Fate of the Fallen: native AssignQuest threw for Quest 5; attempting direct quest-state fallback. " +
+                    exception.Message);
+            }
+
+            if (!IsAshBeneathEarthActive() &&
+                !IsAshBeneathEarthComplete())
+            {
+                AddQuestId(
+                    GameData.HasQuest,
+                    AshBeneathEarthQuestId);
+            }
+
+            return
+                IsAshBeneathEarthActive();
+        }
+
+
+        private static bool CanNativeQuestDbResolve(
+            string questId)
+        {
+            if (GameData.QuestDB == null)
+            {
+                return false;
+            }
+
+            Quest resolved =
+                GameData.QuestDB.GetQuestByName(
+                    questId);
+
+            return
+                resolved != null;
+        }
+
+
+        private static bool AddQuestId(
+            object collection,
+            string id)
+        {
+            if (collection == null ||
+                string.IsNullOrEmpty(
+                    id))
+            {
+                return false;
+            }
+
+            if (ContainsQuestId(
+                    collection,
+                    id))
+            {
+                return true;
+            }
+
+            try
+            {
+                System.Collections.IList list =
+                    collection as
+                        System.Collections.IList;
+
+                if (list != null)
                 {
-                    GameData.PlayerAud.PlayOneShot(
-                        GameData.Misc.QuestComplete,
-                        GameData.PlayerAud.volume *
-                        GameData.SFXVol *
-                        GameData.MasterVol);
+                    list.Add(
+                        id);
+
+                    return
+                        ContainsQuestId(
+                            collection,
+                            id);
                 }
+
+                var add =
+                    HarmonyLib.AccessTools.Method(
+                        collection.GetType(),
+                        "Add",
+                        new Type[]
+                        {
+                            typeof(string)
+                        });
+
+                if (add == null)
+                {
+                    return false;
+                }
+
+                add.Invoke(
+                    collection,
+                    new object[]
+                    {
+                        id
+                    });
+
+                return
+                    ContainsQuestId(
+                        collection,
+                        id);
+            }
+            catch (Exception exception)
+            {
+                Plugin.NativeLog.LogError(
+                    "Fate of the Fallen: failed adding quest state [" +
+                    id +
+                    "]: " +
+                    exception);
+
+                return false;
+            }
+        }
+
+
+        private static bool RemoveQuestId(
+            object collection,
+            string id)
+        {
+            if (collection == null ||
+                string.IsNullOrEmpty(
+                    id))
+            {
+                return false;
+            }
+
+            bool removed =
+                false;
+
+            try
+            {
+                System.Collections.IList list =
+                    collection as
+                        System.Collections.IList;
+
+                if (list != null)
+                {
+                    for (int i =
+                            list.Count - 1;
+                         i >= 0;
+                         i--)
+                    {
+                        if (!string.Equals(
+                                list[i] as string,
+                                id,
+                                StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        list.RemoveAt(
+                            i);
+
+                        removed =
+                            true;
+                    }
+
+                    return
+                        removed ||
+                        !ContainsQuestId(
+                            collection,
+                            id);
+                }
+
+                var remove =
+                    HarmonyLib.AccessTools.Method(
+                        collection.GetType(),
+                        "Remove",
+                        new Type[]
+                        {
+                            typeof(string)
+                        });
+
+                if (remove == null)
+                {
+                    return false;
+                }
+
+                while (ContainsQuestId(
+                    collection,
+                    id))
+                {
+                    object result =
+                        remove.Invoke(
+                            collection,
+                            new object[]
+                            {
+                                id
+                            });
+
+                    removed =
+                        true;
+
+                    if (result is bool &&
+                        !(bool)result)
+                    {
+                        break;
+                    }
+                }
+
+                return
+                    removed ||
+                    !ContainsQuestId(
+                        collection,
+                        id);
+            }
+            catch (Exception exception)
+            {
+                Plugin.NativeLog.LogError(
+                    "Fate of the Fallen: failed removing quest state [" +
+                    id +
+                    "]: " +
+                    exception);
+
+                return false;
+            }
+        }
+
+
+        private static bool ContainsQuestId(
+            object collection,
+            string id)
+        {
+            if (collection == null ||
+                string.IsNullOrEmpty(
+                    id))
+            {
+                return false;
+            }
+
+            try
+            {
+                System.Collections.IList list =
+                    collection as
+                        System.Collections.IList;
+
+                if (list != null)
+                {
+                    for (int i = 0;
+                         i < list.Count;
+                         i++)
+                    {
+                        if (string.Equals(
+                                list[i] as string,
+                                id,
+                                StringComparison.OrdinalIgnoreCase))
+                        {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+                var contains =
+                    HarmonyLib.AccessTools.Method(
+                        collection.GetType(),
+                        "Contains",
+                        new Type[]
+                        {
+                            typeof(string)
+                        });
+
+                if (contains == null)
+                {
+                    return false;
+                }
+
+                object result =
+                    contains.Invoke(
+                        collection,
+                        new object[]
+                        {
+                            id
+                        });
+
+                return
+                    result is bool &&
+                    (bool)result;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        private static void PlayQuestCompleteSound()
+        {
+            try
+            {
+                if (GameData.PlayerAud == null ||
+                    GameData.Misc == null ||
+                    GameData.Misc.QuestComplete == null)
+                {
+                    return;
+                }
+
+                GameData.PlayerAud.PlayOneShot(
+                    GameData.Misc.QuestComplete,
+                    GameData.PlayerAud.volume *
+                    GameData.SFXVol *
+                    GameData.MasterVol);
             }
             catch (Exception exception)
             {
@@ -597,115 +1122,6 @@ namespace FateOfTheFallen
                     "Fate of the Fallen: failed to play quest completion sound: " +
                     exception.Message);
             }
-
-
-            // ========================================================
-            // SUCCESS DIALOGUE
-            // ========================================================
-
-            dialogue =
-                !string.IsNullOrEmpty(
-                    quest.DialogOnSuccess)
-                    ? quest.DialogOnSuccess
-                    : "You did well bringing this to me.";
-
-            return true;
-        }
-
-
-        // ============================================================
-        // RESTORE ITEMS IF TURN-IN FAILS
-        // ============================================================
-
-        private static void RestoreRemovedItems(
-            List<Item> items)
-        {
-            if (items == null ||
-                GameData.PlayerInv == null)
-            {
-                return;
-            }
-
-            foreach (Item item in items)
-            {
-                if (item == null)
-                {
-                    continue;
-                }
-
-                bool restored =
-                    GameData.PlayerInv.AddItemToInv(
-                        item);
-
-                if (!restored)
-                {
-                    GameData.PlayerInv.ForceItemToInv(
-                        item);
-                }
-            }
-        }
-
-
-        // ============================================================
-        // NATIVE ITEM LOOKUP
-        // ============================================================
-
-        private static Item FindNativeItemByName(
-            string itemName)
-        {
-            if (string.IsNullOrEmpty(
-                    itemName))
-            {
-                return null;
-            }
-
-            if (GameData.ItemDB == null ||
-                GameData.ItemDB.ItemDB == null)
-            {
-                Plugin.NativeLog.LogWarning(
-                    "Fate of the Fallen: ItemDB unavailable while resolving [" +
-                    itemName +
-                    "].");
-
-                return null;
-            }
-
-            Item[] nativeItems =
-                GameData.ItemDB.ItemDB;
-
-            for (int i = 0;
-                 i < nativeItems.Length;
-                 i++)
-            {
-                Item item =
-                    nativeItems[i];
-
-                if (item == null ||
-                    string.IsNullOrEmpty(
-                        item.ItemName))
-                {
-                    continue;
-                }
-
-                if (!string.Equals(
-                        item.ItemName,
-                        itemName,
-                        StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                
-
-                return item;
-            }
-
-            Plugin.NativeLog.LogWarning(
-                "Fate of the Fallen: native item [" +
-                itemName +
-                "] was not found in ItemDB.");
-
-            return null;
         }
     }
 }

@@ -1,0 +1,4349 @@
+import bpy
+import math
+import random
+import heapq
+from mathutils import Vector
+
+# ============================================================
+# FATE OF THE FALLEN
+# BLIGHT-TOUCHED COLOSSUS V16
+#
+# COMPLETE MODEL + CORRUPTION + RIG SCRIPT
+#
+# Includes:
+# - Low-poly rocky humanoid body
+# - Tall / intimidating proportions
+# - Flat-bottom legs, no feet
+# - Large Blight Heart chest crystal
+# - Green / purple topology-following corruption
+# - Rear corruption
+# - Dorsal Blight crystals
+# - Roots / moss accents
+# - Full automated Generic creature armature
+# - Rigid stone-chunk weighting
+# - Dedicated Blight Heart bone
+# - Unity-ready rig hierarchy
+# ============================================================
+
+
+# ============================================================
+# SETTINGS
+# ============================================================
+
+COLLECTION_NAME = "FOTF_BlightTouchedColossus_V16"
+RIG_NAME = "FOTF_BlightTouchedColossus_Rig"
+
+DELETE_OLD = True
+JOIN_AT_END = False
+
+SEED = 51793
+
+GROUND_Z = 0.0
+STANCE_WIDTH = 1.10
+ARM_BULK = 1.0
+SHOULDER_BULK = 1.0
+
+random.seed(SEED)
+
+
+# ============================================================
+# SCENE UNITS
+# ============================================================
+
+bpy.context.scene.unit_settings.system = 'METRIC'
+bpy.context.scene.unit_settings.scale_length = 1.0
+
+
+# ============================================================
+# CLEANUP
+# ============================================================
+
+def remove_collection(name):
+    coll = bpy.data.collections.get(name)
+    if coll is None:
+        return
+
+    for obj in list(coll.objects):
+        bpy.data.objects.remove(obj, do_unlink=True)
+
+    bpy.data.collections.remove(coll)
+
+
+if DELETE_OLD:
+    remove_collection(COLLECTION_NAME)
+
+    old_rig = bpy.data.objects.get(RIG_NAME)
+    if old_rig:
+        bpy.data.objects.remove(old_rig, do_unlink=True)
+
+
+# ============================================================
+# COLLECTION
+# ============================================================
+
+COLL = bpy.data.collections.new(COLLECTION_NAME)
+bpy.context.scene.collection.children.link(COLL)
+
+
+def move_to_collection(obj):
+    for c in list(obj.users_collection):
+        c.objects.unlink(obj)
+
+    COLL.objects.link(obj)
+
+
+# ============================================================
+# MATERIALS
+# ============================================================
+
+def make_material(
+    name,
+    color,
+    roughness=0.95,
+    emission=0.0
+):
+    old = bpy.data.materials.get(name)
+
+    if old:
+        return old
+
+    mat = bpy.data.materials.new(name)
+    mat.use_nodes = True
+
+    bsdf = mat.node_tree.nodes.get("Principled BSDF")
+
+    bsdf.inputs["Base Color"].default_value = color
+    bsdf.inputs["Roughness"].default_value = roughness
+
+    if emission > 0.0:
+
+        if "Emission Color" in bsdf.inputs:
+            bsdf.inputs["Emission Color"].default_value = color
+            bsdf.inputs["Emission Strength"].default_value = emission
+
+        elif "Emission" in bsdf.inputs:
+            bsdf.inputs["Emission"].default_value = color
+            bsdf.inputs["Emission Strength"].default_value = emission
+
+    return mat
+
+
+MAT_STONE_DARK = make_material(
+    "V16_Stone_Dark",
+    (0.13, 0.145, 0.12, 1.0)
+)
+
+MAT_STONE = make_material(
+    "V16_Stone",
+    (0.25, 0.27, 0.22, 1.0)
+)
+
+MAT_STONE_LIGHT = make_material(
+    "V16_Stone_Light",
+    (0.37, 0.39, 0.31, 1.0)
+)
+
+MAT_GAP = make_material(
+    "V16_Deep_Gaps",
+    (0.025, 0.032, 0.022, 1.0)
+)
+
+MAT_CRACK = make_material(
+    "V16_Fracture_Dark",
+    (0.010, 0.014, 0.008, 1.0)
+)
+
+MAT_ROOT = make_material(
+    "V16_Blight_Root",
+    (0.115, 0.072, 0.034, 1.0)
+)
+
+MAT_MOSS = make_material(
+    "V16_Blight_Moss",
+    (0.11, 0.23, 0.052, 1.0)
+)
+
+MAT_BLIGHT_GREEN = make_material(
+    "V16_Blight_Green",
+    (0.34, 0.95, 0.08, 1.0),
+    roughness=0.38,
+    emission=4.0
+)
+
+MAT_BLIGHT_PURPLE = make_material(
+    "V16_Blight_Purple",
+    (0.50, 0.14, 0.75, 1.0),
+    roughness=0.38,
+    emission=3.4
+)
+
+MAT_BLIGHT_CORE = make_material(
+    "V16_Blight_Heart",
+    (0.42, 1.00, 0.10, 1.0),
+    roughness=0.24,
+    emission=6.5
+)
+
+STONE_PALETTE = [
+    MAT_STONE_DARK,
+    MAT_STONE,
+    MAT_STONE_LIGHT
+]
+
+
+# ============================================================
+# GENERAL HELPERS
+# ============================================================
+
+def flat_shade(obj):
+    if obj.type != "MESH":
+        return
+
+    for poly in obj.data.polygons:
+        poly.use_smooth = False
+
+
+def add_mat(obj, mat):
+    if mat.name not in [m.name for m in obj.data.materials]:
+        obj.data.materials.append(mat)
+
+
+def apply_stone_palette(
+    obj,
+    seed_offset=0,
+    dark_bias=False
+):
+    for mat in STONE_PALETTE:
+        add_mat(obj, mat)
+
+    rng = random.Random(SEED + seed_offset)
+
+    for poly in obj.data.polygons:
+
+        r = rng.random()
+
+        if dark_bias:
+
+            if r < 0.48:
+                poly.material_index = 0
+
+            elif r < 0.90:
+                poly.material_index = 1
+
+            else:
+                poly.material_index = 2
+
+        else:
+
+            if r < 0.22:
+                poly.material_index = 0
+
+            elif r < 0.84:
+                poly.material_index = 1
+
+            else:
+                poly.material_index = 2
+
+
+def lerp(a, b, t):
+    return a + (b - a) * t
+
+
+# ============================================================
+# OBJECT REGISTRY
+# ============================================================
+
+PARTS = []
+BODY = {}
+
+
+def part(obj):
+    if obj:
+        PARTS.append(obj)
+    return obj
+
+
+def body_part(name, obj):
+    BODY[name] = obj
+    part(obj)
+    return obj
+
+
+def add_many(objects):
+    for obj in objects:
+        part(obj)
+
+
+# ============================================================
+# ROCK GENERATION
+# ============================================================
+
+def make_rock(
+    name,
+    location,
+    scale,
+    rotation=(0, 0, 0),
+    distortion=0.15,
+    seed_offset=0,
+    dark_bias=False,
+    material_override=None
+):
+    bpy.ops.mesh.primitive_ico_sphere_add(
+        subdivisions=1,
+        radius=1.0,
+        location=location,
+        rotation=rotation
+    )
+
+    obj = bpy.context.active_object
+    obj.name = name
+
+    move_to_collection(obj)
+
+    rng = random.Random(SEED + seed_offset)
+
+    for vert in obj.data.vertices:
+        vert.co *= 1.0 + rng.uniform(-distortion, distortion)
+
+    obj.scale = scale
+
+    bpy.context.view_layer.objects.active = obj
+
+    bpy.ops.object.transform_apply(
+        location=False,
+        rotation=False,
+        scale=True
+    )
+
+    flat_shade(obj)
+
+    if material_override:
+        add_mat(obj, material_override)
+
+    else:
+        apply_stone_palette(
+            obj,
+            seed_offset,
+            dark_bias
+        )
+
+    return obj
+
+
+def make_sharp_rock(
+    name,
+    location,
+    scale,
+    rotation=(0, 0, 0),
+    direction="UP",
+    seed_offset=0,
+    dark_bias=False,
+    material_override=None
+):
+    obj = make_rock(
+        name,
+        location,
+        scale,
+        rotation,
+        distortion=0.18,
+        seed_offset=seed_offset,
+        dark_bias=dark_bias,
+        material_override=material_override
+    )
+
+    if direction == "UP":
+
+        limit = max(v.co.z for v in obj.data.vertices)
+
+        for v in obj.data.vertices:
+            if v.co.z > limit * 0.40:
+                v.co.z *= 1.24
+
+    elif direction == "FORWARD":
+
+        limit = max(v.co.y for v in obj.data.vertices)
+
+        for v in obj.data.vertices:
+            if v.co.y > limit * 0.40:
+                v.co.y *= 1.25
+
+    elif direction == "OUT_POS_X":
+
+        limit = max(v.co.x for v in obj.data.vertices)
+
+        for v in obj.data.vertices:
+            if v.co.x > limit * 0.40:
+                v.co.x *= 1.20
+
+    elif direction == "OUT_NEG_X":
+
+        limit = min(v.co.x for v in obj.data.vertices)
+
+        for v in obj.data.vertices:
+            if v.co.x < limit * 0.40:
+                v.co.x *= 1.20
+
+    obj.data.update()
+
+    return obj
+
+
+# ============================================================
+# LOWER LEG
+# ============================================================
+
+def make_leg_pillar(
+    name,
+    x,
+    y,
+    height,
+    base_radius,
+    upper_radius,
+    seed_offset
+):
+    rng = random.Random(SEED + seed_offset)
+
+    sides = 7
+
+    rings = [
+        (GROUND_Z, base_radius),
+        (height * 0.28, base_radius * 0.90),
+        (height * 0.62, upper_radius * 1.06),
+        (height, upper_radius),
+    ]
+
+    verts = []
+    faces = []
+
+    for ring_index, (z, radius) in enumerate(rings):
+
+        phase = 0.09 * ring_index
+
+        for i in range(sides):
+
+            angle = math.tau * i / sides + phase
+
+            irregular = rng.uniform(
+                0.91,
+                1.11
+            )
+
+            vx = (
+                x +
+                math.cos(angle) *
+                radius *
+                irregular
+            )
+
+            vy = (
+                y +
+                math.sin(angle) *
+                radius *
+                irregular
+            )
+
+            if ring_index == 0:
+                vz = GROUND_Z
+
+            else:
+                vz = (
+                    z +
+                    rng.uniform(
+                        -0.045,
+                        0.045
+                    )
+                )
+
+            verts.append(
+                (
+                    vx,
+                    vy,
+                    vz
+                )
+            )
+
+    for ring in range(len(rings) - 1):
+
+        a = ring * sides
+        b = (ring + 1) * sides
+
+        for i in range(sides):
+
+            ni = (i + 1) % sides
+
+            faces.append(
+                (
+                    a + i,
+                    a + ni,
+                    b + ni
+                )
+            )
+
+            faces.append(
+                (
+                    a + i,
+                    b + ni,
+                    b + i
+                )
+            )
+
+    base_center = len(verts)
+
+    verts.append(
+        (
+            x,
+            y,
+            GROUND_Z
+        )
+    )
+
+    for i in range(sides):
+
+        ni = (i + 1) % sides
+
+        faces.append(
+            (
+                base_center,
+                ni,
+                i
+            )
+        )
+
+    mesh = bpy.data.meshes.new(
+        name + "_Mesh"
+    )
+
+    mesh.from_pydata(
+        verts,
+        [],
+        faces
+    )
+
+    mesh.update()
+
+    obj = bpy.data.objects.new(
+        name,
+        mesh
+    )
+
+    COLL.objects.link(obj)
+
+    flat_shade(obj)
+
+    apply_stone_palette(
+        obj,
+        seed_offset
+    )
+
+    return obj
+
+
+# ============================================================
+# ROOT
+# ============================================================
+
+def make_root(
+    name,
+    points,
+    radii,
+    material=MAT_ROOT
+):
+    sides = 5
+
+    pts = [
+        Vector(p)
+        for p in points
+    ]
+
+    verts = []
+    faces = []
+
+    for i, p in enumerate(pts):
+
+        if i == 0:
+            tangent = pts[1] - pts[0]
+
+        elif i == len(pts) - 1:
+            tangent = pts[-1] - pts[-2]
+
+        else:
+            tangent = pts[i + 1] - pts[i - 1]
+
+        tangent.normalize()
+
+        ref = Vector((0, 1, 0))
+
+        if abs(tangent.dot(ref)) > 0.9:
+            ref = Vector((1, 0, 0))
+
+        axis_a = tangent.cross(ref).normalized()
+        axis_b = tangent.cross(axis_a).normalized()
+
+        radius = radii[i]
+
+        for j in range(sides):
+
+            angle = math.tau * j / sides
+
+            offset = (
+                axis_a * math.cos(angle) * radius +
+                axis_b * math.sin(angle) * radius
+            )
+
+            verts.append(
+                tuple(
+                    p + offset
+                )
+            )
+
+    for ring in range(len(pts) - 1):
+
+        a = ring * sides
+        b = (ring + 1) * sides
+
+        for j in range(sides):
+
+            nj = (j + 1) % sides
+
+            faces.append(
+                (
+                    a + j,
+                    a + nj,
+                    b + nj
+                )
+            )
+
+            faces.append(
+                (
+                    a + j,
+                    b + nj,
+                    b + j
+                )
+            )
+
+    mesh = bpy.data.meshes.new(
+        name + "_Mesh"
+    )
+
+    mesh.from_pydata(
+        verts,
+        [],
+        faces
+    )
+
+    mesh.update()
+
+    obj = bpy.data.objects.new(
+        name,
+        mesh
+    )
+
+    COLL.objects.link(obj)
+
+    flat_shade(obj)
+    add_mat(obj, material)
+
+    return obj
+
+
+# ============================================================
+# CRYSTAL / SPIKE
+# ============================================================
+
+def make_spike(
+    name,
+    location,
+    radius,
+    depth,
+    rotation,
+    material
+):
+    bpy.ops.mesh.primitive_cone_add(
+        vertices=5,
+        radius1=radius,
+        radius2=0.0,
+        depth=depth,
+        location=location,
+        rotation=rotation
+    )
+
+    obj = bpy.context.active_object
+    obj.name = name
+
+    move_to_collection(obj)
+
+    flat_shade(obj)
+
+    add_mat(
+        obj,
+        material
+    )
+
+    return obj
+
+
+# ============================================================
+# TOPOLOGY DATA
+# ============================================================
+
+def get_world_mesh_data(obj):
+
+    matrix = obj.matrix_world
+    normal_matrix = obj.matrix_world.to_3x3()
+
+    positions = [
+        matrix @ vert.co
+        for vert in obj.data.vertices
+    ]
+
+    normals = []
+
+    for vert in obj.data.vertices:
+
+        n = normal_matrix @ vert.normal
+
+        if n.length < 0.001:
+            n = Vector((0, 1, 0))
+
+        else:
+            n.normalize()
+
+        normals.append(n)
+
+    adjacency = [
+        []
+        for _ in obj.data.vertices
+    ]
+
+    for edge in obj.data.edges:
+
+        a = edge.vertices[0]
+        b = edge.vertices[1]
+
+        distance = (
+            positions[a] -
+            positions[b]
+        ).length
+
+        adjacency[a].append(
+            (
+                b,
+                distance
+            )
+        )
+
+        adjacency[b].append(
+            (
+                a,
+                distance
+            )
+        )
+
+    return (
+        positions,
+        normals,
+        adjacency
+    )
+
+
+# ============================================================
+# VERTEX SEARCH
+# ============================================================
+
+def nearest_vertex_index(
+    positions,
+    target
+):
+    target = Vector(target)
+
+    best_index = 0
+    best_distance = float("inf")
+
+    for i, position in enumerate(positions):
+
+        distance = (
+            position -
+            target
+        ).length_squared
+
+        if distance < best_distance:
+
+            best_distance = distance
+            best_index = i
+
+    return best_index
+
+
+def nearest_vertex_index_biased(
+    positions,
+    normals,
+    target,
+    desired_normal,
+    normal_bias=1.5
+):
+    target = Vector(target)
+    desired = Vector(desired_normal).normalized()
+
+    best_index = 0
+    best_score = float("inf")
+
+    for i, position in enumerate(positions):
+
+        distance = (
+            position -
+            target
+        ).length_squared
+
+        alignment = normals[i].dot(
+            desired
+        )
+
+        normal_penalty = (
+            1.0 -
+            alignment
+        ) * normal_bias
+
+        score = (
+            distance +
+            normal_penalty
+        )
+
+        if score < best_score:
+
+            best_score = score
+            best_index = i
+
+    return best_index
+
+
+# ============================================================
+# DIJKSTRA EDGE PATH
+# ============================================================
+
+def shortest_mesh_edge_path(
+    positions,
+    adjacency,
+    start_index,
+    end_index,
+    normals=None,
+    desired_normal=None,
+    surface_bias=0.0
+):
+    if start_index == end_index:
+        return [start_index]
+
+    desired = None
+
+    if desired_normal is not None:
+        desired = Vector(desired_normal).normalized()
+
+    distances = {
+        start_index: 0.0
+    }
+
+    previous = {}
+
+    heap = [
+        (
+            0.0,
+            start_index
+        )
+    ]
+
+    visited = set()
+
+    while heap:
+
+        current_distance, current = heapq.heappop(heap)
+
+        if current in visited:
+            continue
+
+        visited.add(current)
+
+        if current == end_index:
+            break
+
+        for neighbour, edge_distance in adjacency[current]:
+
+            cost = edge_distance
+
+            if (
+                desired is not None
+                and
+                normals is not None
+                and
+                surface_bias > 0.0
+            ):
+
+                average_normal = (
+                    normals[current] +
+                    normals[neighbour]
+                )
+
+                if average_normal.length > 0.001:
+
+                    average_normal.normalize()
+
+                    alignment = average_normal.dot(
+                        desired
+                    )
+
+                    penalty = (
+                        1.0 -
+                        alignment
+                    ) * surface_bias
+
+                    cost *= (
+                        1.0 +
+                        max(
+                            0.0,
+                            penalty
+                        )
+                    )
+
+            new_distance = (
+                current_distance +
+                cost
+            )
+
+            if (
+                neighbour not in distances
+                or
+                new_distance < distances[neighbour]
+            ):
+
+                distances[neighbour] = new_distance
+                previous[neighbour] = current
+
+                heapq.heappush(
+                    heap,
+                    (
+                        new_distance,
+                        neighbour
+                    )
+                )
+
+    if end_index not in distances:
+
+        return [
+            start_index,
+            end_index
+        ]
+
+    path = [
+        end_index
+    ]
+
+    current = end_index
+
+    while current != start_index:
+
+        current = previous[current]
+        path.append(current)
+
+    path.reverse()
+
+    return path
+
+
+# ============================================================
+# WAYPOINT TARGET GENERATION
+# ============================================================
+
+def build_waypoint_targets(
+    start,
+    end,
+    radius_side_start,
+    radius_front_start,
+    radius_side_end,
+    radius_front_end,
+    angles_deg
+):
+    start = Vector(start)
+    end = Vector(end)
+
+    axis = end - start
+    axis.normalize()
+
+    world_front = Vector((0, 1, 0))
+
+    front = (
+        world_front -
+        axis *
+        world_front.dot(axis)
+    )
+
+    if front.length < 0.001:
+        front = Vector((1, 0, 0))
+
+    front.normalize()
+
+    side = axis.cross(front)
+    side.normalize()
+
+    targets = []
+
+    count = len(angles_deg)
+
+    for i, angle_deg in enumerate(angles_deg):
+
+        t = (
+            i /
+            max(
+                1,
+                count - 1
+            )
+        )
+
+        center = start.lerp(
+            end,
+            t
+        )
+
+        radius_side = lerp(
+            radius_side_start,
+            radius_side_end,
+            t
+        )
+
+        radius_front = lerp(
+            radius_front_start,
+            radius_front_end,
+            t
+        )
+
+        angle = math.radians(
+            angle_deg
+        )
+
+        radial = (
+            side *
+            math.sin(angle) *
+            radius_side
+            +
+            front *
+            math.cos(angle) *
+            radius_front
+        )
+
+        targets.append(
+            center +
+            radial
+        )
+
+    return targets
+
+
+# ============================================================
+# NORMAL TOPOLOGY PATH
+# ============================================================
+
+def build_topology_path(
+    obj,
+    waypoint_targets
+):
+    (
+        positions,
+        normals,
+        adjacency
+    ) = get_world_mesh_data(obj)
+
+    waypoint_indices = []
+
+    for target in waypoint_targets:
+
+        index = nearest_vertex_index(
+            positions,
+            target
+        )
+
+        if (
+            len(waypoint_indices) == 0
+            or
+            waypoint_indices[-1] != index
+        ):
+            waypoint_indices.append(index)
+
+    if len(waypoint_indices) < 2:
+        return [], []
+
+    final_indices = []
+
+    for i in range(
+        len(waypoint_indices) - 1
+    ):
+
+        section = shortest_mesh_edge_path(
+            positions,
+            adjacency,
+            waypoint_indices[i],
+            waypoint_indices[i + 1]
+        )
+
+        if final_indices:
+            section = section[1:]
+
+        final_indices.extend(section)
+
+    cleaned = []
+
+    for index in final_indices:
+
+        if (
+            len(cleaned) == 0
+            or
+            cleaned[-1] != index
+        ):
+            cleaned.append(index)
+
+    points = [
+        positions[index]
+        for index in cleaned
+    ]
+
+    path_normals = [
+        normals[index]
+        for index in cleaned
+    ]
+
+    return (
+        points,
+        path_normals
+    )
+
+
+# ============================================================
+# BACK-BIASED TOPOLOGY PATH
+# ============================================================
+
+def build_back_topology_path(
+    obj,
+    target_points
+):
+    (
+        positions,
+        normals,
+        adjacency
+    ) = get_world_mesh_data(obj)
+
+    back = Vector(
+        (0, -1, 0)
+    )
+
+    waypoint_indices = []
+
+    for target in target_points:
+
+        index = nearest_vertex_index_biased(
+            positions,
+            normals,
+            target,
+            back,
+            normal_bias=2.0
+        )
+
+        if (
+            len(waypoint_indices) == 0
+            or
+            waypoint_indices[-1] != index
+        ):
+            waypoint_indices.append(index)
+
+    if len(waypoint_indices) < 2:
+        return [], []
+
+    final_indices = []
+
+    for i in range(
+        len(waypoint_indices) - 1
+    ):
+
+        section = shortest_mesh_edge_path(
+            positions,
+            adjacency,
+            waypoint_indices[i],
+            waypoint_indices[i + 1],
+            normals=normals,
+            desired_normal=back,
+            surface_bias=3.5
+        )
+
+        if final_indices:
+            section = section[1:]
+
+        final_indices.extend(section)
+
+    cleaned = []
+
+    for index in final_indices:
+
+        if (
+            len(cleaned) == 0
+            or
+            cleaned[-1] != index
+        ):
+            cleaned.append(index)
+
+    points = [
+        positions[index]
+        for index in cleaned
+    ]
+
+    path_normals = [
+        normals[index]
+        for index in cleaned
+    ]
+
+    return (
+        points,
+        path_normals
+    )
+
+
+# ============================================================
+# EDGE RIBBON
+# ============================================================
+
+def make_edge_ribbon(
+    name,
+    points,
+    normals,
+    width,
+    material,
+    lift
+):
+    if len(points) < 2:
+        return None
+
+    verts = []
+    faces = []
+
+    for i, point in enumerate(points):
+
+        p = Vector(point)
+        normal = Vector(normals[i]).normalized()
+
+        if i == 0:
+
+            tangent = (
+                Vector(points[1]) -
+                p
+            )
+
+        elif i == len(points) - 1:
+
+            tangent = (
+                p -
+                Vector(points[i - 1])
+            )
+
+        else:
+
+            tangent = (
+                Vector(points[i + 1]) -
+                Vector(points[i - 1])
+            )
+
+        if tangent.length < 0.001:
+            tangent = Vector((0, 0, 1))
+
+        else:
+            tangent.normalize()
+
+        sideways = normal.cross(tangent)
+
+        if sideways.length < 0.001:
+            sideways = Vector((1, 0, 0))
+
+        else:
+            sideways.normalize()
+
+        center = (
+            p +
+            normal * lift
+        )
+
+        half = width * 0.5
+
+        verts.append(
+            tuple(
+                center +
+                sideways *
+                half
+            )
+        )
+
+        verts.append(
+            tuple(
+                center -
+                sideways *
+                half
+            )
+        )
+
+    for i in range(
+        len(points) - 1
+    ):
+
+        a = i * 2
+        b = (i + 1) * 2
+
+        faces.append(
+            (
+                a,
+                a + 1,
+                b
+            )
+        )
+
+        faces.append(
+            (
+                a + 1,
+                b + 1,
+                b
+            )
+        )
+
+    mesh = bpy.data.meshes.new(
+        name + "_Mesh"
+    )
+
+    mesh.from_pydata(
+        verts,
+        [],
+        faces
+    )
+
+    mesh.update()
+
+    obj = bpy.data.objects.new(
+        name,
+        mesh
+    )
+
+    COLL.objects.link(obj)
+
+    flat_shade(obj)
+    add_mat(obj, material)
+
+    return obj
+
+
+# ============================================================
+# TOPOLOGY FISSURES
+# ============================================================
+
+def make_topology_fissure(
+    obj,
+    name,
+    start,
+    end,
+    radius_side_start,
+    radius_front_start,
+    radius_side_end,
+    radius_front_end,
+    angles_deg,
+    glow_material,
+    dark_width=0.13,
+    glow_width=0.045
+):
+    targets = build_waypoint_targets(
+        start,
+        end,
+        radius_side_start,
+        radius_front_start,
+        radius_side_end,
+        radius_front_end,
+        angles_deg
+    )
+
+    points, normals = build_topology_path(
+        obj,
+        targets
+    )
+
+    if len(points) < 2:
+        return []
+
+    dark = make_edge_ribbon(
+        name + "_Dark",
+        points,
+        normals,
+        dark_width,
+        MAT_CRACK,
+        lift=0.014
+    )
+
+    glow = make_edge_ribbon(
+        name + "_Glow",
+        points,
+        normals,
+        glow_width,
+        glow_material,
+        lift=0.023
+    )
+
+    result = []
+
+    if dark:
+        result.append(dark)
+
+    if glow:
+        result.append(glow)
+
+    return result
+
+
+def make_back_topology_fissure(
+    obj,
+    name,
+    target_points,
+    glow_material,
+    dark_width=0.13,
+    glow_width=0.045
+):
+    points, normals = build_back_topology_path(
+        obj,
+        target_points
+    )
+
+    if len(points) < 2:
+        return []
+
+    dark = make_edge_ribbon(
+        name + "_Dark",
+        points,
+        normals,
+        dark_width,
+        MAT_CRACK,
+        lift=0.015
+    )
+
+    glow = make_edge_ribbon(
+        name + "_Glow",
+        points,
+        normals,
+        glow_width,
+        glow_material,
+        lift=0.025
+    )
+
+    result = []
+
+    if dark:
+        result.append(dark)
+
+    if glow:
+        result.append(glow)
+
+    return result
+
+
+# ============================================================
+# BODY LEVELS
+# ============================================================
+
+LEG_TOP_Z = 3.20
+KNEE_Z = 3.33
+THIGH_Z = 4.48
+
+PELVIS_Z = 5.52
+
+ABDOMEN_LOW_Z = 6.32
+ABDOMEN_HIGH_Z = 7.15
+
+CHEST_Z = 8.10
+SHOULDER_Z = 8.48
+
+HEAD_Z = 9.08
+CROWN_Z = 9.62
+
+
+# ============================================================
+# LEGS
+# ============================================================
+
+body_part(
+    "LowerLeg_L",
+    make_leg_pillar(
+        "LowerLeg_L",
+        STANCE_WIDTH,
+        0.0,
+        LEG_TOP_Z,
+        0.82,
+        0.54,
+        10
+    )
+)
+
+body_part(
+    "LowerLeg_R",
+    make_leg_pillar(
+        "LowerLeg_R",
+        -STANCE_WIDTH,
+        0.0,
+        LEG_TOP_Z,
+        0.82,
+        0.54,
+        20
+    )
+)
+
+body_part(
+    "Knee_L",
+    make_sharp_rock(
+        "Knee_L",
+        (
+            STANCE_WIDTH,
+            0.18,
+            KNEE_Z
+        ),
+        (
+            0.76,
+            0.62,
+            0.78
+        ),
+        rotation=(
+            0.06,
+            0.02,
+            -0.04
+        ),
+        direction="FORWARD",
+        seed_offset=30
+    )
+)
+
+body_part(
+    "Knee_R",
+    make_sharp_rock(
+        "Knee_R",
+        (
+            -STANCE_WIDTH,
+            0.18,
+            KNEE_Z
+        ),
+        (
+            0.76,
+            0.62,
+            0.78
+        ),
+        rotation=(
+            0.06,
+            -0.02,
+            0.04
+        ),
+        direction="FORWARD",
+        seed_offset=40
+    )
+)
+
+body_part(
+    "Thigh_L",
+    make_rock(
+        "Thigh_L",
+        (
+            1.00,
+            -0.02,
+            THIGH_Z
+        ),
+        (
+            0.91,
+            0.73,
+            1.42
+        ),
+        rotation=(
+            0.02,
+            -0.05,
+            -0.04
+        ),
+        distortion=0.15,
+        seed_offset=50
+    )
+)
+
+body_part(
+    "Thigh_R",
+    make_rock(
+        "Thigh_R",
+        (
+            -1.00,
+            -0.02,
+            THIGH_Z
+        ),
+        (
+            0.91,
+            0.73,
+            1.42
+        ),
+        rotation=(
+            -0.02,
+            0.05,
+            0.04
+        ),
+        distortion=0.15,
+        seed_offset=60
+    )
+)
+
+
+# ============================================================
+# PELVIS
+# ============================================================
+
+body_part(
+    "Pelvis",
+    make_rock(
+        "Pelvis",
+        (
+            0,
+            0,
+            PELVIS_Z
+        ),
+        (
+            1.50,
+            0.88,
+            0.82
+        ),
+        distortion=0.15,
+        seed_offset=70,
+        dark_bias=True
+    )
+)
+
+body_part(
+    "Hip_L",
+    make_sharp_rock(
+        "Hip_L",
+        (
+            1.20,
+            0,
+            PELVIS_Z
+        ),
+        (
+            0.83,
+            0.68,
+            0.78
+        ),
+        rotation=(
+            0,
+            -0.09,
+            -0.10
+        ),
+        direction="OUT_POS_X",
+        seed_offset=80
+    )
+)
+
+body_part(
+    "Hip_R",
+    make_sharp_rock(
+        "Hip_R",
+        (
+            -1.20,
+            0,
+            PELVIS_Z
+        ),
+        (
+            0.83,
+            0.68,
+            0.78
+        ),
+        rotation=(
+            0,
+            0.09,
+            0.10
+        ),
+        direction="OUT_NEG_X",
+        seed_offset=90
+    )
+)
+
+
+# ============================================================
+# TORSO
+# ============================================================
+
+body_part(
+    "DarkTorsoCore",
+    make_rock(
+        "DarkTorsoCore",
+        (
+            0,
+            -0.12,
+            7.10
+        ),
+        (
+            1.72,
+            0.94,
+            2.08
+        ),
+        distortion=0.08,
+        seed_offset=95,
+        material_override=MAT_GAP
+    )
+)
+
+body_part(
+    "AbdomenLower",
+    make_rock(
+        "AbdomenLower",
+        (
+            0,
+            0.12,
+            ABDOMEN_LOW_Z
+        ),
+        (
+            1.28,
+            0.78,
+            0.88
+        ),
+        distortion=0.12,
+        seed_offset=100
+    )
+)
+
+body_part(
+    "AbdomenUpper",
+    make_sharp_rock(
+        "AbdomenUpper",
+        (
+            0,
+            0.15,
+            ABDOMEN_HIGH_Z
+        ),
+        (
+            1.44,
+            0.84,
+            0.94
+        ),
+        rotation=(
+            0.02,
+            0,
+            0
+        ),
+        direction="FORWARD",
+        seed_offset=110
+    )
+)
+
+body_part(
+    "ChestCenter",
+    make_sharp_rock(
+        "ChestCenter",
+        (
+            0,
+            0.06,
+            CHEST_Z
+        ),
+        (
+            1.58,
+            1.04,
+            1.30
+        ),
+        rotation=(
+            0.02,
+            0,
+            0
+        ),
+        direction="UP",
+        seed_offset=120
+    )
+)
+
+body_part(
+    "Chest_L",
+    make_sharp_rock(
+        "Chest_L",
+        (
+            1.30,
+            0.05,
+            CHEST_Z + 0.12
+        ),
+        (
+            1.43,
+            1.02,
+            1.18
+        ),
+        rotation=(
+            0.02,
+            -0.10,
+            -0.10
+        ),
+        direction="OUT_POS_X",
+        seed_offset=130
+    )
+)
+
+body_part(
+    "Chest_R",
+    make_sharp_rock(
+        "Chest_R",
+        (
+            -1.30,
+            0.05,
+            CHEST_Z + 0.12
+        ),
+        (
+            1.43,
+            1.02,
+            1.18
+        ),
+        rotation=(
+            0.02,
+            0.10,
+            0.10
+        ),
+        direction="OUT_NEG_X",
+        seed_offset=140
+    )
+)
+
+body_part(
+    "Sternum",
+    make_sharp_rock(
+        "Sternum",
+        (
+            0,
+            0.91,
+            CHEST_Z - 0.10
+        ),
+        (
+            0.64,
+            0.35,
+            1.12
+        ),
+        rotation=(
+            0.16,
+            0,
+            0
+        ),
+        direction="FORWARD",
+        seed_offset=145
+    )
+)
+
+
+# ============================================================
+# SHOULDERS
+# ============================================================
+
+body_part(
+    "Shoulder_L",
+    make_sharp_rock(
+        "Shoulder_L",
+        (
+            2.58,
+            -0.02,
+            SHOULDER_Z
+        ),
+        (
+            1.42 * SHOULDER_BULK,
+            1.04,
+            1.22
+        ),
+        rotation=(
+            0.02,
+            -0.12,
+            -0.16
+        ),
+        direction="OUT_POS_X",
+        seed_offset=150,
+        dark_bias=True
+    )
+)
+
+body_part(
+    "Shoulder_R",
+    make_sharp_rock(
+        "Shoulder_R",
+        (
+            -2.58,
+            -0.02,
+            SHOULDER_Z
+        ),
+        (
+            1.42 * SHOULDER_BULK,
+            1.04,
+            1.22
+        ),
+        rotation=(
+            0.02,
+            0.12,
+            0.16
+        ),
+        direction="OUT_NEG_X",
+        seed_offset=160,
+        dark_bias=True
+    )
+)
+
+
+# ============================================================
+# ARMS
+# ============================================================
+
+body_part(
+    "UpperArm_L",
+    make_rock(
+        "UpperArm_L",
+        (
+            3.28,
+            0,
+            7.48
+        ),
+        (
+            0.88 * ARM_BULK,
+            0.76 * ARM_BULK,
+            1.28
+        ),
+        rotation=(
+            math.radians(-3),
+            math.radians(-7),
+            math.radians(-20)
+        ),
+        distortion=0.14,
+        seed_offset=220
+    )
+)
+
+body_part(
+    "Elbow_L",
+    make_sharp_rock(
+        "Elbow_L",
+        (
+            3.66,
+            0.22,
+            6.30
+        ),
+        (
+            0.78,
+            0.69,
+            0.78
+        ),
+        direction="FORWARD",
+        seed_offset=221,
+        dark_bias=True
+    )
+)
+
+body_part(
+    "Forearm_L",
+    make_rock(
+        "Forearm_L",
+        (
+            3.66,
+            0.64,
+            5.05
+        ),
+        (
+            1.04,
+            0.86,
+            1.50
+        ),
+        rotation=(
+            math.radians(-14),
+            math.radians(-2),
+            math.radians(-3)
+        ),
+        distortion=0.15,
+        seed_offset=222
+    )
+)
+
+body_part(
+    "Fist_L",
+    make_rock(
+        "Fist_L",
+        (
+            3.56,
+            1.10,
+            3.78
+        ),
+        (
+            1.18,
+            0.96,
+            0.96
+        ),
+        distortion=0.18,
+        seed_offset=223,
+        dark_bias=True
+    )
+)
+
+body_part(
+    "UpperArm_R",
+    make_rock(
+        "UpperArm_R",
+        (
+            -3.31,
+            0,
+            7.43
+        ),
+        (
+            0.92,
+            0.79,
+            1.31
+        ),
+        rotation=(
+            math.radians(-3),
+            math.radians(7),
+            math.radians(20)
+        ),
+        distortion=0.14,
+        seed_offset=230
+    )
+)
+
+body_part(
+    "Elbow_R",
+    make_sharp_rock(
+        "Elbow_R",
+        (
+            -3.72,
+            0.22,
+            6.22
+        ),
+        (
+            0.80,
+            0.71,
+            0.82
+        ),
+        direction="FORWARD",
+        seed_offset=231,
+        dark_bias=True
+    )
+)
+
+body_part(
+    "Forearm_R",
+    make_rock(
+        "Forearm_R",
+        (
+            -3.76,
+            0.68,
+            4.88
+        ),
+        (
+            1.12,
+            0.90,
+            1.56
+        ),
+        distortion=0.16,
+        seed_offset=232
+    )
+)
+
+body_part(
+    "Fist_R",
+    make_rock(
+        "Fist_R",
+        (
+            -3.66,
+            1.16,
+            3.55
+        ),
+        (
+            1.30,
+            1.02,
+            1.04
+        ),
+        distortion=0.18,
+        seed_offset=233,
+        dark_bias=True
+    )
+)
+
+
+# ============================================================
+# HEAD
+# ============================================================
+
+body_part(
+    "NeckMass",
+    make_rock(
+        "NeckMass",
+        (
+            0,
+            -0.10,
+            HEAD_Z - 0.66
+        ),
+        (
+            0.80,
+            0.68,
+            0.66
+        ),
+        distortion=0.11,
+        seed_offset=165,
+        dark_bias=True
+    )
+)
+
+body_part(
+    "FaceSocket",
+    make_rock(
+        "FaceSocket",
+        (
+            0,
+            0.16,
+            HEAD_Z - 0.22
+        ),
+        (
+            0.66,
+            0.36,
+            0.68
+        ),
+        distortion=0.08,
+        seed_offset=166,
+        material_override=MAT_GAP
+    )
+)
+
+body_part(
+    "Skull",
+    make_sharp_rock(
+        "Skull",
+        (
+            0,
+            0.27,
+            HEAD_Z
+        ),
+        (
+            0.70,
+            0.57,
+            0.78
+        ),
+        rotation=(
+            math.radians(8),
+            0,
+            0
+        ),
+        direction="UP",
+        seed_offset=170,
+        dark_bias=True
+    )
+)
+
+body_part(
+    "CrownCenter",
+    make_sharp_rock(
+        "CrownCenter",
+        (
+            0,
+            0.10,
+            CROWN_Z
+        ),
+        (
+            0.30,
+            0.31,
+            0.49
+        ),
+        direction="UP",
+        seed_offset=171,
+        dark_bias=True
+    )
+)
+
+body_part(
+    "Crown_L",
+    make_sharp_rock(
+        "Crown_L",
+        (
+            0.43,
+            0.09,
+            CROWN_Z - 0.10
+        ),
+        (
+            0.31,
+            0.30,
+            0.42
+        ),
+        rotation=(
+            -0.10,
+            -0.20,
+            -0.17
+        ),
+        direction="UP",
+        seed_offset=172,
+        dark_bias=True
+    )
+)
+
+body_part(
+    "Crown_R",
+    make_sharp_rock(
+        "Crown_R",
+        (
+            -0.40,
+            0.08,
+            CROWN_Z - 0.13
+        ),
+        (
+            0.28,
+            0.30,
+            0.39
+        ),
+        rotation=(
+            -0.09,
+            0.18,
+            0.20
+        ),
+        direction="UP",
+        seed_offset=173,
+        dark_bias=True
+    )
+)
+
+body_part(
+    "BrowCenter",
+    make_sharp_rock(
+        "BrowCenter",
+        (
+            0,
+            0.70,
+            HEAD_Z + 0.07
+        ),
+        (
+            0.59,
+            0.25,
+            0.22
+        ),
+        rotation=(
+            0.30,
+            0,
+            0
+        ),
+        direction="FORWARD",
+        seed_offset=175,
+        dark_bias=True
+    )
+)
+
+for i, x in enumerate(
+    (-0.21, 0.21)
+):
+    part(
+        make_rock(
+            f"EyeSocket_{i}",
+            (
+                x,
+                0.77,
+                HEAD_Z - 0.04
+            ),
+            (
+                0.15,
+                0.075,
+                0.11
+            ),
+            distortion=0.04,
+            seed_offset=180 + i,
+            material_override=MAT_GAP
+        )
+    )
+
+part(
+    make_rock(
+        "EyeGlow_L",
+        (
+            -0.21,
+            0.825,
+            HEAD_Z - 0.04
+        ),
+        (
+            0.070,
+            0.035,
+            0.048
+        ),
+        distortion=0.02,
+        seed_offset=185,
+        material_override=MAT_BLIGHT_GREEN
+    )
+)
+
+part(
+    make_rock(
+        "EyeGlow_R",
+        (
+            0.21,
+            0.825,
+            HEAD_Z - 0.04
+        ),
+        (
+            0.065,
+            0.032,
+            0.045
+        ),
+        distortion=0.02,
+        seed_offset=186,
+        material_override=MAT_BLIGHT_GREEN
+    )
+)
+
+body_part(
+    "Cheek_L",
+    make_sharp_rock(
+        "Cheek_L",
+        (
+            0.45,
+            0.57,
+            HEAD_Z - 0.23
+        ),
+        (
+            0.40,
+            0.28,
+            0.36
+        ),
+        direction="OUT_POS_X",
+        seed_offset=190,
+        dark_bias=True
+    )
+)
+
+body_part(
+    "Cheek_R",
+    make_sharp_rock(
+        "Cheek_R",
+        (
+            -0.45,
+            0.56,
+            HEAD_Z - 0.25
+        ),
+        (
+            0.41,
+            0.29,
+            0.36
+        ),
+        direction="OUT_NEG_X",
+        seed_offset=191,
+        dark_bias=True
+    )
+)
+
+part(
+    make_rock(
+        "MouthCavity",
+        (
+            0,
+            0.755,
+            HEAD_Z - 0.42
+        ),
+        (
+            0.41,
+            0.12,
+            0.20
+        ),
+        distortion=0.06,
+        seed_offset=200,
+        material_override=MAT_GAP
+    )
+)
+
+part(
+    make_rock(
+        "MouthCore",
+        (
+            0,
+            0.808,
+            HEAD_Z - 0.42
+        ),
+        (
+            0.25,
+            0.028,
+            0.070
+        ),
+        distortion=0.02,
+        seed_offset=201,
+        material_override=MAT_BLIGHT_GREEN
+    )
+)
+
+body_part(
+    "LowerJaw",
+    make_rock(
+        "LowerJaw",
+        (
+            0,
+            0.62,
+            HEAD_Z - 0.58
+        ),
+        (
+            0.56,
+            0.40,
+            0.31
+        ),
+        distortion=0.13,
+        seed_offset=206,
+        dark_bias=True
+    )
+)
+
+
+# ============================================================
+# BLIGHT HEART
+# ============================================================
+
+part(
+    make_rock(
+        "BlightHeart_Socket",
+        (
+            0,
+            0.92,
+            CHEST_Z + 0.02
+        ),
+        (
+            0.88,
+            0.32,
+            0.98
+        ),
+        distortion=0.08,
+        seed_offset=300,
+        material_override=MAT_GAP
+    )
+)
+
+part(
+    make_spike(
+        "BlightHeart_MainCrystal",
+        (
+            0.00,
+            1.43,
+            CHEST_Z + 0.10
+        ),
+        radius=0.50,
+        depth=2.30,
+        rotation=(
+            math.radians(-88),
+            0,
+            0
+        ),
+        material=MAT_BLIGHT_CORE
+    )
+)
+
+part(
+    make_spike(
+        "BlightHeart_UpperShard",
+        (
+            0.00,
+            1.16,
+            CHEST_Z + 0.62
+        ),
+        radius=0.22,
+        depth=1.05,
+        rotation=(
+            math.radians(-65),
+            0,
+            0
+        ),
+        material=MAT_BLIGHT_GREEN
+    )
+)
+
+part(
+    make_spike(
+        "BlightHeart_LeftShard",
+        (
+            -0.45,
+            1.18,
+            CHEST_Z - 0.08
+        ),
+        radius=0.21,
+        depth=1.04,
+        rotation=(
+            math.radians(-72),
+            math.radians(-18),
+            math.radians(-22)
+        ),
+        material=MAT_BLIGHT_GREEN
+    )
+)
+
+part(
+    make_spike(
+        "BlightHeart_RightShard",
+        (
+            0.46,
+            1.16,
+            CHEST_Z - 0.06
+        ),
+        radius=0.20,
+        depth=1.00,
+        rotation=(
+            math.radians(-72),
+            math.radians(18),
+            math.radians(22)
+        ),
+        material=MAT_BLIGHT_PURPLE
+    )
+)
+
+part(
+    make_spike(
+        "BlightHeart_LowerShard",
+        (
+            0.00,
+            1.08,
+            CHEST_Z - 0.54
+        ),
+        radius=0.18,
+        depth=0.88,
+        rotation=(
+            math.radians(-108),
+            0,
+            0
+        ),
+        material=MAT_BLIGHT_PURPLE
+    )
+)
+
+part(
+    make_spike(
+        "BlightHeart_DiagonalShard",
+        (
+            0.27,
+            1.12,
+            CHEST_Z + 0.40
+        ),
+        radius=0.14,
+        depth=0.78,
+        rotation=(
+            math.radians(-66),
+            math.radians(22),
+            math.radians(18)
+        ),
+        material=MAT_BLIGHT_GREEN
+    )
+)
+
+
+# ============================================================
+# FRONT LIMB CORRUPTION
+# ============================================================
+
+add_many(
+    make_topology_fissure(
+        BODY["UpperArm_L"],
+        "UpperArmCrack_L",
+        (
+            3.02,
+            0.02,
+            7.95
+        ),
+        (
+            3.52,
+            0.18,
+            6.42
+        ),
+        0.82,
+        0.72,
+        0.70,
+        0.61,
+        [
+            -42,
+            52,
+            -62,
+            58,
+            -35
+        ],
+        MAT_BLIGHT_GREEN,
+        0.145,
+        0.046
+    )
+)
+
+add_many(
+    make_topology_fissure(
+        BODY["Forearm_L"],
+        "ForearmCrack_L",
+        (
+            3.58,
+            0.52,
+            6.02
+        ),
+        (
+            3.61,
+            0.88,
+            4.05
+        ),
+        0.97,
+        0.80,
+        0.88,
+        0.72,
+        [
+            48,
+            -55,
+            66,
+            -62,
+            72,
+            -40
+        ],
+        MAT_BLIGHT_GREEN,
+        0.15,
+        0.048
+    )
+)
+
+add_many(
+    make_topology_fissure(
+        BODY["Forearm_L"],
+        "ForearmPurpleBranch_L",
+        (
+            3.60,
+            0.56,
+            5.58
+        ),
+        (
+            3.62,
+            0.82,
+            4.55
+        ),
+        0.93,
+        0.76,
+        0.88,
+        0.72,
+        [
+            -8,
+            34,
+            -28
+        ],
+        MAT_BLIGHT_PURPLE,
+        0.09,
+        0.025
+    )
+)
+
+add_many(
+    make_topology_fissure(
+        BODY["UpperArm_R"],
+        "UpperArmCrack_R",
+        (
+            -3.04,
+            0.02,
+            7.92
+        ),
+        (
+            -3.58,
+            0.18,
+            6.36
+        ),
+        0.84,
+        0.73,
+        0.72,
+        0.63,
+        [
+            44,
+            -54,
+            64,
+            -57,
+            38
+        ],
+        MAT_BLIGHT_GREEN,
+        0.145,
+        0.046
+    )
+)
+
+add_many(
+    make_topology_fissure(
+        BODY["Forearm_R"],
+        "ForearmCrack_R",
+        (
+            -3.68,
+            0.55,
+            5.95
+        ),
+        (
+            -3.72,
+            0.92,
+            3.95
+        ),
+        1.04,
+        0.84,
+        0.96,
+        0.77,
+        [
+            -46,
+            57,
+            -68,
+            62,
+            -72,
+            42
+        ],
+        MAT_BLIGHT_PURPLE,
+        0.15,
+        0.045
+    )
+)
+
+add_many(
+    make_topology_fissure(
+        BODY["Thigh_L"],
+        "ThighCrack_L",
+        (
+            1.00,
+            0.0,
+            5.30
+        ),
+        (
+            1.02,
+            0.0,
+            3.57
+        ),
+        0.82,
+        0.69,
+        0.75,
+        0.63,
+        [
+            -44,
+            54,
+            -64,
+            58,
+            -36
+        ],
+        MAT_BLIGHT_GREEN,
+        0.14,
+        0.045
+    )
+)
+
+add_many(
+    make_topology_fissure(
+        BODY["Thigh_R"],
+        "ThighCrack_R",
+        (
+            -1.00,
+            0.0,
+            5.30
+        ),
+        (
+            -1.02,
+            0.0,
+            3.57
+        ),
+        0.82,
+        0.69,
+        0.75,
+        0.63,
+        [
+            42,
+            -52,
+            62,
+            -56,
+            36
+        ],
+        MAT_BLIGHT_PURPLE,
+        0.135,
+        0.040
+    )
+)
+
+add_many(
+    make_topology_fissure(
+        BODY["LowerLeg_L"],
+        "ShinCrack_L",
+        (
+            STANCE_WIDTH,
+            0.0,
+            3.04
+        ),
+        (
+            STANCE_WIDTH,
+            0.0,
+            0.20
+        ),
+        0.55,
+        0.50,
+        0.76,
+        0.67,
+        [
+            38,
+            -48,
+            52,
+            -55,
+            46,
+            -42
+        ],
+        MAT_BLIGHT_GREEN,
+        0.13,
+        0.043
+    )
+)
+
+add_many(
+    make_topology_fissure(
+        BODY["LowerLeg_R"],
+        "ShinCrack_R",
+        (
+            -STANCE_WIDTH,
+            0.0,
+            3.04
+        ),
+        (
+            -STANCE_WIDTH,
+            0.0,
+            0.20
+        ),
+        0.55,
+        0.50,
+        0.76,
+        0.67,
+        [
+            -38,
+            48,
+            -52,
+            55,
+            -46,
+            42
+        ],
+        MAT_BLIGHT_GREEN,
+        0.13,
+        0.043
+    )
+)
+
+
+# ============================================================
+# CHEST CORRUPTION
+# ============================================================
+
+add_many(
+    make_topology_fissure(
+        BODY["ChestCenter"],
+        "HeartCrack_Center",
+        (
+            0,
+            0,
+            8.85
+        ),
+        (
+            0,
+            0,
+            7.25
+        ),
+        1.10,
+        1.00,
+        1.10,
+        0.92,
+        [
+            -20,
+            34,
+            -32,
+            28
+        ],
+        MAT_BLIGHT_GREEN,
+        0.17,
+        0.055
+    )
+)
+
+add_many(
+    make_topology_fissure(
+        BODY["Chest_L"],
+        "HeartCrack_Left",
+        (
+            0.88,
+            0,
+            8.36
+        ),
+        (
+            1.82,
+            0,
+            8.58
+        ),
+        1.00,
+        0.93,
+        1.08,
+        0.90,
+        [
+            22,
+            -34,
+            28
+        ],
+        MAT_BLIGHT_GREEN,
+        0.14,
+        0.044
+    )
+)
+
+add_many(
+    make_topology_fissure(
+        BODY["Chest_R"],
+        "HeartCrack_Right",
+        (
+            -0.88,
+            0,
+            8.34
+        ),
+        (
+            -1.80,
+            0,
+            8.54
+        ),
+        1.00,
+        0.93,
+        1.08,
+        0.90,
+        [
+            -20,
+            32,
+            -28
+        ],
+        MAT_BLIGHT_PURPLE,
+        0.13,
+        0.039
+    )
+)
+
+
+# ============================================================
+# SHOULDERS / FACE CORRUPTION
+# ============================================================
+
+add_many(
+    make_topology_fissure(
+        BODY["Shoulder_L"],
+        "ShoulderCrack_L",
+        (
+            2.25,
+            0,
+            8.95
+        ),
+        (
+            2.72,
+            0,
+            7.95
+        ),
+        1.00,
+        0.84,
+        0.95,
+        0.82,
+        [
+            -30,
+            38,
+            -42
+        ],
+        MAT_BLIGHT_GREEN,
+        0.14,
+        0.045
+    )
+)
+
+add_many(
+    make_topology_fissure(
+        BODY["Shoulder_R"],
+        "ShoulderCrack_R",
+        (
+            -2.25,
+            0,
+            8.95
+        ),
+        (
+            -2.72,
+            0,
+            7.95
+        ),
+        1.00,
+        0.84,
+        0.95,
+        0.82,
+        [
+            28,
+            -36,
+            40
+        ],
+        MAT_BLIGHT_PURPLE,
+        0.13,
+        0.039
+    )
+)
+
+add_many(
+    make_topology_fissure(
+        BODY["Skull"],
+        "FaceTopologyCrack",
+        (
+            0,
+            0.20,
+            9.55
+        ),
+        (
+            0,
+            0.20,
+            8.72
+        ),
+        0.54,
+        0.48,
+        0.52,
+        0.46,
+        [
+            -18,
+            24,
+            -16
+        ],
+        MAT_BLIGHT_GREEN,
+        0.085,
+        0.025
+    )
+)
+
+
+# ============================================================
+# REAR CORRUPTION
+# ============================================================
+
+add_many(
+    make_back_topology_fissure(
+        BODY["ChestCenter"],
+        "BackSpine_Upper",
+        [
+            (0.00, -1.08, 9.00),
+            (-0.28, -1.10, 8.68),
+            (0.18, -1.12, 8.34),
+            (-0.22, -1.10, 7.98),
+            (0.10, -1.04, 7.58),
+        ],
+        MAT_BLIGHT_GREEN,
+        0.17,
+        0.052
+    )
+)
+
+add_many(
+    make_back_topology_fissure(
+        BODY["Chest_L"],
+        "BackBranch_Left",
+        [
+            (0.92, -1.02, 8.82),
+            (1.18, -1.06, 8.54),
+            (0.96, -1.08, 8.24),
+            (1.35, -1.00, 7.90),
+        ],
+        MAT_BLIGHT_GREEN,
+        0.14,
+        0.043
+    )
+)
+
+add_many(
+    make_back_topology_fissure(
+        BODY["Chest_R"],
+        "BackBranch_Right",
+        [
+            (-0.92, -1.02, 8.80),
+            (-1.22, -1.07, 8.53),
+            (-0.94, -1.08, 8.20),
+            (-1.34, -0.99, 7.88),
+        ],
+        MAT_BLIGHT_PURPLE,
+        0.13,
+        0.039
+    )
+)
+
+add_many(
+    make_back_topology_fissure(
+        BODY["AbdomenUpper"],
+        "BackSpine_Lower",
+        [
+            (0.00, -0.88, 7.72),
+            (0.26, -0.92, 7.42),
+            (-0.18, -0.94, 7.12),
+            (0.14, -0.90, 6.80),
+            (-0.06, -0.84, 6.54),
+        ],
+        MAT_BLIGHT_GREEN,
+        0.14,
+        0.043
+    )
+)
+
+add_many(
+    make_back_topology_fissure(
+        BODY["Shoulder_L"],
+        "RearShoulder_Left",
+        [
+            (2.10, -0.90, 8.94),
+            (2.48, -1.00, 8.70),
+            (2.24, -1.02, 8.38),
+            (2.72, -0.90, 8.08),
+        ],
+        MAT_BLIGHT_GREEN,
+        0.13,
+        0.040
+    )
+)
+
+add_many(
+    make_back_topology_fissure(
+        BODY["Shoulder_R"],
+        "RearShoulder_Right",
+        [
+            (-2.10, -0.90, 8.94),
+            (-2.50, -1.00, 8.70),
+            (-2.22, -1.02, 8.36),
+            (-2.72, -0.90, 8.06),
+        ],
+        MAT_BLIGHT_PURPLE,
+        0.12,
+        0.036
+    )
+)
+
+add_many(
+    make_back_topology_fissure(
+        BODY["UpperArm_L"],
+        "RearUpperArm_Left",
+        [
+            (3.06, -0.66, 7.90),
+            (3.42, -0.74, 7.52),
+            (3.18, -0.72, 7.08),
+            (3.58, -0.62, 6.62),
+        ],
+        MAT_BLIGHT_GREEN,
+        0.11,
+        0.034
+    )
+)
+
+add_many(
+    make_back_topology_fissure(
+        BODY["UpperArm_R"],
+        "RearUpperArm_Right",
+        [
+            (-3.08, -0.68, 7.88),
+            (-3.44, -0.76, 7.48),
+            (-3.20, -0.74, 7.04),
+            (-3.62, -0.64, 6.58),
+        ],
+        MAT_BLIGHT_PURPLE,
+        0.11,
+        0.033
+    )
+)
+
+add_many(
+    make_back_topology_fissure(
+        BODY["Thigh_L"],
+        "RearThigh_Left",
+        [
+            (1.00, -0.72, 5.20),
+            (0.80, -0.78, 4.78),
+            (1.15, -0.76, 4.32),
+            (0.90, -0.68, 3.84),
+        ],
+        MAT_BLIGHT_GREEN,
+        0.10,
+        0.031
+    )
+)
+
+add_many(
+    make_back_topology_fissure(
+        BODY["Thigh_R"],
+        "RearThigh_Right",
+        [
+            (-1.00, -0.72, 5.20),
+            (-0.80, -0.78, 4.78),
+            (-1.15, -0.76, 4.32),
+            (-0.90, -0.68, 3.84),
+        ],
+        MAT_BLIGHT_PURPLE,
+        0.10,
+        0.030
+    )
+)
+
+
+# ============================================================
+# DORSAL BLIGHT CRYSTALS
+# ============================================================
+
+part(
+    make_spike(
+        "BackCrystal_Main",
+        (
+            0.00,
+            -1.02,
+            8.82
+        ),
+        radius=0.36,
+        depth=2.05,
+        rotation=(
+            math.radians(70),
+            0,
+            0
+        ),
+        material=MAT_BLIGHT_GREEN
+    )
+)
+
+part(
+    make_spike(
+        "BackCrystal_High_L",
+        (
+            0.42,
+            -0.93,
+            8.78
+        ),
+        radius=0.20,
+        depth=1.12,
+        rotation=(
+            math.radians(61),
+            math.radians(-13),
+            math.radians(-17)
+        ),
+        material=MAT_BLIGHT_PURPLE
+    )
+)
+
+part(
+    make_spike(
+        "BackCrystal_High_R",
+        (
+            -0.40,
+            -0.92,
+            8.70
+        ),
+        radius=0.21,
+        depth=1.16,
+        rotation=(
+            math.radians(61),
+            math.radians(13),
+            math.radians(17)
+        ),
+        material=MAT_BLIGHT_GREEN
+    )
+)
+
+part(
+    make_spike(
+        "BackCrystal_Mid_L",
+        (
+            0.55,
+            -0.84,
+            8.16
+        ),
+        radius=0.16,
+        depth=0.90,
+        rotation=(
+            math.radians(52),
+            math.radians(-12),
+            math.radians(-21)
+        ),
+        material=MAT_BLIGHT_GREEN
+    )
+)
+
+part(
+    make_spike(
+        "BackCrystal_Mid_R",
+        (
+            -0.54,
+            -0.84,
+            8.04
+        ),
+        radius=0.16,
+        depth=0.86,
+        rotation=(
+            math.radians(52),
+            math.radians(12),
+            math.radians(21)
+        ),
+        material=MAT_BLIGHT_PURPLE
+    )
+)
+
+part(
+    make_spike(
+        "BackCrystal_Middle",
+        (
+            0.06,
+            -0.86,
+            7.90
+        ),
+        radius=0.17,
+        depth=0.94,
+        rotation=(
+            math.radians(51),
+            math.radians(-4),
+            0
+        ),
+        material=MAT_BLIGHT_GREEN
+    )
+)
+
+part(
+    make_spike(
+        "BackCrystal_Lower",
+        (
+            -0.04,
+            -0.76,
+            7.38
+        ),
+        radius=0.14,
+        depth=0.76,
+        rotation=(
+            math.radians(43),
+            0,
+            0
+        ),
+        material=MAT_BLIGHT_PURPLE
+    )
+)
+
+
+# ============================================================
+# ROOTS
+# ============================================================
+
+part(
+    make_root(
+        "ChestRoot",
+        [
+            (-1.82, 0.74, 8.54),
+            (-1.28, 0.90, 8.25),
+            (-0.70, 0.96, 7.96),
+            (-0.18, 0.91, 7.64),
+        ],
+        [
+            0.11,
+            0.13,
+            0.11,
+            0.065
+        ]
+    )
+)
+
+part(
+    make_root(
+        "ArmRoot",
+        [
+            (2.56, 0.24, 8.15),
+            (2.98, 0.45, 7.49),
+            (3.27, 0.62, 6.74),
+            (3.49, 0.79, 5.98),
+        ],
+        [
+            0.10,
+            0.12,
+            0.10,
+            0.060
+        ]
+    )
+)
+
+part(
+    make_root(
+        "BackRoot",
+        [
+            (-0.72, -0.78, 8.48),
+            (-0.34, -0.96, 8.10),
+            (0.05, -1.00, 7.78),
+            (0.38, -0.90, 7.40),
+        ],
+        [
+            0.10,
+            0.12,
+            0.10,
+            0.055
+        ]
+    )
+)
+
+
+# ============================================================
+# MOSS
+# ============================================================
+
+moss_data = [
+    (
+        (1.53, 0.70, 8.46),
+        (0.40, 0.15, 0.29)
+    ),
+    (
+        (-1.68, 0.64, 8.27),
+        (0.34, 0.14, 0.26)
+    ),
+    (
+        (3.52, 0.91, 5.30),
+        (0.28, 0.13, 0.34)
+    ),
+    (
+        (-0.72, -0.88, 8.18),
+        (0.34, 0.13, 0.26)
+    ),
+    (
+        (0.58, -0.85, 7.62),
+        (0.26, 0.11, 0.23)
+    ),
+]
+
+for i, (
+    position,
+    scale
+) in enumerate(moss_data):
+
+    part(
+        make_rock(
+            f"Moss_{i}",
+            position,
+            scale,
+            distortion=0.08,
+            seed_offset=600 + i,
+            material_override=MAT_MOSS
+        )
+    )
+
+
+# ============================================================
+# STONE SILHOUETTE SPIKES
+# ============================================================
+
+part(
+    make_spike(
+        "ShoulderStoneSpike_L",
+        (
+            2.80,
+            -0.27,
+            SHOULDER_Z + 0.58
+        ),
+        0.23,
+        1.16,
+        (
+            math.radians(-28),
+            math.radians(10),
+            math.radians(-27)
+        ),
+        MAT_STONE_DARK
+    )
+)
+
+part(
+    make_spike(
+        "ShoulderStoneSpike_R",
+        (
+            -2.80,
+            -0.27,
+            SHOULDER_Z + 0.55
+        ),
+        0.23,
+        1.16,
+        (
+            math.radians(-28),
+            math.radians(-10),
+            math.radians(27)
+        ),
+        MAT_STONE_DARK
+    )
+)
+
+
+# ============================================================
+# GROUND REFERENCE
+# ============================================================
+
+bpy.ops.mesh.primitive_circle_add(
+    vertices=24,
+    radius=5.2,
+    location=(
+        0,
+        0,
+        GROUND_Z
+    )
+)
+
+ground = bpy.context.active_object
+ground.name = "Ground_Reference"
+
+move_to_collection(ground)
+
+
+# ============================================================
+# AUTOMATED RIG
+# ============================================================
+
+armature_data = bpy.data.armatures.new(
+    RIG_NAME + "_Data"
+)
+
+armature = bpy.data.objects.new(
+    RIG_NAME,
+    armature_data
+)
+
+COLL.objects.link(
+    armature
+)
+
+armature.show_in_front = True
+armature.data.display_type = 'OCTAHEDRAL'
+armature.data.pose_position = 'POSE'
+
+armature["FOTF_Creature"] = "Blight-Touched Colossus"
+armature["FOTF_RigVersion"] = "16"
+armature["UnityRigType"] = "Generic"
+armature["RootMotion"] = False
+
+bpy.context.view_layer.objects.active = armature
+
+armature.select_set(True)
+
+bpy.ops.object.mode_set(
+    mode='EDIT'
+)
+
+
+# ============================================================
+# BONE CREATION
+# ============================================================
+
+def create_bone(
+    name,
+    head,
+    tail,
+    parent=None,
+    deform=True
+):
+    bone = armature.data.edit_bones.new(
+        name
+    )
+
+    bone.head = Vector(head)
+    bone.tail = Vector(tail)
+
+    bone.use_deform = deform
+    bone.use_connect = False
+
+    if parent:
+        bone.parent = armature.data.edit_bones.get(
+            parent
+        )
+
+    return bone
+
+
+# ============================================================
+# ROOT / TORSO BONES
+# ============================================================
+
+create_bone(
+    "Root",
+    (0, 0, 0),
+    (0, 0, 0.70),
+    deform=False
+)
+
+create_bone(
+    "Pelvis",
+    (0, 0, 5.05),
+    (0, 0, 5.80),
+    parent="Root"
+)
+
+create_bone(
+    "Spine_Lower",
+    (0, 0, 5.65),
+    (0, 0, 6.70),
+    parent="Pelvis"
+)
+
+create_bone(
+    "Spine_Upper",
+    (0, 0, 6.65),
+    (0, 0, 7.62),
+    parent="Spine_Lower"
+)
+
+create_bone(
+    "Chest",
+    (0, 0, 7.55),
+    (0, 0, 8.52),
+    parent="Spine_Upper"
+)
+
+create_bone(
+    "Neck",
+    (0, 0, 8.42),
+    (0, 0, 8.92),
+    parent="Chest"
+)
+
+create_bone(
+    "Head",
+    (0, 0, 8.84),
+    (0, 0, 9.68),
+    parent="Neck"
+)
+
+create_bone(
+    "Jaw",
+    (
+        0,
+        0.47,
+        8.74
+    ),
+    (
+        0,
+        0.75,
+        8.43
+    ),
+    parent="Head"
+)
+
+create_bone(
+    "BlightHeart",
+    (
+        0,
+        0.90,
+        8.10
+    ),
+    (
+        0,
+        1.65,
+        8.12
+    ),
+    parent="Chest"
+)
+
+
+# ============================================================
+# LEFT ARM BONES
+# ============================================================
+
+create_bone(
+    "Shoulder_L",
+    (
+        0.95,
+        0,
+        8.35
+    ),
+    (
+        2.48,
+        0,
+        8.40
+    ),
+    parent="Chest"
+)
+
+create_bone(
+    "UpperArm_L",
+    (
+        2.48,
+        0,
+        8.36
+    ),
+    (
+        3.55,
+        0.20,
+        6.38
+    ),
+    parent="Shoulder_L"
+)
+
+create_bone(
+    "Forearm_L",
+    (
+        3.55,
+        0.20,
+        6.38
+    ),
+    (
+        3.62,
+        0.78,
+        4.23
+    ),
+    parent="UpperArm_L"
+)
+
+create_bone(
+    "Hand_L",
+    (
+        3.62,
+        0.78,
+        4.23
+    ),
+    (
+        3.56,
+        1.12,
+        3.52
+    ),
+    parent="Forearm_L"
+)
+
+
+# ============================================================
+# RIGHT ARM BONES
+# ============================================================
+
+create_bone(
+    "Shoulder_R",
+    (
+        -0.95,
+        0,
+        8.35
+    ),
+    (
+        -2.48,
+        0,
+        8.40
+    ),
+    parent="Chest"
+)
+
+create_bone(
+    "UpperArm_R",
+    (
+        -2.48,
+        0,
+        8.36
+    ),
+    (
+        -3.60,
+        0.20,
+        6.30
+    ),
+    parent="Shoulder_R"
+)
+
+create_bone(
+    "Forearm_R",
+    (
+        -3.60,
+        0.20,
+        6.30
+    ),
+    (
+        -3.72,
+        0.82,
+        4.05
+    ),
+    parent="UpperArm_R"
+)
+
+create_bone(
+    "Hand_R",
+    (
+        -3.72,
+        0.82,
+        4.05
+    ),
+    (
+        -3.66,
+        1.17,
+        3.32
+    ),
+    parent="Forearm_R"
+)
+
+
+# ============================================================
+# LEG BONES
+# ============================================================
+
+create_bone(
+    "Thigh_L",
+    (
+        0.86,
+        0,
+        5.58
+    ),
+    (
+        1.10,
+        0.12,
+        3.36
+    ),
+    parent="Pelvis"
+)
+
+create_bone(
+    "Shin_L",
+    (
+        1.10,
+        0.12,
+        3.36
+    ),
+    (
+        1.10,
+        0,
+        0.28
+    ),
+    parent="Thigh_L"
+)
+
+create_bone(
+    "Thigh_R",
+    (
+        -0.86,
+        0,
+        5.58
+    ),
+    (
+        -1.10,
+        0.12,
+        3.36
+    ),
+    parent="Pelvis"
+)
+
+create_bone(
+    "Shin_R",
+    (
+        -1.10,
+        0.12,
+        3.36
+    ),
+    (
+        -1.10,
+        0,
+        0.28
+    ),
+    parent="Thigh_R"
+)
+
+
+bpy.ops.object.mode_set(
+    mode='OBJECT'
+)
+
+
+# ============================================================
+# RIGGING HELPERS
+# ============================================================
+
+def clear_armature_modifiers(obj):
+
+    for modifier in list(
+        obj.modifiers
+    ):
+
+        if modifier.type == 'ARMATURE':
+            obj.modifiers.remove(
+                modifier
+            )
+
+
+def clear_vertex_groups(obj):
+
+    while len(
+        obj.vertex_groups
+    ) > 0:
+
+        obj.vertex_groups.remove(
+            obj.vertex_groups[0]
+        )
+
+
+def rigid_bind(
+    obj,
+    bone_name
+):
+    if obj is None:
+        return
+
+    if obj.type != 'MESH':
+        return
+
+    if bone_name not in armature.data.bones:
+
+        print(
+            "WARNING: Missing bone",
+            bone_name,
+            "for",
+            obj.name
+        )
+
+        return
+
+    world_matrix = obj.matrix_world.copy()
+
+    clear_armature_modifiers(
+        obj
+    )
+
+    clear_vertex_groups(
+        obj
+    )
+
+    group = obj.vertex_groups.new(
+        name=bone_name
+    )
+
+    vertex_indices = [
+        vertex.index
+        for vertex in obj.data.vertices
+    ]
+
+    if vertex_indices:
+
+        group.add(
+            vertex_indices,
+            1.0,
+            'REPLACE'
+        )
+
+    modifier = obj.modifiers.new(
+        name="FOTF_Armature",
+        type='ARMATURE'
+    )
+
+    modifier.object = armature
+    modifier.use_vertex_groups = True
+
+    obj.parent = armature
+    obj.parent_type = 'OBJECT'
+
+    obj.matrix_parent_inverse = (
+        armature.matrix_world.inverted()
+    )
+
+    obj.matrix_world = world_matrix
+
+    obj[
+        "FOTF_RigidBone"
+    ] = bone_name
+
+
+# ============================================================
+# EXACT BINDINGS
+# ============================================================
+
+EXACT_BONE_BINDINGS = {
+
+    # Pelvis
+    "Pelvis": "Pelvis",
+    "Hip_L": "Pelvis",
+    "Hip_R": "Pelvis",
+
+    # Torso
+    "DarkTorsoCore": "Spine_Lower",
+    "AbdomenLower": "Spine_Lower",
+    "AbdomenUpper": "Spine_Upper",
+    "ChestCenter": "Chest",
+    "Chest_L": "Chest",
+    "Chest_R": "Chest",
+    "Sternum": "Chest",
+
+    # Head
+    "NeckMass": "Neck",
+    "FaceSocket": "Head",
+    "Skull": "Head",
+    "CrownCenter": "Head",
+    "Crown_L": "Head",
+    "Crown_R": "Head",
+    "BrowCenter": "Head",
+    "EyeSocket_0": "Head",
+    "EyeSocket_1": "Head",
+    "EyeGlow_L": "Head",
+    "EyeGlow_R": "Head",
+    "Cheek_L": "Head",
+    "Cheek_R": "Head",
+    "MouthCavity": "Head",
+    "MouthCore": "Head",
+    "LowerJaw": "Jaw",
+
+    # Left arm
+    "Shoulder_L": "Shoulder_L",
+    "UpperArm_L": "UpperArm_L",
+    "Elbow_L": "Forearm_L",
+    "Forearm_L": "Forearm_L",
+    "Fist_L": "Hand_L",
+
+    # Right arm
+    "Shoulder_R": "Shoulder_R",
+    "UpperArm_R": "UpperArm_R",
+    "Elbow_R": "Forearm_R",
+    "Forearm_R": "Forearm_R",
+    "Fist_R": "Hand_R",
+
+    # Left leg
+    "Thigh_L": "Thigh_L",
+    "Knee_L": "Shin_L",
+    "LowerLeg_L": "Shin_L",
+
+    # Right leg
+    "Thigh_R": "Thigh_R",
+    "Knee_R": "Shin_R",
+    "LowerLeg_R": "Shin_R",
+
+    # Blight Heart
+    "BlightHeart_MainCrystal": "BlightHeart",
+    "BlightHeart_UpperShard": "BlightHeart",
+    "BlightHeart_LeftShard": "BlightHeart",
+    "BlightHeart_RightShard": "BlightHeart",
+    "BlightHeart_LowerShard": "BlightHeart",
+    "BlightHeart_DiagonalShard": "BlightHeart",
+    "BlightHeart_Socket": "Chest",
+
+    # Dorsal crystals
+    "BackCrystal_Main": "Chest",
+    "BackCrystal_High_L": "Chest",
+    "BackCrystal_High_R": "Chest",
+    "BackCrystal_Mid_L": "Spine_Upper",
+    "BackCrystal_Mid_R": "Spine_Upper",
+    "BackCrystal_Middle": "Spine_Upper",
+    "BackCrystal_Lower": "Spine_Upper",
+
+    # Roots
+    "ChestRoot": "Chest",
+    "ArmRoot": "Chest",
+    "BackRoot": "Spine_Upper",
+
+    # Stone spikes
+    "ShoulderStoneSpike_L": "Shoulder_L",
+    "ShoulderStoneSpike_R": "Shoulder_R",
+}
+
+
+# ============================================================
+# PREFIX BINDINGS
+# ============================================================
+
+PREFIX_BONE_BINDINGS = [
+
+    # Face
+    (
+        "FaceTopologyCrack",
+        "Head"
+    ),
+
+    # Chest
+    (
+        "HeartCrack_Center",
+        "Chest"
+    ),
+    (
+        "HeartCrack_Left",
+        "Chest"
+    ),
+    (
+        "HeartCrack_Right",
+        "Chest"
+    ),
+
+    # Shoulders
+    (
+        "ShoulderCrack_L",
+        "Shoulder_L"
+    ),
+    (
+        "ShoulderCrack_R",
+        "Shoulder_R"
+    ),
+
+    # Arms
+    (
+        "UpperArmCrack_L",
+        "UpperArm_L"
+    ),
+    (
+        "ForearmCrack_L",
+        "Forearm_L"
+    ),
+    (
+        "ForearmPurpleBranch_L",
+        "Forearm_L"
+    ),
+    (
+        "UpperArmCrack_R",
+        "UpperArm_R"
+    ),
+    (
+        "ForearmCrack_R",
+        "Forearm_R"
+    ),
+
+    # Legs
+    (
+        "ThighCrack_L",
+        "Thigh_L"
+    ),
+    (
+        "ShinCrack_L",
+        "Shin_L"
+    ),
+    (
+        "ThighCrack_R",
+        "Thigh_R"
+    ),
+    (
+        "ShinCrack_R",
+        "Shin_R"
+    ),
+
+    # Rear torso
+    (
+        "BackSpine_Upper",
+        "Chest"
+    ),
+    (
+        "BackBranch_Left",
+        "Chest"
+    ),
+    (
+        "BackBranch_Right",
+        "Chest"
+    ),
+    (
+        "BackSpine_Lower",
+        "Spine_Upper"
+    ),
+
+    # Rear shoulders
+    (
+        "RearShoulder_Left",
+        "Shoulder_L"
+    ),
+    (
+        "RearShoulder_Right",
+        "Shoulder_R"
+    ),
+
+    # Rear arms
+    (
+        "RearUpperArm_Left",
+        "UpperArm_L"
+    ),
+    (
+        "RearUpperArm_Right",
+        "UpperArm_R"
+    ),
+
+    # Rear thighs
+    (
+        "RearThigh_Left",
+        "Thigh_L"
+    ),
+    (
+        "RearThigh_Right",
+        "Thigh_R"
+    ),
+]
+
+
+# ============================================================
+# MOSS BINDINGS
+# ============================================================
+
+MOSS_BONE_BINDINGS = {
+
+    "Moss_0": "Chest",
+
+    "Moss_1": "Chest",
+
+    "Moss_2": "Forearm_L",
+
+    "Moss_3": "Chest",
+
+    "Moss_4": "Spine_Upper",
+}
+
+
+# ============================================================
+# RESOLVE OBJECT BONE
+# ============================================================
+
+def resolve_bone_for_object(obj):
+
+    name = obj.name
+
+    if name in EXACT_BONE_BINDINGS:
+
+        return EXACT_BONE_BINDINGS[
+            name
+        ]
+
+    if name in MOSS_BONE_BINDINGS:
+
+        return MOSS_BONE_BINDINGS[
+            name
+        ]
+
+    for prefix, bone_name in PREFIX_BONE_BINDINGS:
+
+        if name.startswith(
+            prefix
+        ):
+            return bone_name
+
+    return None
+
+
+# ============================================================
+# APPLY RIG
+# ============================================================
+
+rigged_count = 0
+unassigned = []
+
+for obj in list(COLL.objects):
+
+    if obj == armature:
+        continue
+
+    if obj.name == "Ground_Reference":
+        continue
+
+    if obj.type != 'MESH':
+        continue
+
+    bone_name = resolve_bone_for_object(
+        obj
+    )
+
+    if bone_name is None:
+
+        unassigned.append(
+            obj.name
+        )
+
+        continue
+
+    rigid_bind(
+        obj,
+        bone_name
+    )
+
+    rigged_count += 1
+
+
+# ============================================================
+# POSE SETTINGS
+# ============================================================
+
+bpy.context.view_layer.objects.active = armature
+
+armature.select_set(True)
+
+bpy.ops.object.mode_set(
+    mode='POSE'
+)
+
+for pose_bone in armature.pose.bones:
+
+    pose_bone.rotation_mode = 'XYZ'
+
+bpy.ops.object.mode_set(
+    mode='OBJECT'
+)
+
+
+# ============================================================
+# ANIMATION METADATA
+# ============================================================
+
+armature[
+    "FOTF_Animation_Idle"
+] = "Idle"
+
+armature[
+    "FOTF_Animation_Walk"
+] = "Walk"
+
+armature[
+    "FOTF_Animation_Attack01"
+] = "Attack_01"
+
+armature[
+    "FOTF_Animation_Attack02"
+] = "Attack_02"
+
+armature[
+    "FOTF_Animation_FracturingRoar"
+] = "Fracturing_Roar"
+
+armature[
+    "FOTF_Animation_Hit"
+] = "Hit"
+
+armature[
+    "FOTF_Animation_Death"
+] = "Death"
+
+
+# ============================================================
+# OPTIONAL JOIN
+#
+# LEAVE FALSE WHILE ANIMATING.
+# ============================================================
+
+if JOIN_AT_END:
+
+    print(
+        "JOIN_AT_END is enabled, but for the rigged boss "
+        "I recommend keeping it False until animation/export."
+    )
+
+
+# ============================================================
+# SELECT ARMATURE
+# ============================================================
+
+bpy.ops.object.select_all(
+    action='DESELECT'
+)
+
+armature.select_set(
+    True
+)
+
+bpy.context.view_layer.objects.active = (
+    armature
+)
+
+
+# ============================================================
+# REPORT
+# ============================================================
+
+print(
+    "======================================================"
+)
+
+print(
+    "FOTF BLIGHT-TOUCHED COLOSSUS V16 COMPLETE"
+)
+
+print(
+    "Rig:",
+    RIG_NAME
+)
+
+print(
+    "Rigged mesh objects:",
+    rigged_count
+)
+
+print(
+    "Unity Rig Type: Generic"
+)
+
+print(
+    "Root Motion: OFF"
+)
+
+if unassigned:
+
+    print(
+        "UNASSIGNED MESH OBJECTS:"
+    )
+
+    for name in unassigned:
+
+        print(
+            " -",
+            name
+        )
+
+else:
+
+    print(
+        "All creature mesh objects successfully mapped."
+    )
+
+print(
+    "======================================================"
+)
+
+print(
+    "Blight-Touched Colossus V16 generated and rigged successfully."
+)

@@ -392,8 +392,13 @@ namespace FateOfTheFallen
                     int mobLevel =
                         host.MyStats.Level;
     
-                    if (mobLevel < MinimumMobLevel)
+                    if (mobLevel < MinimumMobLevel ||
+                        !EmberweaverScrollDistribution.IsNativeErenshorRaidScene(
+                            host.gameObject.scene))
                     {
+                        // Raid-tier Blightcaller scrolls are rewards from
+                        // native raid planes only. Open-world level 40+ mobs,
+                        // FOTF world bosses and custom raids are not eligible.
                         return;
                     }
     

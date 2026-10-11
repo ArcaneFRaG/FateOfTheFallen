@@ -16,13 +16,13 @@ namespace FateOfTheFallen
             {
                 try
                 {
-                    BlightcallerCharacterCreation
-                        .InstallButton(__instance);
+                    FOTFCharacterCreationPager
+                        .Install(__instance);
                 }
                 catch (Exception exception)
                 {
                     Plugin.NativeLog.LogError(
-                        "Blightcaller: failed to install character creation button: " +
+                        "FOTF: failed to install custom character creation buttons: " +
                         exception);
                 }
             }

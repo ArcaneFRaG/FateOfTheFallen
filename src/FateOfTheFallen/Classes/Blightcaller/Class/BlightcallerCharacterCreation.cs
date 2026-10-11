@@ -27,6 +27,7 @@ namespace FateOfTheFallen
         internal static void InstallButton(
             CharSelectManager manager)
         {
+            if (!FOTFContentOptions.Active.NewBlightcallers) return;
             if (manager == null)
             {
                 return;
@@ -323,6 +324,8 @@ namespace FateOfTheFallen
         internal static void SelectBlightcaller(
             CharSelectManager manager)
         {
+            if (!FOTFContentOptions.Active.NewBlightcallers) return;
+
             if (manager == null ||
                 GameData.CurrentCharacterSlot == null)
             {

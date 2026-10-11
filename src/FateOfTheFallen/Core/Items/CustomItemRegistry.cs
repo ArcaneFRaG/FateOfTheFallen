@@ -98,6 +98,137 @@ namespace FateOfTheFallen
             return item;
         }
 
+        internal static Item FindNativeItemByName(
+            ItemDatabase database,
+            string itemName)
+        {
+            if (database == null ||
+                string.IsNullOrEmpty(itemName))
+            {
+                return null;
+            }
+
+            if (database.ItemDBList != null)
+            {
+                for (int i = 0;
+                     i < database.ItemDBList.Count;
+                     i++)
+                {
+                    Item candidate =
+                        database.ItemDBList[i];
+
+                    if (candidate == null)
+                    {
+                        continue;
+                    }
+
+                    if (string.Equals(
+                            candidate.ItemName,
+                            itemName,
+                            StringComparison.OrdinalIgnoreCase))
+                    {
+                        return candidate;
+                    }
+                }
+            }
+
+            if (database.ItemDB != null)
+            {
+                for (int i = 0;
+                     i < database.ItemDB.Length;
+                     i++)
+                {
+                    Item candidate =
+                        database.ItemDB[i];
+
+                    if (candidate == null)
+                    {
+                        continue;
+                    }
+
+                    if (string.Equals(
+                            candidate.ItemName,
+                            itemName,
+                            StringComparison.OrdinalIgnoreCase))
+                    {
+                        return candidate;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        internal static Item CloneNativeItem(
+            ItemDatabase database,
+            string templateItemName,
+            string newId,
+            string newItemName)
+        {
+            if (database == null ||
+                string.IsNullOrEmpty(templateItemName) ||
+                string.IsNullOrEmpty(newId) ||
+                string.IsNullOrEmpty(newItemName))
+            {
+                return null;
+            }
+
+            Item existing =
+                GetItemById(newId);
+
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            Item template =
+                FindNativeItemByName(
+                    database,
+                    templateItemName);
+
+            if (template == null)
+            {
+                Plugin.NativeLog.LogError(
+                    "CustomItemRegistry: native item template [" +
+                    templateItemName +
+                    "] was not found.");
+
+                return null;
+            }
+
+            Item clone =
+                UnityEngine.Object.Instantiate(
+                    template);
+
+            if (clone == null)
+            {
+                Plugin.NativeLog.LogError(
+                    "CustomItemRegistry: failed to clone native item template [" +
+                    templateItemName +
+                    "].");
+
+                return null;
+            }
+
+            clone.name =
+                "FOTF - " +
+                newItemName;
+
+            clone.Id =
+                newId;
+
+            clone.ItemName =
+                newItemName;
+
+            clone.hideFlags =
+                HideFlags.HideAndDontSave;
+
+            RegisterItem(
+                clone);
+
+            return clone;
+        }
+
         internal static void RegisterItem(
             Item item)
         {

@@ -1,0 +1,39 @@
+ManifestFileVersion: 0
+CRC: 1752009107
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 05c808527b74dca330abeb089acce316
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 54e1b945648c30e5e419132db70148b0
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 05c808527b74dca330abeb089acce316
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/FateOfTheFallen/Equipment/Bloom_Of_The_Withered_Grove/Prefabs/FOTF_BloomOfTheWitheredGrove.prefab
+- Assets/FateOfTheFallen/Equipment/FallenScepter/Prefabs/FallenScepter.prefab
+- Assets/FateOfTheFallen/Equipment/Sporebound_Scepter/Prefab/FOTF_SporeboundScepter.prefab
+- Assets/FateOfTheFallen/Equipment/Rotcleaver/Prefabs/FOTF_Rotcleaver.prefab
+- Assets/FateOfTheFallen/Equipment/Sporepiercer/Prefabs/FOTF_SporePiercer.prefab
+- Assets/FateOfTheFallen/Equipment/Blighted_Earth/Prefabs/FOTF_Bulwark_Blighted_Earth.prefab
+Dependencies: []

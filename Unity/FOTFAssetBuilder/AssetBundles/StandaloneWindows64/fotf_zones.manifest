@@ -1,0 +1,50 @@
+ManifestFileVersion: 0
+CRC: 4187034687
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: ff0a7e11b03b5ff8466f429053e8b1eb
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: a1eb7d0504f28b278748e2666cc628bc
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: ff0a7e11b03b5ff8466f429053e8b1eb
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 64
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 89
+  Script: {instanceID: 0}
+- Class: 104
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 157
+  Script: {instanceID: 0}
+- Class: 196
+  Script: {instanceID: 0}
+- Class: 238
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/FateOfTheFallen/Zones/FallenReach/Scenes/FallenReach.unity
+Dependencies: []

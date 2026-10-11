@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 3648143232
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: fotf_equipment
+      Dependencies: {}
+    Info_1:
+      Name: fotf_zones
+      Dependencies: {}
+    Info_2:
+      Name: fotf_raid_poc
+      Dependencies: {}
+    Info_3:
+      Name: fotf_worldbosses
+      Dependencies: {}
+    Info_4:
+      Name: fotf_npcs
+      Dependencies: {}
+    Info_5:
+      Name: fotf_questprops
+      Dependencies: {}

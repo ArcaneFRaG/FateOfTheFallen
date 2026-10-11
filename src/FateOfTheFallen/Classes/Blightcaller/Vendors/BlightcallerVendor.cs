@@ -264,6 +264,7 @@ namespace FateOfTheFallen
             const float interval = 0.5f;
 
             float elapsed = 0f;
+            bool foundTemplate = false;
 
             while (elapsed < timeout)
             {
@@ -274,11 +275,26 @@ namespace FateOfTheFallen
 
                 if (template != null)
                 {
-                    SpawnAdvancedVendor(template);
+                    foundTemplate = true;
 
-                    _advancedSpawnRoutine = null;
+                    /*
+                     * A Lunaris hot reload can occur after native SpellDB/
+                     * ItemDatabase Start has already run. Rehydrate the
+                     * Blightcaller content before constructing the vendor
+                     * inventory so Kaelith can never spawn with missing
+                     * scroll/aura entries just because the registry was
+                     * cleared during unload.
+                     */
+                    if (BlightcallerModule
+                        .EnsureRuntimeContentReady(
+                            "Kaelith vendor spawn"))
+                    {
+                        SpawnAdvancedVendor(template);
 
-                    yield break;
+                        _advancedSpawnRoutine = null;
+
+                        yield break;
+                    }
                 }
 
                 yield return new WaitForSeconds(interval);
@@ -289,7 +305,9 @@ namespace FateOfTheFallen
             _advancedSpawnRoutine = null;
 
             Plugin.ModLog.Error(
-                "Kaelith spawn failed: native Edwin Ansegg was not found in Azure."
+                foundTemplate
+                    ? "Kaelith spawn failed: Blightcaller vendor content did not become ready within 15 seconds."
+                    : "Kaelith spawn failed: native Edwin Ansegg was not found in Azure."
             );
         }
 
@@ -303,6 +321,7 @@ namespace FateOfTheFallen
             const float interval = 0.5f;
 
             float elapsed = 0f;
+            bool foundTemplate = false;
 
             while (elapsed < timeout)
             {
@@ -313,11 +332,18 @@ namespace FateOfTheFallen
 
                 if (template != null)
                 {
-                    SpawnMidVendor(template);
+                    foundTemplate = true;
 
-                    _midSpawnRoutine = null;
+                    if (BlightcallerModule
+                        .EnsureRuntimeContentReady(
+                            "Vorren vendor spawn"))
+                    {
+                        SpawnMidVendor(template);
 
-                    yield break;
+                        _midSpawnRoutine = null;
+
+                        yield break;
+                    }
                 }
 
                 yield return new WaitForSeconds(interval);
@@ -328,7 +354,9 @@ namespace FateOfTheFallen
             _midSpawnRoutine = null;
 
             Plugin.ModLog.Error(
-                "Vorren spawn failed: native Juctin Mysia was not found in Loomingwood."
+                foundTemplate
+                    ? "Vorren spawn failed: Blightcaller vendor content did not become ready within 15 seconds."
+                    : "Vorren spawn failed: native Juctin Mysia was not found in Loomingwood."
             );
         }
 
@@ -342,6 +370,7 @@ namespace FateOfTheFallen
             const float interval = 0.5f;
 
             float elapsed = 0f;
+            bool foundTemplate = false;
 
             while (elapsed < timeout)
             {
@@ -352,11 +381,18 @@ namespace FateOfTheFallen
 
                 if (template != null)
                 {
-                    SpawnNoviceVendor(template);
+                    foundTemplate = true;
 
-                    _noviceSpawnRoutine = null;
+                    if (BlightcallerModule
+                        .EnsureRuntimeContentReady(
+                            "Veyra vendor spawn"))
+                    {
+                        SpawnNoviceVendor(template);
 
-                    yield break;
+                        _noviceSpawnRoutine = null;
+
+                        yield break;
+                    }
                 }
 
                 yield return new WaitForSeconds(interval);
@@ -367,7 +403,9 @@ namespace FateOfTheFallen
             _noviceSpawnRoutine = null;
 
             Plugin.ModLog.Error(
-                "Veyra spawn failed: native Amethi Plazzo was not found in Stowaway."
+                foundTemplate
+                    ? "Veyra spawn failed: Blightcaller vendor content did not become ready within 15 seconds."
+                    : "Veyra spawn failed: native Amethi Plazzo was not found in Stowaway."
             );
         }
 
@@ -387,32 +425,60 @@ namespace FateOfTheFallen
             if (template != null)
                 return template;
 
-            GameObject[] objects =
-                Resources.FindObjectsOfTypeAll<GameObject>();
-
             Scene activeScene =
                 SceneManager.GetActiveScene();
 
-            foreach (GameObject obj in objects)
+            if (!activeScene.IsValid() ||
+                !activeScene.isLoaded)
             {
-                if (obj == null)
-                    continue;
+                return null;
+            }
 
-                if (!obj.scene.IsValid())
-                    continue;
+            GameObject[] roots =
+                activeScene.GetRootGameObjects();
 
-                if (obj.scene != activeScene)
-                    continue;
+            for (int r = 0;
+                 roots != null &&
+                 r < roots.Length;
+                 r++)
+            {
+                GameObject root =
+                    roots[r];
 
-                if (!string.Equals(
-                        obj.name,
-                        templateName,
-                        StringComparison.OrdinalIgnoreCase))
+                if (root == null)
                 {
                     continue;
                 }
 
-                return obj;
+                if (string.Equals(
+                        root.name,
+                        templateName,
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    return root;
+                }
+
+                Transform[] children =
+                    root.GetComponentsInChildren<Transform>(
+                        true);
+
+                for (int i = 0;
+                     children != null &&
+                     i < children.Length;
+                     i++)
+                {
+                    Transform child =
+                        children[i];
+
+                    if (child != null &&
+                        string.Equals(
+                            child.name,
+                            templateName,
+                            StringComparison.OrdinalIgnoreCase))
+                    {
+                        return child.gameObject;
+                    }
+                }
             }
 
             return null;
@@ -473,8 +539,6 @@ namespace FateOfTheFallen
                 );
 
                 ConfigureKaelithInventory(inventory);
-                ConfigureKaelithQuests(
-                    vendor);
             }
             catch (Exception ex)
             {
@@ -486,93 +550,6 @@ namespace FateOfTheFallen
                 DestroyVendor(ref _advancedVendor);
             }
         }
-
-        // ------------------------------------------------------------
-        // KAELITH QUESTS
-        // ------------------------------------------------------------
-
-        private static void ConfigureKaelithQuests(
-            GameObject vendor)
-        {
-            if (vendor == null)
-            {
-                return;
-            }
-
-            Quest quest =
-                FateOfTheFallenQuests.WeatheredNoteQuest;
-
-            if (quest == null)
-            {
-                Plugin.NativeLog.LogError(
-                    "Kaelith: Weathered Note quest was unavailable.");
-
-                return;
-            }
-
-            QuestManager questManager =
-                vendor.GetComponent<QuestManager>();
-
-            if (questManager == null)
-            {
-                questManager =
-                    vendor.AddComponent<QuestManager>();
-
-                
-            }
-
-            if (questManager.NPCQuests == null)
-            {
-                questManager.NPCQuests =
-                    new List<Quest>();
-            }
-
-
-            // Remove stale/duplicate versions of our quest.
-
-            for (int i =
-                     questManager.NPCQuests.Count - 1;
-                 i >= 0;
-                 i--)
-            {
-                Quest existing =
-                    questManager.NPCQuests[i];
-
-                if (existing == null)
-                {
-                    continue;
-                }
-
-                if (string.Equals(
-                        existing.DBName,
-                        FateOfTheFallenQuests
-                            .WeatheredNoteQuestId,
-                        StringComparison.OrdinalIgnoreCase))
-                {
-                    questManager.NPCQuests.RemoveAt(
-                        i);
-                }
-            }
-
-
-            // Add the exact Quest object used by the custom quest system.
-
-            questManager.NPCQuests.Add(
-                quest);
-
-            Plugin.NativeLog.LogInfo(
-                "Kaelith: attached quest [" +
-                quest.DBName +
-                "] to QuestManager. Required item count: " +
-                (
-                    quest.RequiredItems != null
-                        ? quest.RequiredItems.Count
-                        : 0
-                ) +
-                ".");
-        }
-
-
 
         // ------------------------------------------------------------
         // SPAWN VORREN
@@ -1147,26 +1124,8 @@ namespace FateOfTheFallen
 
                 string dialogue;
 
-                // ----------------------------------------------------
-                // KAELITH QUEST TURN-IN
-                // ----------------------------------------------------
-
                 if (isKaelith)
                 {
-                    string questDialogue;
-
-                    if (FateOfTheFallenQuests
-                        .TryHandleKaelithTurnIn(
-                            out questDialogue))
-                    {
-                        SetDialogReturnString(
-                            __instance,
-                            questDialogue
-                        );
-
-                        return;
-                    }
-
                     dialogue =
                         GetKaelithDialogue();
                 }

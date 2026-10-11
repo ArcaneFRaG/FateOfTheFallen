@@ -300,10 +300,6 @@ namespace FateOfTheFallen
                 FindNativeAuraTemplate(
                     spellDB.SpellDatabase);
 
-            List<Spell> combinedSpells =
-                new List<Spell>(
-                    spellDB.SpellDatabase);
-
             foreach (
                 BlightcallerAuraDefinition definition
                 in Definitions)
@@ -312,48 +308,148 @@ namespace FateOfTheFallen
 
                 if (!SpellsByKey.TryGetValue(
                         definition.Key,
-                        out auraSpell))
+                        out auraSpell) ||
+                    auraSpell == null)
                 {
+                    /*
+                     * On a hot reload the native SpellDB can still contain
+                     * the Aura spell created by the previous plugin instance.
+                     * Adopt it by stable ID instead of appending a duplicate.
+                     */
                     auraSpell =
-                        CreateSpell(
-                            definition,
-                            template);
+                        FindExistingAuraSpell(
+                            spellDB.SpellDatabase,
+                            definition.Key);
 
-                    SpellsByKey.Add(
-                        definition.Key,
-                        auraSpell);
+                    if (auraSpell == null)
+                    {
+                        auraSpell =
+                            CreateSpell(
+                                definition,
+                                template);
+                    }
+
+                    if (auraSpell == null)
+                    {
+                        continue;
+                    }
+
+                    SpellsByKey[
+                        definition.Key] =
+                        auraSpell;
                 }
 
-                if (!combinedSpells.Contains(
-                        auraSpell))
-                {
-                    combinedSpells.Add(
-                        auraSpell);
-                }
+                /*
+                 * Rebind class identity in case this registration belongs to
+                 * a new plugin instance after Lunaris hot reload.
+                 */
+                auraSpell.UsedBy =
+                    new List<Class>
+                    {
+                        BlightcallerCatalog.BlightcallerClass
+                    };
+
+                /*
+                 * Register by stable Spell.Id. CustomSpellRegistry replaces a
+                 * previous object with the same ID rather than duplicating it.
+                 */
+                CustomSpellRegistry.Register(
+                    spellDB,
+                    auraSpell);
 
                 Item auraItem;
 
                 if (!ItemsByKey.TryGetValue(
                         definition.Key,
-                        out auraItem))
+                        out auraItem) ||
+                    auraItem == null)
                 {
                     auraItem =
-                        CreateItem(
-                            definition,
-                            auraSpell);
+                        CustomItemRegistry.GetItemById(
+                            definition.ItemId.ToString());
 
-                    ItemsByKey.Add(
-                        definition.Key,
-                        auraItem);
+                    if (auraItem == null)
+                    {
+                        auraItem =
+                            CreateItem(
+                                definition,
+                                auraSpell);
+                    }
 
-                    CustomItemRegistry.RegisterItem(
-                        auraItem);
+                    if (auraItem == null)
+                    {
+                        continue;
+                    }
+
+                    ItemsByKey[
+                        definition.Key] =
+                        auraItem;
+                }
+
+                /*
+                 * The Aura Item is reference-sensitive: keep its Aura and
+                 * class list bound to the current canonical runtime objects.
+                 */
+                auraItem.Aura =
+                    auraSpell;
+
+                auraItem.Classes =
+                    new List<Class>
+                    {
+                        BlightcallerCatalog.BlightcallerClass
+                    };
+
+                /*
+                 * Critical hot-reload step. Plugin.OnDestroy clears the shared
+                 * registry, so this must happen even for an Item that already
+                 * existed in ItemsByKey before the reload.
+                 */
+                CustomItemRegistry.RegisterItem(
+                    auraItem);
+            }
+        }
+
+
+        private static Spell FindExistingAuraSpell(
+            Spell[] spells,
+            string key)
+        {
+            if (spells == null ||
+                string.IsNullOrEmpty(key))
+            {
+                return null;
+            }
+
+            string expectedId =
+                AuraSpellPrefix +
+                key.ToUpperInvariant();
+
+            for (int i = 0;
+                 i < spells.Length;
+                 i++)
+            {
+                Spell spell =
+                    spells[i];
+
+                if (spell == null ||
+                    string.IsNullOrEmpty(
+                        spell.Id))
+                {
+                    continue;
+                }
+
+                if (string.Equals(
+                        spell.Id,
+                        expectedId,
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    return spell;
                 }
             }
 
-            spellDB.SpellDatabase =
-                combinedSpells.ToArray();
+            return null;
         }
+
 
         internal static Spell GetSpell(
             string key)

@@ -1,0 +1,997 @@
+fileFormatVersion: 2
+guid: 0b38ad6d7fa65c849a939f404bc2aa9a
+ModelImporter:
+  serializedVersion: 21300
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 1
+    motionNodeName: 
+    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
+      human bone 'LeftFoot' not found\n"
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human:
+    - boneName: Hips
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: UpperLeg_L
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: UpperLeg_R
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: LowerLeg_L
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: LowerLeg_R
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Spine_01
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Spine_02
+      humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Neck
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Head
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Shoulder_L
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Shoulder_R
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Elbow_L
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Elbow_R
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Hand_L
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Hand_R
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Spine_03
+      humanName: UpperChest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: LeftFoot
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: RightFoot
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: Nhalsera(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: AbdomenLower
+      parentName: Nhalsera(Clone)
+      position: {x: 0.000000008742278, y: 6.3199997, z: 0.099999994}
+      rotation: {x: 0.000000052578326, y: 0.7176334, z: 0.696421, w: -0.000000054179814}
+      scale: {x: 100, y: 99.99999, z: 99.99999}
+    - name: AbdomenUpper
+      parentName: Nhalsera(Clone)
+      position: {x: 0.000000012239188, y: 7.1499996, z: 0.14}
+      rotation: {x: 0.000000052578326, y: 0.7176334, z: 0.696421, w: -0.000000054179814}
+      scale: {x: 100, y: 99.99999, z: 99.99999}
+    - name: ArmRoot
+      parentName: Nhalsera(Clone)
+      position: {x: 3.12, y: 7.0499997, z: 0.29999974}
+      rotation: {x: 0.22661074, y: 0.6416651, z: 0.7318447, w: -0.036287647}
+      scale: {x: 99.99999, y: 100, z: 99.999985}
+    - name: BackBranch_Left_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackBranch_Left_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackBranch_Right_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackBranch_Right_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackCrystal_High_L
+      parentName: Nhalsera(Clone)
+      position: {x: 0.4699999, y: 8.82, z: -0.91}
+      rotation: {x: -0.079241544, y: 0.9270979, z: 0.2934666, w: -0.21928887}
+      scale: {x: 99.99999, y: 100.00001, z: 100}
+    - name: BackCrystal_High_R
+      parentName: Nhalsera(Clone)
+      position: {x: -0.47000006, y: 8.76, z: -0.90999997}
+      rotation: {x: 0.0792416, y: 0.927098, z: 0.29346666, w: 0.21928878}
+      scale: {x: 99.999985, y: 100.00001, z: 100}
+    - name: BackCrystal_Lower
+      parentName: Nhalsera(Clone)
+      position: {x: -0.08000006, y: 7.2999997, z: -0.7}
+      rotation: {x: 0.00000003190678, y: 0.9063078, z: 0.4226182, w: -0.00000006842434}
+      scale: {x: 100, y: 99.99999, z: 99.99999}
+    - name: BackCrystal_Main
+      parentName: Nhalsera(Clone)
+      position: {x: -0.00000008392586, y: 8.88, z: -0.96}
+      rotation: {x: 0.000000014405676, y: 0.9816272, z: 0.19080898, w: -0.0000000741108}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackCrystal_Mid_L
+      parentName: Nhalsera(Clone)
+      position: {x: 0.71999997, y: 8.16, z: -0.7900001}
+      rotation: {x: -0.011324118, y: 0.8786877, z: 0.37327826, w: -0.2973938}
+      scale: {x: 99.999985, y: 100, z: 99.99999}
+    - name: BackCrystal_Mid_R
+      parentName: Nhalsera(Clone)
+      position: {x: -0.7200001, y: 8.1, z: -0.78999996}
+      rotation: {x: 0.011324145, y: 0.87868774, z: 0.37327823, w: 0.29739365}
+      scale: {x: 99.99999, y: 99.99999, z: 99.99999}
+    - name: BackCrystal_Middle
+      parentName: Nhalsera(Clone)
+      position: {x: 0.07999992, y: 7.8199997, z: -0.83}
+      rotation: {x: -0.032794766, y: 0.93912023, z: 0.34181166, w: -0.011936394}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackRoot
+      parentName: Nhalsera(Clone)
+      position: {x: 0.6199999, y: 7.7599998, z: -1.12}
+      rotation: {x: -0.14172949, y: 0.7708932, z: 0.61769724, w: 0.06392568}
+      scale: {x: 99.99999, y: 100, z: 100}
+    - name: BackSpine_Lower_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackSpine_Lower_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackSpine_Upper_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackSpine_Upper_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BlightHeart_DiagonalShard
+      parentName: Nhalsera(Clone)
+      position: {x: 0.3100001, y: 8.5, z: 1.02}
+      rotation: {x: -0.21080355, y: 0.30279177, z: 0.8850825, w: 0.28373948}
+      scale: {x: 99.99999, y: 100.00001, z: 99.99999}
+    - name: BlightHeart_LeftShard
+      parentName: Nhalsera(Clone)
+      position: {x: -0.54999995, y: 8.15, z: 1}
+      rotation: {x: 0.3213206, y: 0.13319889, z: 0.9270714, w: -0.13982056}
+      scale: {x: 99.99999, y: 100.00001, z: 100}
+    - name: BlightHeart_LowerShard
+      parentName: Nhalsera(Clone)
+      position: {x: 0.00000008742278, y: 7.46, z: 1}
+      rotation: {x: -0.58778524, y: -3.179327e-16, z: 3.1793268e-16, w: 0.809017}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BlightHeart_MainCrystal
+      parentName: Nhalsera(Clone)
+      position: {x: 0.00000010141042, y: 8.179999, z: 1.16}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BlightHeart_RightShard
+      parentName: Nhalsera(Clone)
+      position: {x: 0.5500001, y: 8.15, z: 0.9999999}
+      rotation: {x: -0.3213205, y: 0.13319875, z: 0.92707145, w: 0.13982052}
+      scale: {x: 99.99999, y: 99.99999, z: 100}
+    - name: BlightHeart_Socket
+      parentName: Nhalsera(Clone)
+      position: {x: 0.0000000725609, y: 8.12, z: 0.83}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BlightHeart_UpperShard
+      parentName: Nhalsera(Clone)
+      position: {x: 0.00000008917122, y: 8.83, z: 1.02}
+      rotation: {x: 0.000000086772, y: 0.58778524, z: 0.809017, w: -0.000000009013297}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BrowCenter
+      parentName: Nhalsera(Clone)
+      position: {x: 0.00000005857326, y: 9.179999, z: 0.66999996}
+      rotation: {x: 0.00000004419799, y: 0.8107301, z: 0.58542013, w: -0.00000006120842}
+      scale: {x: 100, y: 100.00001, z: 100.00001}
+    - name: Cheek_L
+      parentName: Nhalsera(Clone)
+      position: {x: 0.43000007, y: 8.84, z: 0.5299999}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Cheek_R
+      parentName: Nhalsera(Clone)
+      position: {x: -0.42999995, y: 8.84, z: 0.53000003}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Chest_L
+      parentName: Nhalsera(Clone)
+      position: {x: 1.2, y: 8.22, z: -0.020000104}
+      rotation: {x: -0.0011265209, y: 0.70511127, z: 0.70009077, w: -0.11264933}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Chest_R
+      parentName: Nhalsera(Clone)
+      position: {x: -1.2, y: 8.22, z: -0.019999895}
+      rotation: {x: 0.0011265997, y: 0.70511127, z: 0.70009077, w: 0.11264942}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ChestCenter
+      parentName: Nhalsera(Clone)
+      position: {x: 0.0000000017484555, y: 8.1, z: 0.02}
+      rotation: {x: 0.000000053117486, y: 0.71063346, z: 0.70356244, w: -0.000000053651334}
+      scale: {x: 100, y: 100.00001, z: 100.00001}
+    - name: ChestRoot
+      parentName: Nhalsera(Clone)
+      position: {x: -1.8399999, y: 8.7, z: 0.6800001}
+      rotation: {x: -0.21990909, y: 0.77044284, z: 0.5972787, w: 0.036276665}
+      scale: {x: 99.99999, y: 100, z: 100}
+    - name: Crown_L
+      parentName: Nhalsera(Clone)
+      position: {x: 0.42999998, y: 9.64, z: 0.019999962}
+      rotation: {x: -0.010598832, y: 0.6133156, z: 0.76476026, w: -0.19716358}
+      scale: {x: 99.99999, y: 99.99999, z: 99.99999}
+    - name: Crown_R
+      parentName: Nhalsera(Clone)
+      position: {x: -0.42999998, y: 9.64, z: 0.020000035}
+      rotation: {x: 0.010598963, y: 0.6133155, z: 0.76476026, w: 0.19716361}
+      scale: {x: 100, y: 99.999985, z: 100}
+    - name: CrownCenter
+      parentName: Nhalsera(Clone)
+      position: {x: 0.0000000017484555, y: 9.8, z: 0.02}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: DarkTorsoCore
+      parentName: Nhalsera(Clone)
+      position: {x: -0.000000013987644, y: 7.12, z: -0.16}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: EyeGlow_L
+      parentName: Nhalsera(Clone)
+      position: {x: -0.19999991, y: 9.06, z: 0.78499997}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: EyeGlow_R
+      parentName: Nhalsera(Clone)
+      position: {x: 0.20000008, y: 9.06, z: 0.78499997}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: EyeSocket_0
+      parentName: Nhalsera(Clone)
+      position: {x: -0.19999994, y: 9.06, z: 0.74}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: EyeSocket_1
+      parentName: Nhalsera(Clone)
+      position: {x: 0.20000005, y: 9.06, z: 0.74}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: FaceSocket
+      parentName: Nhalsera(Clone)
+      position: {x: 0.000000013987644, y: 8.9, z: 0.16}
+      rotation: {x: 0.000000050026422, y: 0.7489557, z: 0.66262007, w: -0.000000056544582}
+      scale: {x: 100, y: 100, z: 100}
+    - name: FaceTopologyCrack_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: FaceTopologyCrack_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Fist_L
+      parentName: Nhalsera(Clone)
+      position: {x: 3.55, y: 3.73, z: 1.0999997}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Fist_R
+      parentName: Nhalsera(Clone)
+      position: {x: -3.6399999, y: 3.5, z: 1.1600003}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Forearm_L
+      parentName: Nhalsera(Clone)
+      position: {x: 3.6299999, y: 5.02, z: 0.66999966}
+      rotation: {x: 0.0045101056, y: 0.61469954, z: 0.7878927, w: -0.03673125}
+      scale: {x: 99.99999, y: 99.99999, z: 99.99999}
+    - name: Forearm_R
+      parentName: Nhalsera(Clone)
+      position: {x: -3.72, y: 4.8599997, z: 0.7000003}
+      rotation: {x: -0.004510012, y: 0.6146996, z: 0.78789276, w: 0.03673118}
+      scale: {x: 99.99999, y: 99.99999, z: 99.99999}
+    - name: ForearmCrack_L_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ForearmCrack_L_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ForearmCrack_R_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ForearmCrack_R_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ForearmPurpleBranch_L_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ForearmPurpleBranch_L_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: FOTF_NhalSera_Rig
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Root
+      parentName: FOTF_NhalSera_Rig
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Hips
+      parentName: Root
+      position: {x: -0, y: 0.051799998, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_01
+      parentName: Hips
+      position: {x: -0, y: 0.0051999995, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_02
+      parentName: Spine_01
+      position: {x: -0, y: 0.006800003, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_03
+      parentName: Spine_02
+      position: {x: -0, y: 0.0073999977, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Neck
+      parentName: Spine_03
+      position: {x: -0, y: 0.011599998, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Head
+      parentName: Neck
+      position: {x: -0, y: 0.005, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Head_end
+      parentName: Head
+      position: {x: -0, y: 0.009400005, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Shoulder_L
+      parentName: Spine_03
+      position: {x: -0.022999998, y: 0.013400001, z: 0}
+      rotation: {x: 0.6878969, y: -0.66265666, z: -0.2120131, w: -0.20672332}
+      scale: {x: 0.9999997, y: 1, z: 1}
+    - name: Elbow_L
+      parentName: Shoulder_L
+      position: {x: 0.0000000023841857, y: 0.025053548, z: -0.0000000020861626}
+      rotation: {x: 0.0047427607, y: 0.22495821, z: -0.010810406, w: 0.9742969}
+      scale: {x: 1.0000001, y: 1.0000001, z: 0.99999994}
+    - name: Hand_L
+      parentName: Elbow_L
+      position: {x: -0.0000000019697473, y: 0.022265686, z: -2.2351741e-10}
+      rotation: {x: 0.12056314, y: 0.036292937, z: -0.047601014, w: 0.9908993}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Hand_L_end
+      parentName: Hand_L
+      position: {x: -0, y: 0.008625541, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Shoulder_R
+      parentName: Spine_03
+      position: {x: 0.022999998, y: 0.013400001, z: 0}
+      rotation: {x: 0.68779105, y: 0.6624531, z: 0.21257257, w: -0.20715271}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    - name: Elbow_R
+      parentName: Shoulder_R
+      position: {x: -2.9802322e-10, y: 0.026046876, z: 0.0000000016391277}
+      rotation: {x: 0.0054862318, y: -0.21802428, z: 0.011048586, w: 0.97586536}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
+    - name: Hand_R
+      parentName: Elbow_R
+      position: {x: -0.0000000031664966, y: 0.022952994, z: -5.9604643e-10}
+      rotation: {x: 0.11519358, y: -0.041627843, z: 0.057028957, w: 0.9908306}
+      scale: {x: 1, y: 0.9999999, z: 0.9999998}
+    - name: Hand_R_end
+      parentName: Hand_R
+      position: {x: -0, y: 0.008625543, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: UpperLeg_L
+      parentName: Hips
+      position: {x: -0.0085, y: 0.0024000024, z: 0}
+      rotation: {x: 0.9960477, y: -0.05847323, z: -0.058475763, w: -0.032412853}
+      scale: {x: 1.0000113, y: 1.0000004, z: 1.0000026}
+    - name: LowerLeg_L
+      parentName: UpperLeg_L
+      position: {x: -0.0000000014714896, y: 0.020785818, z: 7.4505804e-11}
+      rotation: {x: -0.052054606, y: 0.059615076, z: -0.057307664, w: 0.99521464}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: LeftFoot
+      parentName: LowerLeg_L
+      position: {x: 1.4309406e-10, y: 0.03042366, z: -6.980578e-11}
+      rotation: {x: 0.069109336, y: -0.83923, z: 0.5299327, w: 0.10044071}
+      scale: {x: 1, y: 0.9999999, z: 0.99999994}
+    - name: Ankle_L
+      parentName: LeftFoot
+      position: {x: 2.255307e-14, y: 0.0030462965, z: 1.5518481e-10}
+      rotation: {x: 0.07987167, y: 3.9622875e-12, z: 4.86338e-14, w: 0.9968052}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Ball_L
+      parentName: Ankle_L
+      position: {x: -0, y: 0.0012369263, z: -1.918576e-10}
+      rotation: {x: 0.051518235, y: -1.1357464e-14, z: 3.6997545e-13, w: 0.99867207}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: Toes_L
+      parentName: Ball_L
+      position: {x: -0, y: 0.0014142074, z: -1.09517936e-10}
+      rotation: {x: 0.07088929, y: -1.1397357e-13, z: -2.6356388e-13, w: 0.9974842}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Toes_L_end
+      parentName: Toes_L
+      position: {x: -0, y: 0.0012, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: UpperLeg_R
+      parentName: Hips
+      position: {x: 0.0085, y: 0.0024000024, z: 0}
+      rotation: {x: 0.9960477, y: 0.05847323, z: 0.058475763, w: -0.032412853}
+      scale: {x: 1.0000113, y: 1.0000004, z: 1.0000026}
+    - name: LowerLeg_R
+      parentName: UpperLeg_R
+      position: {x: 0.0000000014714896, y: 0.020785818, z: 7.4505804e-11}
+      rotation: {x: -0.052054606, y: -0.059615076, z: 0.057307664, w: 0.99521464}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: RightFoot
+      parentName: LowerLeg_R
+      position: {x: -1.4309406e-10, y: 0.03042366, z: -6.980578e-11}
+      rotation: {x: 0.069109336, y: 0.83923, z: -0.5299327, w: 0.10044071}
+      scale: {x: 1, y: 0.9999999, z: 0.99999994}
+    - name: Ankle_R
+      parentName: RightFoot
+      position: {x: -2.255307e-14, y: 0.0030462965, z: 1.5518481e-10}
+      rotation: {x: 0.07987167, y: -3.9622875e-12, z: -4.86338e-14, w: 0.9968052}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Ball_R
+      parentName: Ankle_R
+      position: {x: -0, y: 0.0012369263, z: -1.918576e-10}
+      rotation: {x: 0.051518235, y: 1.1357464e-14, z: -3.6997545e-13, w: 0.99867207}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: Toes_R
+      parentName: Ball_R
+      position: {x: -0, y: 0.0014142074, z: -1.09517936e-10}
+      rotation: {x: 0.07088929, y: 1.1397357e-13, z: 2.6356388e-13, w: 0.9974842}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Toes_R_end
+      parentName: Toes_R
+      position: {x: -0, y: 0.0012, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GEO_Elbow_L
+      parentName: Nhalsera(Clone)
+      position: {x: 3.61, y: 6.2999997, z: 0.24999969}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: GEO_Elbow_R
+      parentName: Nhalsera(Clone)
+      position: {x: -3.6699998, y: 6.22, z: 0.25000033}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: GEO_LowerLeg_L
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: GEO_LowerLeg_R
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: GEO_Shoulder_L
+      parentName: Nhalsera(Clone)
+      position: {x: 2.48, y: 8.48, z: -0.08000021}
+      rotation: {x: 0.023233917, y: 0.6978588, z: 0.69973016, w: -0.15109938}
+      scale: {x: 100, y: 99.99999, z: 99.99999}
+    - name: GEO_Shoulder_R
+      parentName: Nhalsera(Clone)
+      position: {x: -2.48, y: 8.48, z: -0.07999978}
+      rotation: {x: -0.023233855, y: 0.69785875, z: 0.6997302, w: 0.15109926}
+      scale: {x: 99.99999, y: 99.99999, z: 99.99999}
+    - name: HeartCrack_Center_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: HeartCrack_Center_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: HeartCrack_Left_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: HeartCrack_Left_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: HeartCrack_Right_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: HeartCrack_Right_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Hip_L
+      parentName: Nhalsera(Clone)
+      position: {x: 1.08, y: 5.5499997, z: -0.0000000944166}
+      rotation: {x: -0.0035354998, y: 0.70067304, z: 0.70709795, w: -0.09516972}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Hip_R
+      parentName: Nhalsera(Clone)
+      position: {x: -1.08, y: 5.5499997, z: 0.0000000944166}
+      rotation: {x: 0.0035355901, y: 0.7006731, z: 0.70709795, w: 0.09516964}
+      scale: {x: 99.99999, y: 100.00001, z: 100}
+    - name: Knee_L
+      parentName: Nhalsera(Clone)
+      position: {x: 1, y: 3.33, z: 0.2399999}
+      rotation: {x: 0.034236427, y: 0.74120176, z: 0.67001575, w: -0.02294986}
+      scale: {x: 99.99999, y: 99.99999, z: 100}
+    - name: Knee_R
+      parentName: Nhalsera(Clone)
+      position: {x: -1, y: 3.33, z: 0.24000007}
+      rotation: {x: -0.03423635, y: 0.7412018, z: 0.67001575, w: 0.022949772}
+      scale: {x: 99.99999, y: 100, z: 100}
+    - name: Light
+      parentName: Nhalsera(Clone)
+      position: {x: -4.0762453, y: 5.903862, z: -1.005454}
+      rotation: {x: 0.52327543, y: -0.34203392, z: 0.72694236, w: 0.28416622}
+      scale: {x: 100.00001, y: 100, z: 100}
+    - name: LowerJaw
+      parentName: Nhalsera(Clone)
+      position: {x: 0.00000004983098, y: 8.48, z: 0.57}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Moss_0
+      parentName: Nhalsera(Clone)
+      position: {x: 1.55, y: 8.42, z: 0.8199998}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Moss_1
+      parentName: Nhalsera(Clone)
+      position: {x: -1.6199998, y: 8.28, z: 0.78000003}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Moss_2
+      parentName: Nhalsera(Clone)
+      position: {x: 3.6, y: 5.2999997, z: 0.9399997}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Moss_3
+      parentName: Nhalsera(Clone)
+      position: {x: -0.82000005, y: 8.12, z: -1.0599998}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Moss_4
+      parentName: Nhalsera(Clone)
+      position: {x: 0.61999995, y: 7.54, z: -1}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: MouthCavity
+      parentName: Nhalsera(Clone)
+      position: {x: 0.0000000629444, y: 8.65, z: 0.71999997}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: MouthCore
+      parentName: Nhalsera(Clone)
+      position: {x: 0.00000006687842, y: 8.65, z: 0.765}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: NeckMass
+      parentName: Nhalsera(Clone)
+      position: {x: -0.000000010490733, y: 8.42, z: -0.12}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Pelvis
+      parentName: Nhalsera(Clone)
+      position: {x: -0.000000003496911, y: 5.52, z: -0.04}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearShoulder_Left_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearShoulder_Left_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearShoulder_Right_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearShoulder_Right_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearThigh_Left_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearThigh_Left_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearThigh_Right_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearThigh_Right_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearUpperArm_Left_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearUpperArm_Left_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearUpperArm_Right_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearUpperArm_Right_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShinCrack_L_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShinCrack_L_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShinCrack_R_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShinCrack_R_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShoulderCrack_L_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShoulderCrack_L_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShoulderCrack_R_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShoulderCrack_R_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShoulderStoneSpike_L
+      parentName: Nhalsera(Clone)
+      position: {x: 2.7, y: 9.14, z: -0.26000023}
+      rotation: {x: 0.2837791, y: 0.5190473, z: 0.8051019, w: -0.04324823}
+      scale: {x: 99.999985, y: 99.99999, z: 99.99999}
+    - name: ShoulderStoneSpike_R
+      parentName: Nhalsera(Clone)
+      position: {x: -2.7, y: 9.1, z: -0.25999975}
+      rotation: {x: -0.283779, y: 0.51904726, z: 0.8051019, w: 0.04324814}
+      scale: {x: 99.99999, y: 99.99999, z: 99.99999}
+    - name: Skull
+      parentName: Nhalsera(Clone)
+      position: {x: 0.000000020981465, y: 9.11, z: 0.24}
+      rotation: {x: 0.000000049031964, y: 0.760406, z: 0.649448, w: -0.000000057409054}
+      scale: {x: 100, y: 100.00001, z: 100.00001}
+    - name: Sternum
+      parentName: Nhalsera(Clone)
+      position: {x: 0.000000069063994, y: 8.02, z: 0.78999996}
+      rotation: {x: 0.000000047788763, y: 0.77416706, z: 0.63298136, w: -0.000000058447984}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Thigh_L
+      parentName: Nhalsera(Clone)
+      position: {x: 0.90999997, y: 4.48, z: -0.020000078}
+      rotation: {x: -0.011135509, y: 0.7121539, z: 0.6999408, w: -0.052874662}
+      scale: {x: 99.99998, y: 100, z: 100}
+    - name: Thigh_R
+      parentName: Nhalsera(Clone)
+      position: {x: -0.90999997, y: 4.48, z: -0.019999918}
+      rotation: {x: 0.010075937, y: 0.69801354, z: 0.71404296, w: 0.053086706}
+      scale: {x: 99.99999, y: 99.99999, z: 100}
+    - name: ThighCrack_L_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ThighCrack_L_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ThighCrack_R_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ThighCrack_R_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: UpperArm_L
+      parentName: Nhalsera(Clone)
+      position: {x: 3.1799998, y: 7.48, z: -0.00000027800442}
+      rotation: {x: 0.07238447, y: 0.6659245, z: 0.7215305, w: -0.17521065}
+      scale: {x: 100, y: 99.99999, z: 100}
+    - name: UpperArm_R
+      parentName: Nhalsera(Clone)
+      position: {x: -3.21, y: 7.43, z: 0.00000028062712}
+      rotation: {x: -0.07238438, y: 0.6659245, z: 0.72153056, w: 0.17521058}
+      scale: {x: 100, y: 100, z: 100}
+    - name: UpperArmCrack_L_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: UpperArmCrack_L_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: UpperArmCrack_R_Dark
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    - name: UpperArmCrack_R_Glow
+      parentName: Nhalsera(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385076, y: 0.7071068, z: 0.70710677, w: -0.00000005338508}
+      scale: {x: 100, y: 100, z: 100}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 3
+  humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

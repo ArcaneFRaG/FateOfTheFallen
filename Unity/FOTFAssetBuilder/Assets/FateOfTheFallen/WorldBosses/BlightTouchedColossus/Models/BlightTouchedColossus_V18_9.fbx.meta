@@ -1,0 +1,967 @@
+fileFormatVersion: 2
+guid: e5e09b675e159ad41834f74a5808761f
+ModelImporter:
+  serializedVersion: 21300
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 1
+    motionNodeName: 
+    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
+      human bone 'LeftFoot' not found\n"
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human:
+    - boneName: Hips
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: UpperLeg_L
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: UpperLeg_R
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: LowerLeg_L
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: LowerLeg_R
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Spine_01
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Spine_02
+      humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Neck
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Head
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Shoulder_L
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Shoulder_R
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Elbow_L
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Elbow_R
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Hand_L
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Hand_R
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Spine_03
+      humanName: UpperChest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: LeftFoot
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: RightFoot
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: BlightTouchedColossus_V18_9(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: AbdomenLower
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.000000010490733, y: 6.3199997, z: 0.12}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: AbdomenUpper
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.000000013113417, y: 7.1499996, z: 0.15}
+      rotation: {x: 0.00000005284857, y: 0.7141423, z: 0.7000005, w: -0.000000053916256}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ArmRoot
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 8.227003, y: 2.2021108, z: 1.6034456}
+      rotation: {x: -0.3356932, y: 0.6833037, z: 0.54589653, w: -0.34986156}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackBranch_Left_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackBranch_Left_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackBranch_Right_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackBranch_Right_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackCrystal_High_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.41999987, y: 8.78, z: -0.93000007}
+      rotation: {x: -0.07162295, y: 0.9471689, z: 0.2622374, w: -0.170214}
+      scale: {x: 100, y: 100.00001, z: 99.99999}
+    - name: BackCrystal_High_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0.40000007, y: 8.7, z: -0.9199999}
+      rotation: {x: 0.07162297, y: 0.9471689, z: 0.2622375, w: 0.1702139}
+      scale: {x: 99.99999, y: 100, z: 100}
+    - name: BackCrystal_Lower
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0.040000066, y: 7.3799996, z: -0.76}
+      rotation: {x: 0.000000030104736, y: 0.9170601, z: 0.39874917, w: -0.00000006923614}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackCrystal_Main
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0.00000008917122, y: 8.82, z: -1.02}
+      rotation: {x: 0.000000013110079, y: 0.9848078, z: 0.17364825, w: -0.000000074350936}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackCrystal_Mid_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.54999995, y: 8.16, z: -0.84}
+      rotation: {x: -0.03817354, y: 0.91839105, z: 0.33637404, w: -0.20482461}
+      scale: {x: 100, y: 100, z: 99.99999}
+    - name: BackCrystal_Mid_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0.5400001, y: 8.04, z: -0.8399999}
+      rotation: {x: 0.03817355, y: 0.91839117, z: 0.33637393, w: 0.20482449}
+      scale: {x: 99.99999, y: 100, z: 99.99999}
+    - name: BackCrystal_Middle
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.059999924, y: 7.8999996, z: -0.85999995}
+      rotation: {x: -0.032897677, y: 0.94206727, z: 0.3336035, w: -0.011649757}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackRoot
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackSpine_Lower_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackSpine_Lower_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackSpine_Upper_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BackSpine_Upper_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BlightHeart_DiagonalShard
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.2700001, y: 8.5, z: 1.12}
+      rotation: {x: -0.1110216, y: 0.17238212, z: 0.95456094, w: 0.21626846}
+      scale: {x: 99.999985, y: 99.99999, z: 99.99999}
+    - name: BlightHeart_LeftShard
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0.44999987, y: 8.02, z: 1.18}
+      rotation: {x: 0.16211751, y: 0.12218795, z: 0.9622745, w: -0.18115135}
+      scale: {x: 99.99999, y: 100, z: 100}
+    - name: BlightHeart_LowerShard
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.0000000944166, y: 7.56, z: 1.08}
+      rotation: {x: 0.000000054983698, y: -0.15643449, z: 0.98768836, w: -0.00000006773043}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BlightHeart_MainCrystal
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.00000012501457, y: 8.2, z: 1.43}
+      rotation: {x: 0.0000000754864, y: 0.017452383, z: 0.9998477, w: -0.000000001317615}
+      scale: {x: 100, y: 100.00001, z: 100.00001}
+    - name: BlightHeart_RightShard
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.4600001, y: 8.04, z: 1.16}
+      rotation: {x: -0.16211742, y: 0.122187935, z: 0.9622745, w: 0.18115132}
+      scale: {x: 100, y: 100, z: 99.99999}
+    - name: BlightHeart_Socket
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.000000080428954, y: 8.12, z: 0.91999996}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BlightHeart_UpperShard
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.00000010141042, y: 8.72, z: 1.16}
+      rotation: {x: 0.00000007370829, y: 0.21643953, z: 0.976296, w: -0.00000001634073}
+      scale: {x: 100, y: 100, z: 100}
+    - name: BrowCenter
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.00000006119594, y: 9.15, z: 0.7}
+      rotation: {x: 0.00000004480785, y: 0.80483544, z: 0.593498, w: -0.000000060763384}
+      scale: {x: 100, y: 100.00001, z: 100.00001}
+    - name: Cheek_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.45000002, y: 8.85, z: 0.56999993}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Cheek_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0.44999993, y: 8.83, z: 0.56000006}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Chest_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 1.3, y: 8.22, z: 0.049999885}
+      rotation: {x: -0.00070591277, y: 0.71061, z: 0.70003587, w: -0.0705894}
+      scale: {x: 99.99999, y: 100.00001, z: 100}
+    - name: Chest_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -1.3, y: 8.22, z: 0.050000113}
+      rotation: {x: 0.0007059845, y: 0.7106099, z: 0.70003587, w: 0.07058931}
+      scale: {x: 100.00001, y: 100, z: 100}
+    - name: ChestCenter
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.0000000052453664, y: 8.1, z: 0.06}
+      rotation: {x: 0.00000005284857, y: 0.7141423, z: 0.7000005, w: -0.000000053916256}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ChestRoot
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Crown_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.42999998, y: 9.52, z: 0.08999996}
+      rotation: {x: -0.0040921774, y: 0.65883565, z: 0.7408812, w: -0.13043737}
+      scale: {x: 100, y: 100.00001, z: 99.999985}
+    - name: Crown_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0.39999998, y: 9.49, z: 0.080000035}
+      rotation: {x: -0.013071209, y: 0.6618715, z: 0.7375923, w: 0.13309015}
+      scale: {x: 99.99999, y: 99.99999, z: 100}
+    - name: CrownCenter
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.000000008742278, y: 9.62, z: 0.099999994}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: DarkTorsoCore
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0.000000010490733, y: 7.1, z: -0.12}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: EyeGlow_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0.20999992, y: 9.04, z: 0.825}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: EyeGlow_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.21000007, y: 9.04, z: 0.825}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: EyeSocket_0
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0.20999992, y: 9.04, z: 0.77}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: EyeSocket_1
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.21000007, y: 9.04, z: 0.77}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: FaceSocket
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.000000013987644, y: 8.86, z: 0.16}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: FaceTopologyCrack_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: FaceTopologyCrack_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Fist_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 6.5739403, y: 7.3291974, z: 1.4013379}
+      rotation: {x: 0.71233916, y: -0.46142814, z: -0.4906223, w: 0.19734931}
+      scale: {x: 99.99998, y: 99.99999, z: 99.99996}
+    - name: Fist_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -6.7040567, y: 7.4259806, z: 1.6824417}
+      rotation: {x: 0.7123394, y: 0.46142778, z: 0.4906223, w: 0.1973491}
+      scale: {x: 99.99999, y: 100.00001, z: 99.99999}
+    - name: Forearm_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 5.86221, y: 8.154784, z: 1.0770767}
+      rotation: {x: 0.5427069, y: -0.45780027, z: -0.5414741, w: 0.45021534}
+      scale: {x: 99.999985, y: 99.99999, z: 99.999954}
+    - name: Forearm_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -6.0095396, y: 8.300756, z: 1.2042339}
+      rotation: {x: 0.60234755, y: 0.50398284, z: 0.50049233, w: 0.36426127}
+      scale: {x: 100.000015, y: 100.00001, z: 100.00001}
+    - name: ForearmCrack_L_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 10.812585, y: 4.3154426, z: 0.83027786}
+      rotation: {x: 0.5986263, y: -0.51144767, z: -0.5014893, w: 0.35857552}
+      scale: {x: 99.99998, y: 99.99998, z: 99.999954}
+    - name: ForearmCrack_L_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 10.812585, y: 4.3154426, z: 0.83027786}
+      rotation: {x: 0.5986263, y: -0.51144767, z: -0.5014893, w: 0.35857552}
+      scale: {x: 99.99998, y: 99.99998, z: 99.999954}
+    - name: ForearmCrack_R_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -10.874788, y: 4.4806275, z: 0.8164391}
+      rotation: {x: 0.60234755, y: 0.50398284, z: 0.50049233, w: 0.36426127}
+      scale: {x: 100.000015, y: 100.00001, z: 100.00001}
+    - name: ForearmCrack_R_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -10.874788, y: 4.4806275, z: 0.8164391}
+      rotation: {x: 0.60234755, y: 0.50398284, z: 0.50049233, w: 0.36426127}
+      scale: {x: 100.000015, y: 100.00001, z: 100.00001}
+    - name: ForearmPurpleBranch_L_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 10.812585, y: 4.3154426, z: 0.83027786}
+      rotation: {x: 0.5986263, y: -0.51144767, z: -0.5014893, w: 0.35857552}
+      scale: {x: 99.99998, y: 99.99998, z: 99.999954}
+    - name: ForearmPurpleBranch_L_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 10.812585, y: 4.3154426, z: 0.83027786}
+      rotation: {x: 0.5986263, y: -0.51144767, z: -0.5014893, w: 0.35857552}
+      scale: {x: 99.99998, y: 99.99998, z: 99.999954}
+    - name: FOTF_BlightTouchedColossus_Rig
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -0.7071067, y: -0.000000030908616, z: 0.000000030908623, w: 0.7071068}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Root
+      parentName: FOTF_BlightTouchedColossus_Rig
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Hips
+      parentName: Root
+      position: {x: -0, y: 0.051799998, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_01
+      parentName: Hips
+      position: {x: -0, y: 0.0051999995, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_02
+      parentName: Spine_01
+      position: {x: -0, y: 0.006800003, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_03
+      parentName: Spine_02
+      position: {x: -0, y: 0.0073999977, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Neck
+      parentName: Spine_03
+      position: {x: -0, y: 0.011599998, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Head
+      parentName: Neck
+      position: {x: -0, y: 0.005, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Shoulder_L
+      parentName: Spine_03
+      position: {x: -0.022999998, y: 0.013400001, z: 0}
+      rotation: {x: -0.694455, y: 0.69445515, z: 0.13316204, w: 0.13316205}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Elbow_L
+      parentName: Shoulder_L
+      position: {x: -0, y: 0.025053544, z: 0}
+      rotation: {x: 0, y: 0.06688005, z: -0, w: 0.9977611}
+      scale: {x: 0.99999994, y: 1, z: 0.99999994}
+    - name: Hand_L
+      parentName: Elbow_L
+      position: {x: -0.000000009536743, y: 0.022265682, z: 0}
+      rotation: {x: 0, y: -0.1220178, z: -0, w: 0.9925279}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Shoulder_R
+      parentName: Spine_03
+      position: {x: 0.022999998, y: 0.013400001, z: 0}
+      rotation: {x: 0.6943741, y: 0.694374, z: 0.13358398, w: -0.13358398}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Elbow_R
+      parentName: Shoulder_R
+      position: {x: -0, y: 0.02604688, z: 0}
+      rotation: {x: 0, y: -0.061980262, z: -0, w: 0.9980774}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Hand_R
+      parentName: Elbow_R
+      position: {x: -0, y: 0.02295299, z: 0}
+      rotation: {x: 0, y: 0.11653954, z: -0, w: 0.99318606}
+      scale: {x: 1, y: 1, z: 1}
+    - name: UpperLeg_L
+      parentName: Hips
+      position: {x: -0.0085, y: 0.0024000024, z: 0}
+      rotation: {x: 0.9960477, y: -0.05847323, z: -0.058475763, w: -0.032412853}
+      scale: {x: 1.0000113, y: 1.0000004, z: 1.0000026}
+    - name: LowerLeg_L
+      parentName: UpperLeg_L
+      position: {x: -0.0000000014714896, y: 0.020785818, z: 7.4505804e-11}
+      rotation: {x: -0.052054606, y: 0.059615076, z: -0.057307664, w: 0.99521464}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: LeftFoot
+      parentName: LowerLeg_L
+      position: {x: 1.4309406e-10, y: 0.03042366, z: -6.980578e-11}
+      rotation: {x: 0.06910942, y: -0.8392298, z: 0.5299329, w: 0.100440696}
+      scale: {x: 1, y: 0.9999999, z: 0.99999994}
+    - name: Ankle_L
+      parentName: LeftFoot
+      position: {x: 2.255307e-14, y: 0.0030462965, z: 1.5518481e-10}
+      rotation: {x: 0.07987167, y: 3.9622875e-12, z: 4.86338e-14, w: 0.9968052}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Ball_L
+      parentName: Ankle_L
+      position: {x: -0, y: 0.0012369263, z: -1.918576e-10}
+      rotation: {x: 0.051518235, y: -1.1357464e-14, z: 3.6997545e-13, w: 0.99867207}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: Toes_L
+      parentName: Ball_L
+      position: {x: -0, y: 0.0014142074, z: -1.09517936e-10}
+      rotation: {x: 0.07088929, y: -1.1397357e-13, z: -2.6356388e-13, w: 0.9974842}
+      scale: {x: 1, y: 1, z: 1}
+    - name: UpperLeg_R
+      parentName: Hips
+      position: {x: 0.0085, y: 0.0024000024, z: 0}
+      rotation: {x: 0.9960477, y: 0.05847323, z: 0.058475763, w: -0.032412853}
+      scale: {x: 1.0000113, y: 1.0000004, z: 1.0000026}
+    - name: LowerLeg_R
+      parentName: UpperLeg_R
+      position: {x: 0.0000000014714896, y: 0.020785818, z: 7.4505804e-11}
+      rotation: {x: -0.052054606, y: -0.059615076, z: 0.057307664, w: 0.99521464}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: RightFoot
+      parentName: LowerLeg_R
+      position: {x: -1.4309406e-10, y: 0.03042366, z: -6.980578e-11}
+      rotation: {x: 0.069109276, y: 0.8392298, z: -0.529933, w: 0.100440785}
+      scale: {x: 1, y: 0.9999999, z: 0.99999994}
+    - name: Ankle_R
+      parentName: RightFoot
+      position: {x: -2.255307e-14, y: 0.0030462965, z: 1.5518481e-10}
+      rotation: {x: 0.07987167, y: -3.9622875e-12, z: -4.86338e-14, w: 0.9968052}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Ball_R
+      parentName: Ankle_R
+      position: {x: -0, y: 0.0012369263, z: -1.918576e-10}
+      rotation: {x: 0.051518235, y: 1.1357464e-14, z: -3.6997545e-13, w: 0.99867207}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: Toes_R
+      parentName: Ball_R
+      position: {x: -0, y: 0.0014142074, z: -1.09517936e-10}
+      rotation: {x: 0.07088929, y: 1.1397357e-13, z: 2.6356388e-13, w: 0.9974842}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GEO_Elbow_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 4.7593474, y: 8.351637, z: 0.38148838}
+      rotation: {x: 0.5986263, y: -0.51144767, z: -0.5014893, w: 0.35857552}
+      scale: {x: 99.99998, y: 99.99998, z: 99.999954}
+    - name: GEO_Elbow_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -4.820804, y: 8.454114, z: 0.4478024}
+      rotation: {x: 0.60234755, y: 0.50398284, z: 0.50049233, w: 0.36426127}
+      scale: {x: 100.000015, y: 100.00001, z: 100.00001}
+    - name: GEO_LowerLeg_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: GEO_LowerLeg_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: GEO_Shoulder_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 2.432991, y: 8.702057, z: -0.054054845}
+      rotation: {x: -0.31478807, y: 0.68809384, z: 0.4916157, w: -0.4309865}
+      scale: {x: 99.99999, y: 100, z: 99.99998}
+    - name: GEO_Shoulder_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -2.432197, y: 8.702661, z: -0.053284347}
+      rotation: {x: 0.31709144, y: 0.68755627, z: 0.49105105, w: 0.43079975}
+      scale: {x: 100, y: 100.00001, z: 99.99999}
+    - name: HeartCrack_Center_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: HeartCrack_Center_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: HeartCrack_Left_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: HeartCrack_Left_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: HeartCrack_Right_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: HeartCrack_Right_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Hip_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 1.2, y: 5.52, z: -0.000000104907336}
+      rotation: {x: 0.0035355415, y: 0.70391834, z: 0.707098, w: -0.06707418}
+      scale: {x: 100, y: 100.00001, z: 100}
+    - name: Hip_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -1.2, y: 5.52, z: 0.000000104907336}
+      rotation: {x: -0.0035354672, y: 0.70391834, z: 0.707098, w: 0.06707409}
+      scale: {x: 99.999985, y: 100.00001, z: 100}
+    - name: Knee_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 1.1, y: 3.33, z: 0.17999992}
+      rotation: {x: 0.02098842, y: 0.72795373, z: 0.6852616, w: -0.0077040177}
+      scale: {x: 99.99999, y: 100, z: 100.00001}
+    - name: Knee_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -1.1, y: 3.33, z: 0.1800001}
+      rotation: {x: -0.020988338, y: 0.72795373, z: 0.6852616, w: 0.007703931}
+      scale: {x: 99.99999, y: 100, z: 100.00001}
+    - name: LowerJaw
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.000000054202122, y: 8.5, z: 0.62}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Moss_0
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 1.5300001, y: 8.46, z: 0.6999998}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Moss_1
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -1.68, y: 8.27, z: 0.64000005}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Moss_2
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 5.5485253, y: 7.980308, z: 1.2388172}
+      rotation: {x: 0.5986263, y: -0.51144767, z: -0.5014893, w: 0.35857552}
+      scale: {x: 99.99998, y: 99.99998, z: 99.999954}
+    - name: Moss_3
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0.7200001, y: 8.179999, z: -0.8799999}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Moss_4
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.5799999, y: 7.62, z: -0.8500001}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: MouthCavity
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.0000000660042, y: 8.66, z: 0.755}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: MouthCore
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.0000000706376, y: 8.66, z: 0.808}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: NeckMass
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0.000000008742278, y: 8.42, z: -0.099999994}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Pelvis
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 5.52, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearShoulder_Left_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 8.227003, y: 2.2021108, z: 1.6034456}
+      rotation: {x: -0.3356932, y: 0.6833037, z: 0.54589653, w: -0.34986156}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearShoulder_Left_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 8.227003, y: 2.2021108, z: 1.6034456}
+      rotation: {x: -0.3356932, y: 0.6833037, z: 0.54589653, w: -0.34986156}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearShoulder_Right_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -8.246944, y: 2.2217596, z: 1.6061872}
+      rotation: {x: 0.33797768, y: 0.682578, z: 0.5454567, w: 0.34976465}
+      scale: {x: 100.00002, y: 100, z: 100.00001}
+    - name: RearShoulder_Right_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -8.246944, y: 2.2217596, z: 1.6061872}
+      rotation: {x: 0.33797768, y: 0.682578, z: 0.5454567, w: 0.34976465}
+      scale: {x: 100.00002, y: 100, z: 100.00001}
+    - name: RearThigh_Left_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearThigh_Left_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearThigh_Right_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearThigh_Right_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearUpperArm_Left_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 8.227003, y: 2.2021108, z: 1.6034456}
+      rotation: {x: -0.3356932, y: 0.6833037, z: 0.54589653, w: -0.34986156}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearUpperArm_Left_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 8.227003, y: 2.2021108, z: 1.6034456}
+      rotation: {x: -0.3356932, y: 0.6833037, z: 0.54589653, w: -0.34986156}
+      scale: {x: 100, y: 100, z: 100}
+    - name: RearUpperArm_Right_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -8.246944, y: 2.2217596, z: 1.6061872}
+      rotation: {x: 0.33797768, y: 0.682578, z: 0.5454567, w: 0.34976465}
+      scale: {x: 100.00002, y: 100, z: 100.00001}
+    - name: RearUpperArm_Right_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -8.246944, y: 2.2217596, z: 1.6061872}
+      rotation: {x: 0.33797768, y: 0.682578, z: 0.5454567, w: 0.34976465}
+      scale: {x: 100.00002, y: 100, z: 100.00001}
+    - name: ShinCrack_L_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShinCrack_L_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShinCrack_R_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShinCrack_R_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShoulderCrack_L_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 8.227003, y: 2.2021108, z: 1.6034456}
+      rotation: {x: -0.3356932, y: 0.6833037, z: 0.54589653, w: -0.34986156}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShoulderCrack_L_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 8.227003, y: 2.2021108, z: 1.6034456}
+      rotation: {x: -0.3356932, y: 0.6833037, z: 0.54589653, w: -0.34986156}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ShoulderCrack_R_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -8.246944, y: 2.2217596, z: 1.6061872}
+      rotation: {x: 0.33797768, y: 0.682578, z: 0.5454567, w: 0.34976465}
+      scale: {x: 100.00002, y: 100, z: 100.00001}
+    - name: ShoulderCrack_R_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -8.246944, y: 2.2217596, z: 1.6061872}
+      rotation: {x: 0.33797768, y: 0.682578, z: 0.5454567, w: 0.34976465}
+      scale: {x: 100.00002, y: 100, z: 100.00001}
+    - name: ShoulderStoneSpike_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 2.078859, y: 9.1388235, z: -0.41616896}
+      rotation: {x: -0.026309276, y: 0.6457671, z: 0.637128, w: -0.4199531}
+      scale: {x: 99.99998, y: 100.00001, z: 99.99998}
+    - name: ShoulderStoneSpike_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -2.1026633, y: 9.123502, z: -0.41063622}
+      rotation: {x: 0.028698271, y: 0.6456311, z: 0.63689286, w: 0.42036223}
+      scale: {x: 100, y: 99.99998, z: 100.00002}
+    - name: Skull
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.00000002360415, y: 9.08, z: 0.27}
+      rotation: {x: 0.000000049531074, y: 0.75470954, z: 0.6560591, w: -0.000000056978994}
+      scale: {x: 100, y: 99.99999, z: 99.99999}
+    - name: Sternum
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 0.00000007955473, y: 8, z: 0.90999997}
+      rotation: {x: 0.000000048948085, y: 0.7613535, z: 0.648337, w: -0.000000057480587}
+      scale: {x: 100, y: 99.99999, z: 99.99999}
+    - name: Thigh_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 1, y: 4.48, z: -0.020000087}
+      rotation: {x: -0.0038533923, y: 0.7134265, z: 0.69999886, w: -0.03177217}
+      scale: {x: 100, y: 99.99999, z: 100.00001}
+    - name: Thigh_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -1, y: 4.48, z: -0.019999912}
+      rotation: {x: 0.0032173009, y: 0.69928473, z: 0.7141265, w: 0.03184279}
+      scale: {x: 100, y: 100.00001, z: 100.00001}
+    - name: ThighCrack_L_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ThighCrack_L_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ThighCrack_R_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: ThighCrack_R_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000053385094, y: 0.7071067, z: 0.7071068, w: -0.000000053385083}
+      scale: {x: 100, y: 100, z: 100}
+    - name: UpperArm_L
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 3.6469553, y: 8.783011, z: 0.046620384}
+      rotation: {x: -0.22792444, y: 0.690669, z: 0.4812669, w: -0.48929438}
+      scale: {x: 100.000015, y: 99.99998, z: 99.999985}
+    - name: UpperArm_R
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -3.703714, y: 8.78793, z: 0.055225268}
+      rotation: {x: 0.23027453, y: 0.69037676, z: 0.48069853, w: 0.48916522}
+      scale: {x: 99.99999, y: 100.00001, z: 100.000015}
+    - name: UpperArmCrack_L_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 8.227003, y: 2.2021108, z: 1.6034456}
+      rotation: {x: -0.3356932, y: 0.6833037, z: 0.54589653, w: -0.34986156}
+      scale: {x: 100, y: 100, z: 100}
+    - name: UpperArmCrack_L_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: 8.227003, y: 2.2021108, z: 1.6034456}
+      rotation: {x: -0.3356932, y: 0.6833037, z: 0.54589653, w: -0.34986156}
+      scale: {x: 100, y: 100, z: 100}
+    - name: UpperArmCrack_R_Dark
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -8.246944, y: 2.2217596, z: 1.6061872}
+      rotation: {x: 0.33797768, y: 0.682578, z: 0.5454567, w: 0.34976465}
+      scale: {x: 100.00002, y: 100, z: 100.00001}
+    - name: UpperArmCrack_R_Glow
+      parentName: BlightTouchedColossus_V18_9(Clone)
+      position: {x: -8.246944, y: 2.2217596, z: 1.6061872}
+      rotation: {x: 0.33797768, y: 0.682578, z: 0.5454567, w: 0.34976465}
+      scale: {x: 100.00002, y: 100, z: 100.00001}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 3
+  humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
